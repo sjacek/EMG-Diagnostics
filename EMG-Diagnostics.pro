@@ -1,3 +1,4 @@
 TEMPLATE = subdirs
 SUBDIRS = \
-    ./EMG-Diagnostics
+    EMG-Diagnostics \
+    libuECG
