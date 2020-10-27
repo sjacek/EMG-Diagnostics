@@ -1,4 +1,4 @@
-QT += quick
+QT += charts qml quick
 
 CONFIG += c++11
 
@@ -6,10 +6,20 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+HEADERS += \
+    datasource.h
+
 SOURCES += \
-        main.cpp
+    datasource.cpp \
+    main.cpp
 
 RESOURCES += qml.qrc
+
+DISTFILES += \
+    qml/ControlPanel.qml \
+    qml/MultiButton.qml \
+    qml/ScopeView.qml \
+    qml/main.qml
 
 TRANSLATIONS += \
     EMG-Diagnostics_en_GB.ts
@@ -24,3 +34,4 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+

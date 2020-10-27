@@ -27,41 +27,49 @@
  **
  ****************************************************************************/
 
-#include <QtWidgets/QApplication>
-#include <QtQml/QQmlContext>
-#include <QtQuick/QQuickView>
-#include <QtQml/QQmlEngine>
-#include <QtCore/QDir>
-#include "datasource.h"
+import QtQuick 2.0
 
-int main(int argc, char *argv[])
-{
-    // Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
-    QApplication app(argc, argv);
+Item {
+    id: main
+    width: 600
+    height: 400
 
-    QQuickView viewer;
+    ScopeView {
+        id: scopeView
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: controlPanel.left
+        height: main.height
 
-    // TODO: remove in Release profile
-    // The following are needed to make the app run without having to install the module
-    // in desktop environments.
-#ifdef Q_OS_WIN
-    QString extraImportPath(QStringLiteral("%1/../../../../%2"));
-#else
-    QString extraImportPath(QStringLiteral("%1/../../../%2"));
-#endif
-    viewer.engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
-                                      QString::fromLatin1("qml")));
-    QObject::connect(viewer.engine(), &QQmlEngine::quit, &viewer, &QWindow::close);
+        onOpenGLSupportedChanged: {
+            if (!openGLSupported) {
+                controlPanel.openGLButton.enabled = false
+                controlPanel.openGLButton.currentSelection = 0
+            }
+        }
+    }
 
-    viewer.setTitle(QStringLiteral("EMG Diagnostics"));
+    ControlPanel {
+        id: controlPanel
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
 
-    DataSource dataSource(&viewer);
-    viewer.rootContext()->setContextProperty("dataSource", &dataSource);
+        onSignalSourceChanged: {
+            if (source == "sin")
+                dataSource.generateData(0, signalCount, sampleCount);
+            else
+                dataSource.generateData(1, signalCount, sampleCount);
+            scopeView.axisX().max = sampleCount;
+        }
+        onSeriesTypeChanged: scopeView.changeSeriesType(type);
+        onRefreshRateChanged: scopeView.changeRefreshRate(rate);
+        onAntialiasingEnabled: scopeView.antialiasing = enabled;
+        onOpenGlChanged: {
+            scopeView.openGL = enabled;
+        }
+    }
 
-    viewer.setSource(QUrl("qrc:/qml/main.qml"));
-    viewer.setResizeMode(QQuickView::SizeRootObjectToView);
-    viewer.setColor(QColor("#404040"));
-    viewer.show();
-
-    return app.exec();
 }

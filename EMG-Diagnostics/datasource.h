@@ -27,41 +27,34 @@
  **
  ****************************************************************************/
 
-#include <QtWidgets/QApplication>
-#include <QtQml/QQmlContext>
-#include <QtQuick/QQuickView>
-#include <QtQml/QQmlEngine>
-#include <QtCore/QDir>
-#include "datasource.h"
+#ifndef DATASOURCE_H
+#define DATASOURCE_H
 
-int main(int argc, char *argv[])
+#include <QtCore/QObject>
+#include <QtCharts/QAbstractSeries>
+
+QT_BEGIN_NAMESPACE
+class QQuickView;
+QT_END_NAMESPACE
+
+QT_CHARTS_USE_NAMESPACE
+
+class DataSource : public QObject
 {
-    // Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
-    QApplication app(argc, argv);
+    Q_OBJECT
+public:
+    explicit DataSource(QQuickView *appViewer, QObject *parent = 0);
 
-    QQuickView viewer;
+Q_SIGNALS:
 
-    // TODO: remove in Release profile
-    // The following are needed to make the app run without having to install the module
-    // in desktop environments.
-#ifdef Q_OS_WIN
-    QString extraImportPath(QStringLiteral("%1/../../../../%2"));
-#else
-    QString extraImportPath(QStringLiteral("%1/../../../%2"));
-#endif
-    viewer.engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
-                                      QString::fromLatin1("qml")));
-    QObject::connect(viewer.engine(), &QQmlEngine::quit, &viewer, &QWindow::close);
+public slots:
+    void generateData(int type, int rowCount, int colCount);
+    void update(QAbstractSeries *series);
 
-    viewer.setTitle(QStringLiteral("EMG Diagnostics"));
+private:
+    QQuickView *m_appViewer;
+    QList<QList<QPointF>> m_data;
+    int m_index;
+};
 
-    DataSource dataSource(&viewer);
-    viewer.rootContext()->setContextProperty("dataSource", &dataSource);
-
-    viewer.setSource(QUrl("qrc:/qml/main.qml"));
-    viewer.setResizeMode(QQuickView::SizeRootObjectToView);
-    viewer.setColor(QColor("#404040"));
-    viewer.show();
-
-    return app.exec();
-}
+#endif // DATASOURCE_H
