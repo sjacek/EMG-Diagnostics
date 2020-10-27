@@ -1,1 +1,1 @@
-# EMG-Diagnostics
+# EMG Diagnostics
