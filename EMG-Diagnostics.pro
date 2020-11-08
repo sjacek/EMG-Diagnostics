@@ -1,4 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS = \
     EMG-Diagnostics \
-    libuECG
+    libuECG \
+    plugins
