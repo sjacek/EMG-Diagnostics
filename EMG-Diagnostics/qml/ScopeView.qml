@@ -104,7 +104,7 @@ ChartView {
         // Create two new series of the correct type. Axis x is the same for both of the series,
         // but the series have their own y-axes to make it possible to control the y-offset
         // of the "signal sources".
-        if (type == "line") {
+        if (type === "line") {
             var series1 = chartView.createSeries(ChartView.SeriesTypeLine, "signal 1",
                                                  axisX, axisY1);
             series1.useOpenGL = chartView.openGL

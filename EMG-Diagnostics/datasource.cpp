@@ -29,10 +29,8 @@
 
 #include "datasource.h"
 #include <QtCharts/QXYSeries>
-#include <QtCharts/QAreaSeries>
-#include <QtQuick/QQuickView>
-#include <QtQuick/QQuickItem>
-#include <QtCore/QDebug>
+//#include <QtCharts/QAreaSeries>
+//#include <QtCore/QDebug>
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QtMath>
 
@@ -41,9 +39,8 @@ QT_CHARTS_USE_NAMESPACE
 Q_DECLARE_METATYPE(QAbstractSeries *)
 Q_DECLARE_METATYPE(QAbstractAxis *)
 
-DataSource::DataSource(QQuickView *appViewer, QObject *parent) :
+DataSource::DataSource(QObject *parent) :
     QObject(parent),
-    m_appViewer(appViewer),
     m_index(-1)
 {
     qRegisterMetaType<QAbstractSeries*>();

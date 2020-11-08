@@ -8,10 +8,12 @@ CONFIG += c++11
 
 HEADERS += \
     ../plugins/interface/emginterface.h \
-    datasource.h
+    datasource.h \
+    emgviewer.h
 
 SOURCES += \
     datasource.cpp \
+    emgviewer.cpp \
     main.cpp
 
 RESOURCES += qml.qrc
@@ -20,7 +22,8 @@ DISTFILES += \
     qml/ControlPanel.qml \
     qml/MultiButton.qml \
     qml/ScopeView.qml \
-    qml/main.qml
+    qml/emgviewer.qml
+
 
 TRANSLATIONS += \
     EMG-Diagnostics_en_GB.ts

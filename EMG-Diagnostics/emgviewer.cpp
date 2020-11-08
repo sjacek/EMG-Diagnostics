@@ -27,16 +27,32 @@
  **
  ****************************************************************************/
 
-#include <QtWidgets/QApplication>
 #include "emgviewer.h"
 
-int main(int argc, char *argv[])
+#include <QtWidgets/QApplication>
+#include <QtQml/QQmlContext>
+#include <QtQml/QQmlEngine>
+#include <QtCore/QDir>
+
+EmgViewer::EmgViewer()
 {
-    // Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
-    QApplication app(argc, argv);
+    // TODO: remove in Release profile
+    // The following are needed to make the app run without having to install the module
+    // in desktop environments.
+#ifdef Q_OS_WIN
+    QString extraImportPath(QStringLiteral("%1/../../../../%2"));
+#else
+    QString extraImportPath(QStringLiteral("%1/../../../%2"));
+#endif
+    engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
+                                      QString::fromLatin1("qml")));
+    QObject::connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
 
-    EmgViewer viewer;
-    viewer.show();
+    setTitle(QStringLiteral("EMG Diagnostics"));
 
-    return app.exec();
+    rootContext()->setContextProperty("dataSource", &m_dataSource);
+
+    setSource(QUrl("qrc:/qml/emgviewer.qml"));
+    setResizeMode(QQuickView::SizeRootObjectToView);
+    setColor(QColor("#404040"));
 }

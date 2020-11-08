@@ -1,7 +1,7 @@
 /****************************************************************************
  **
  ** Copyright (C) 2020 Jacek Sztajnke.
- ** Contact: jacek.sztajnke@gmail.com
+ ** Contact: jacek.sztajnke@gl.com
  **
  ** This file is part of the EMG-Diagnostics project.
  **
@@ -27,16 +27,49 @@
  **
  ****************************************************************************/
 
-#include <QtWidgets/QApplication>
-#include "emgviewer.h"
+import QtQuick 2.0
 
-int main(int argc, char *argv[])
-{
-    // Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
-    QApplication app(argc, argv);
+Item {
+    id: emgviewer
+    width: 600
+    height: 400
 
-    EmgViewer viewer;
-    viewer.show();
+    ScopeView {
+        id: scopeView
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: controlPanel.left
+        height: emgviewer.height
 
-    return app.exec();
+        onOpenGLSupportedChanged: {
+            if (!openGLSupported) {
+                controlPanel.openGLButton.enabled = false
+                controlPanel.openGLButton.currentSelection = 0
+            }
+        }
+    }
+
+    ControlPanel {
+        id: controlPanel
+        anchors.top: parent.top
+        anchors.topMargin: 10
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+
+        onSignalSourceChanged: {
+            if (source == "sin")
+                dataSource.generateData(0, signalCount, sampleCount);
+            else
+                dataSource.generateData(1, signalCount, sampleCount);
+            scopeView.axisX().max = sampleCount;
+        }
+        onSeriesTypeChanged: scopeView.changeSeriesType(type);
+        onRefreshRateChanged: scopeView.changeRefreshRate(rate);
+        onAntialiasingEnabled: scopeView.antialiasing = enabled;
+        onOpenGlChanged: {
+            scopeView.openGL = enabled;
+        }
+    }
+
 }
