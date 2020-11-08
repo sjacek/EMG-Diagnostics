@@ -33,6 +33,11 @@
 #include <QtQuick/QQuickView>
 #include "datasource.h"
 
+QT_BEGIN_NAMESPACE
+class QDir;
+class EmgInterface;
+QT_END_NAMESPACE
+
 class EmgViewer : public QQuickView
 {
     Q_OBJECT
@@ -42,6 +47,11 @@ public:
 
 private:
     DataSource m_dataSource;
+    QList<EmgInterface*> m_ListPlugins;
+
+    void initGUI();
+    void loadPlugins();
+    void loadPluginsFromDir(QDir dir);
 };
 
 #endif // EMGVIEWER_H

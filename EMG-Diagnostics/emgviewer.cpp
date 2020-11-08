@@ -30,11 +30,75 @@
 #include "emgviewer.h"
 
 #include <QtWidgets/QApplication>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtWidgets/QMessageBox>
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
-#include <QtCore/QDir>
+#include <QtCore/QPluginLoader>
+
+#include "emginterface.h"
 
 EmgViewer::EmgViewer()
+{
+    loadPlugins();
+    {
+//        QMessageBox::information((QWidget*)this, "Error", "Could not load the plugin");
+//        lineEdit->setEnabled(false);
+//        button->setEnabled(false);
+    }
+
+    initGUI();
+}
+
+void EmgViewer::loadPlugins()
+{
+    QDir pluginsDir(QCoreApplication::applicationDirPath());
+#if defined(Q_OS_WIN)
+    if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
+        pluginsDir.cdUp();
+#elif defined(Q_OS_MAC)
+    if (pluginsDir.dirName() == "MacOS") {
+        pluginsDir.cdUp();
+        pluginsDir.cdUp();
+        pluginsDir.cdUp();
+    }
+#endif
+    pluginsDir.cd("../plugins");
+    loadPluginsFromDir(pluginsDir);
+
+    for (const QFileInfo &fileinfo : pluginsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
+        loadPluginsFromDir(fileinfo.absoluteFilePath());
+    }
+}
+
+void EmgViewer::loadPluginsFromDir(QDir dir)
+{
+    qDebug() << dir.absolutePath();
+
+    const QStringList entries = dir.entryList(QDir::Files);
+    qDebug() << "entries: "  << entries;
+
+    for (const QString &fileName : entries) {
+        QPluginLoader pluginLoader(dir.absoluteFilePath(fileName));
+        QObject *plugin = pluginLoader.instance();
+        if (plugin) {
+            EmgInterface* emgInterface = qobject_cast<EmgInterface*>(plugin);
+            if (emgInterface)
+            {
+                qInfo() << "loaded plugin" << fileName;
+                m_ListPlugins.append(emgInterface);
+            }
+            else
+            {
+                qWarning() << "failed loading plugin" << fileName;
+                pluginLoader.unload();
+            }
+        }
+    }
+}
+
+void EmgViewer::initGUI()
 {
     // TODO: remove in Release profile
     // The following are needed to make the app run without having to install the module
@@ -44,8 +108,9 @@ EmgViewer::EmgViewer()
 #else
     QString extraImportPath(QStringLiteral("%1/../../../%2"));
 #endif
-    engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
-                                      QString::fromLatin1("qml")));
+    engine()->addImportPath(extraImportPath.arg(
+                                QGuiApplication::applicationDirPath(),
+                                QString::fromLatin1("qml")));
     QObject::connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
 
     setTitle(QStringLiteral("EMG Diagnostics"));
