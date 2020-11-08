@@ -36,12 +36,12 @@ class EmgInterface
 {
 public:
     virtual ~EmgInterface() = default;
-    virtual QString echo(const QString &message) = 0;
+//    virtual QString echo(const QString &message) = 0;
 };
 
 QT_BEGIN_NAMESPACE
 
-#define EchoInterface_iid "com.github.sjacek.EMG-Diagnostics.EmgInterface"
+#define EmgInterface_iid "com.github.sjacek.EMG-Diagnostics.EmgInterface"
 
 Q_DECLARE_INTERFACE(EmgInterface, EmgInterface_iid)
 QT_END_NAMESPACE
