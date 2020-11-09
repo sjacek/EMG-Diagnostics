@@ -10,6 +10,6 @@ Homepage: <insert the upstream URL, if relevant>
 
 Package: emg-diagnostics
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, qml-module-qtquick2, qml-module-qtcharts, qml-module-qtquick-controls, qml-module-qtquick-layouts
 Description: <insert up to 60 chars description>
  <insert long description, indented with spaces>
