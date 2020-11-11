@@ -1,3 +1,8 @@
+# Check if the config file exists
+! include( ../common.pri ) {
+    error( "Couldn't find the common.pri file!" )
+}
+
 QT += charts qml quick
 
 CONFIG += c++11
@@ -37,7 +42,8 @@ QML_IMPORT_PATH =
 QML_DESIGNER_IMPORT_PATH =
 
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
+else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
 !isEmpty(target.path): INSTALLS += target
 
+CONFIG += install_ok  # Do not cargo-cult this!

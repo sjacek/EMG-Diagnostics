@@ -53,31 +53,42 @@ EmgViewer::EmgViewer()
 
 void EmgViewer::loadPlugins()
 {
-    QDir pluginsDir(QCoreApplication::applicationDirPath());
+    QDir dir(QCoreApplication::applicationDirPath());
 #if defined(Q_OS_WIN)
-    if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
-        pluginsDir.cdUp();
+    if (dir.dirName().toLower() == "debug" || dir.dirName().toLower() == "release")
+        dir.cdUp();
 #elif defined(Q_OS_MAC)
-    if (pluginsDir.dirName() == "MacOS") {
-        pluginsDir.cdUp();
-        pluginsDir.cdUp();
-        pluginsDir.cdUp();
+    if (dir.dirName() == "MacOS") {
+        dir.cdUp();
+        dir.cdUp();
+        dir.cdUp();
     }
 #endif
-    pluginsDir.cd("../plugins");
-    loadPluginsFromDir(pluginsDir);
+    if (dir.dirName() == "bin")
+        dir.cdUp();
+    qDebug() << "Base dir:" << dir;
 
-    for (const QFileInfo &fileinfo : pluginsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
-        loadPluginsFromDir(fileinfo.absoluteFilePath());
+    QDir pluginsDir = dir;
+    if (pluginsDir.cd("lib/plugins")) {
+        loadPluginsFromDir(pluginsDir);
+    }
+
+    pluginsDir = dir;
+    if (pluginsDir.cd("plugins")) {
+        loadPluginsFromDir(pluginsDir);
+
+        for (const QFileInfo &fileinfo : pluginsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
+            loadPluginsFromDir(fileinfo.absoluteFilePath());
+        }
     }
 }
 
-void EmgViewer::loadPluginsFromDir(QDir dir)
+void EmgViewer::loadPluginsFromDir(const QDir& dir)
 {
-    qDebug() << dir.absolutePath();
+    qDebug() << "Plugins dir:" << dir;
 
     const QStringList entries = dir.entryList(QDir::Files);
-    qDebug() << "entries: "  << entries;
+    qDebug() << "entries:"  << entries;
 
     for (const QString &fileName : entries) {
         QPluginLoader pluginLoader(dir.absoluteFilePath(fileName));

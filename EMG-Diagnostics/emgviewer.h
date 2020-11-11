@@ -51,7 +51,7 @@ private:
 
     void initGUI();
     void loadPlugins();
-    void loadPluginsFromDir(QDir dir);
+    void loadPluginsFromDir(const QDir& dir);
 };
 
 #endif // EMGVIEWER_H

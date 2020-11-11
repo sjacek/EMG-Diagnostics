@@ -1,3 +1,8 @@
+# Check if the plugin config file exists
+! include( ../plugin.pri ) {
+    error( "Couldn't find the common.pri file!" )
+}
+
 TEMPLATE = lib
 
 CONFIG += plugin
@@ -11,3 +16,7 @@ SOURCES = \
 
 CONFIG += install_ok  # Do not cargo-cult this!
 
+TARGET  = $$qtLibraryTarget(uECG)
+#DESTDIR = ../plugins
+
+CONFIG += install_ok  # Do not cargo-cult this!

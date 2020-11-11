@@ -1,3 +1,8 @@
+# Check if the plugin config file exists
+! include( ../plugin.pri ) {
+    error( "Couldn't find the common.pri file!" )
+}
+
 TEMPLATE = lib
 
 CONFIG += plugin
@@ -9,5 +14,7 @@ HEADERS = \
 SOURCES = \
     fakeplugin.cpp
 
-CONFIG += install_ok  # Do not cargo-cult this!
+TARGET  = $$qtLibraryTarget(fake)
+#DESTDIR = ../plugins
 
+CONFIG += install_ok  # Do not cargo-cult this!
