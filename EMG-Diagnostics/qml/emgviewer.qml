@@ -58,10 +58,15 @@ Item {
         anchors.right: parent.right
 
         onSignalSourceChanged: {
-            if (source == "sin")
+            switch (source) {
+            case "sin":
                 dataSource.generateData(0, signalCount, sampleCount);
-            else
+                break;
+            case "linear":
                 dataSource.generateData(1, signalCount, sampleCount);
+                break;
+            }
+
             scopeView.axisX().max = sampleCount;
         }
         onSeriesTypeChanged: scopeView.changeSeriesType(type);
