@@ -91,8 +91,8 @@ ChartView {
         running: true
         repeat: true
         onTriggered: {
-            dataSource.update(chartView.series(0));
-            dataSource.update(chartView.series(1));
+            for (var i = 0; i <= chartView.count; i++)
+                dataSource.update(chartView.series(i));
         }
     }
     //![2]
@@ -104,33 +104,40 @@ ChartView {
         // Create two new series of the correct type. Axis x is the same for both of the series,
         // but the series have their own y-axes to make it possible to control the y-offset
         // of the "signal sources".
-        if (type === "line") {
-            var series1 = chartView.createSeries(ChartView.SeriesTypeLine, "signal 1",
-                                                 axisX, axisY1);
-            series1.useOpenGL = chartView.openGL
 
-            var series2 = chartView.createSeries(ChartView.SeriesTypeLine, "signal 2",
-                                                 axisX, axisY2);
+        var seriesType;
+        switch (type) {
+        case "line":
+            seriesType = ChartView.SeriesTypeLine;
+            break;
+        case "scatter":
+            seriesType = ChartView.SeriesTypeScatter;
+            break;
+        }
+
+        var series1 = chartView.createSeries(seriesType, "signal 1", axisX, axisY1);
+        var series2 = chartView.createSeries(seriesType, "signal 2", axisX, axisY2);
+
+        switch (type) {
+        case "line":
+            series1.useOpenGL = chartView.openGL
             series2.useOpenGL = chartView.openGL
-        } else {
-            var series1 = chartView.createSeries(ChartView.SeriesTypeScatter, "signal 1",
-                                                 axisX, axisY1);
+            break;
+        case "scatter":
             series1.markerSize = 2;
             series1.borderColor = "transparent";
             series1.useOpenGL = chartView.openGL
 
-            var series2 = chartView.createSeries(ChartView.SeriesTypeScatter, "signal 2",
-                                                 axisX, axisY2);
             series2.markerSize = 2;
             series2.borderColor = "transparent";
             series2.useOpenGL = chartView.openGL
+            break;
         }
     }
 
     function createAxis(min, max) {
         // The following creates a ValueAxis object that can be then set as a x or y axis for a series
-        return Qt.createQmlObject("import QtQuick 2.0; import QtCharts 2.0; ValueAxis { min: "
-                                  + min + "; max: " + max + " }", chartView);
+        return Qt.createQmlObject("import QtQuick 2.0; import QtCharts 2.0; ValueAxis { min: " + min + "; max: " + max + " }", chartView);
     }
     //![3]
 
