@@ -1,3 +1,5 @@
+QMAKE_PROJECT_NAME = EMG-Diagnostics
+
 # Check if the config file exists
 ! include( ../common.pri ) {
     error( "Couldn't find the common.pri file!" )
@@ -14,12 +16,15 @@ CONFIG += c++11
 INCLUDEPATH    += ../plugins/interface
 
 HEADERS += \
-    ../plugins/interface/emginterface.h \
+    ../plugins/interface/dataseries.h \
+    ../plugins/interface/plugin.h \
     datasource.h \
+    emgapplication.h \
     emgviewer.h
 
 SOURCES += \
     datasource.cpp \
+    emgapplication.cpp \
     emgviewer.cpp \
     main.cpp
 

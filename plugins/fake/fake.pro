@@ -1,3 +1,5 @@
+QMAKE_PROJECT_NAME = fake
+
 # Check if the plugin config file exists
 ! include( ../plugin.pri ) {
     error( "Couldn't find the common.pri file!" )
@@ -10,9 +12,11 @@ QT += widgets
 INCLUDEPATH    += ../interface
 
 HEADERS = \
-    fakeplugin.h
+    fakeplugin.h \
+    fakeseries.h
 SOURCES = \
-    fakeplugin.cpp
+    fakeplugin.cpp \
+    fakeseries.cpp
 
 TARGET  = $$qtLibraryTarget(fake)
 #DESTDIR = ../plugins

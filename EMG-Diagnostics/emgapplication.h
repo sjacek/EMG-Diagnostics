@@ -27,26 +27,39 @@
  **
  ****************************************************************************/
 
-#ifndef UECGPLUGIN_H
-#define UECGPLUGIN_H
+#ifndef EMGAPPLICATION_H
+#define EMGAPPLICATION_H
 
-#include <QtCore/QObject>
-#include <QtCore/QtPlugin>
-#include "plugin.h"
+#include <QtWidgets/QApplication>
+//#include <QtCore/qglobal.h>
 
-class UEcgPlugin : public QObject, Plugin
+QT_BEGIN_NAMESPACE
+class Plugin;
+class QDir;
+QT_END_NAMESPACE
+
+class EmgApplication : public QApplication
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "fakeplugin.json")
-    Q_INTERFACES(Plugin)
+public:
+#ifdef Q_QDOC
+    EmgApplication(int &argc, char **argv);
+#else
+    EmgApplication(int &argc, char **argv, int flags = ApplicationFlags);
+#endif
+
+private:
+    QList<Plugin*> m_Plugins;
+
+    void loadPlugins();
+    void loadPluginsFromDir(const QDir& dir);
+
 
 public:
-    explicit UEcgPlugin(QObject *parent = nullptr);
+    const QList<Plugin*>& getPlugins() {
+        return m_Plugins;
+    }
 
-    virtual QString getName() { return "FakePlugin"; }
-
-signals:
-
+    static EmgApplication* theApp;
 };
 
-#endif // UECGPLUGIN_H
+#endif // EMGAPPLICATION_H

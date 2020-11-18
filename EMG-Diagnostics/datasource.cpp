@@ -29,8 +29,6 @@
 
 #include "datasource.h"
 #include <QtCharts/QXYSeries>
-//#include <QtCharts/QAreaSeries>
-//#include <QtCore/QDebug>
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QtMath>
 

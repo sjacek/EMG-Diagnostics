@@ -27,24 +27,25 @@
  **
  ****************************************************************************/
 
-#ifndef EMGINTERFACE_H
-#define EMGINTERFACE_H
+#ifndef DATASERIES_H
+#define DATASERIES_H
 
 #include <QtCore/QObject>
+#include <QtCharts/QAbstractSeries>
 
-class EmgInterface
+QT_CHARTS_USE_NAMESPACE
+
+class DataSeries : public QObject
 {
+    Q_OBJECT
 public:
-    virtual ~EmgInterface() = default;
-//    virtual QString echo(const QString &message) = 0;
+    explicit DataSeries(QObject *parent = 0) : QObject(parent) {};
+
+Q_SIGNALS:
+
+public slots:
+    virtual void generateData(int type, int rowCount, int colCount) = 0;
+    virtual void update(QAbstractSeries *series) = 0;
 };
 
-QT_BEGIN_NAMESPACE
-
-#define EmgInterface_iid "com.github.sjacek.EMG-Diagnostics.EmgInterface"
-
-Q_DECLARE_INTERFACE(EmgInterface, EmgInterface_iid)
-QT_END_NAMESPACE
-
-
-#endif // EMGINTERFACE_H
+#endif // DATASERIES_H

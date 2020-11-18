@@ -4,12 +4,12 @@ Priority: optional
 Maintainer: Jacek Sztajnke <jacek.sztajnke@gmail.com>
 Build-Depends: debhelper-compat (= 12)
 Standards-Version: 4.4.1
-Homepage: <insert the upstream URL, if relevant>
+Homepage: https://github.com/sjacek/EMG-Diagnostics
 #Vcs-Browser: https://salsa.debian.org/debian/emg-diagnostics
 #Vcs-Git: https://salsa.debian.org/debian/emg-diagnostics.git
 
 Package: emg-diagnostics
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, qml-module-qtquick2, qml-module-qtcharts, qml-module-qtquick-controls, qml-module-qtquick-layouts
-Description: <insert up to 60 chars description>
+Description: EMG devices diagnostic tool
  <insert long description, indented with spaces>

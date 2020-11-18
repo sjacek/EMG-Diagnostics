@@ -27,6 +27,7 @@ Makefile*
 *.prl
 *.app
 moc_*.cpp
+moc_*.h
 ui_*.h
 qrc_*.cpp
 Thumbs.db
@@ -59,6 +60,10 @@ Thumbs.db
 *.vcxproj
 *vcxproj.*
 
+# KDevelop generated files
+.kdev4/
+*.kdev4
+
 # MinGW generated files
 *.Debug
 *.Release
@@ -71,4 +76,4 @@ Thumbs.db
 build/
 *.dll
 *.exe
-EMG-Diagnostics/
+

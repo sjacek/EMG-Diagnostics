@@ -32,10 +32,10 @@
 
 #include <QtQuick/QQuickView>
 #include "datasource.h"
+#include "dataseries.h"
 
 QT_BEGIN_NAMESPACE
 class QDir;
-class EmgInterface;
 QT_END_NAMESPACE
 
 class EmgViewer : public QQuickView
@@ -46,12 +46,13 @@ public:
     EmgViewer();
 
 private:
-    DataSource m_dataSource;
-    QList<EmgInterface*> m_ListPlugins;
+    DataSource m_DataSource;
+//    DataSeries* m_pDataSource;
+//    QList<DataSeries*> m_DataSources;
 
     void initGUI();
-    void loadPlugins();
-    void loadPluginsFromDir(const QDir& dir);
+
+    void addDatasource(DataSeries* datasource);
 };
 
 #endif // EMGVIEWER_H

@@ -31,82 +31,18 @@
 
 #include <QtWidgets/QApplication>
 #include <QtCore/QDebug>
-#include <QtCore/QDir>
 #include <QtWidgets/QMessageBox>
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
-#include <QtCore/QPluginLoader>
 
-#include "emginterface.h"
+#include "emgapplication.h"
+#include "dataseries.h"
+#include "plugin.h"
 
 EmgViewer::EmgViewer()
+    : m_DataSource(this)
 {
-    loadPlugins();
-    {
-//        QMessageBox::information((QWidget*)this, "Error", "Could not load the plugin");
-//        lineEdit->setEnabled(false);
-//        button->setEnabled(false);
-    }
-
     initGUI();
-}
-
-void EmgViewer::loadPlugins()
-{
-    QDir dir(QCoreApplication::applicationDirPath());
-#if defined(Q_OS_WIN)
-    if (dir.dirName().toLower() == "debug" || dir.dirName().toLower() == "release")
-        dir.cdUp();
-#elif defined(Q_OS_MAC)
-    if (dir.dirName() == "MacOS") {
-        dir.cdUp();
-        dir.cdUp();
-        dir.cdUp();
-    }
-#endif
-    if (dir.dirName() == "bin")
-        dir.cdUp();
-    qDebug() << "Base dir:" << dir;
-
-    QDir pluginsDir = dir;
-    if (pluginsDir.cd("lib/plugins")) {
-        loadPluginsFromDir(pluginsDir);
-    }
-
-    pluginsDir = dir;
-    if (pluginsDir.cd("plugins")) {
-        loadPluginsFromDir(pluginsDir);
-
-        for (const QFileInfo &fileinfo : pluginsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
-            loadPluginsFromDir(fileinfo.absoluteFilePath());
-        }
-    }
-}
-
-void EmgViewer::loadPluginsFromDir(const QDir& dir)
-{
-    qDebug() << "Plugins dir:" << dir;
-
-    const QStringList entries = dir.entryList(QDir::Files);
-    qDebug() << "entries:"  << entries;
-
-    for (const QString &fileName : entries) {
-        QPluginLoader pluginLoader(dir.absoluteFilePath(fileName));
-        QObject *plugin = pluginLoader.instance();
-        if (plugin) {
-            EmgInterface* emgInterface = qobject_cast<EmgInterface*>(plugin);
-            if (emgInterface)
-            {
-                qInfo() << "loaded plugin" << fileName;
-                m_ListPlugins.append(emgInterface);
-            }
-            else
-            {
-                qWarning() << "failed loading plugin" << fileName;
-                pluginLoader.unload();
-            }
-        }
-    }
 }
 
 void EmgViewer::initGUI()
@@ -126,9 +62,18 @@ void EmgViewer::initGUI()
 
     setTitle(QStringLiteral("EMG Diagnostics"));
 
-    rootContext()->setContextProperty("dataSource", &m_dataSource);
+    rootContext()->setContextProperty("dataSource", &m_DataSource);
+
+    qDebug() << "EmgViewer::initGUI()";
+    foreach (Plugin* plugin, EmgApplication::theApp->getPlugins()) {
+        qDebug() << plugin->getName();
+    }
 
     setSource(QUrl("qrc:/qml/emgviewer.qml"));
     setResizeMode(QQuickView::SizeRootObjectToView);
     setColor(QColor("#404040"));
+}
+
+void addDatasource(DataSeries* datasource) {
+
 }

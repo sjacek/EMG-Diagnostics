@@ -1,3 +1,5 @@
+QMAKE_PROJECT_NAME = uECG-plugin
+
 # Check if the plugin config file exists
 ! include( ../plugin.pri ) {
     error( "Couldn't find the common.pri file!" )
@@ -10,11 +12,11 @@ QT += widgets
 INCLUDEPATH    += ../interface
 
 HEADERS = \
-    uecgplugin.h
+    uecgplugin.h \
+    uecgseries.h
 SOURCES = \
-    uecgplugin.cpp
-
-CONFIG += install_ok  # Do not cargo-cult this!
+    uecgplugin.cpp \
+    uecgseries.cpp
 
 TARGET  = $$qtLibraryTarget(uECG)
 #DESTDIR = ../plugins

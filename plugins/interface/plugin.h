@@ -27,26 +27,25 @@
  **
  ****************************************************************************/
 
-#ifndef UECGPLUGIN_H
-#define UECGPLUGIN_H
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
 #include <QtCore/QObject>
-#include <QtCore/QtPlugin>
-#include "plugin.h"
 
-class UEcgPlugin : public QObject, Plugin
+class Plugin
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "fakeplugin.json")
-    Q_INTERFACES(Plugin)
-
 public:
-    explicit UEcgPlugin(QObject *parent = nullptr);
+    virtual ~Plugin() = default;
 
-    virtual QString getName() { return "FakePlugin"; }
-
-signals:
-
+    virtual QString getName() = 0;
 };
 
-#endif // UECGPLUGIN_H
+QT_BEGIN_NAMESPACE
+
+#define Plugin_iid "com.github.sjacek.EMG-Diagnostics.Plugin"
+
+Q_DECLARE_INTERFACE(Plugin, Plugin_iid)
+QT_END_NAMESPACE
+
+
+#endif // PLUGIN_H

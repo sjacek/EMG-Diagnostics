@@ -39,13 +39,13 @@ class DataSource : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataSource(QObject *parent = 0);
+    explicit DataSource(QObject* parent);
 
 Q_SIGNALS:
 
 public slots:
     void generateData(int type, int rowCount, int colCount);
-    void update(QAbstractSeries *series);
+    void update(QAbstractSeries* series);
 
 private:
     QList<QList<QPointF>> m_data;

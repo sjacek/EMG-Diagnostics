@@ -31,17 +31,19 @@
 #define UECGPLUGIN_H
 
 #include <QtCore/QObject>
-#include <QtPlugin>
-#include "emginterface.h"
+#include <QtCore/QtPlugin>
+#include "plugin.h"
 
-class UEcgPlugin : public QObject, EmgInterface
+class UEcgPlugin : public QObject, Plugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.EmgInterface" FILE "uecgplugin.json")
-    Q_INTERFACES(EmgInterface)
+    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "uecgplugin.json")
+    Q_INTERFACES(Plugin)
 
 public:
     explicit UEcgPlugin(QObject *parent = nullptr);
+
+    virtual QString getName() { return "uECGPlugin"; }
 
 signals:
 

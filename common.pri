@@ -1,1 +1,0 @@
-QMAKE_PROJECT_NAME = EMG-Diagnostics

@@ -29,7 +29,7 @@
 
 #include "fakeplugin.h"
 
-FakePlugin::FakePlugin(QObject *parent) : QObject(parent)
+UEcgPlugin::UEcgPlugin(QObject *parent) : QObject(parent)
 {
 
 }
