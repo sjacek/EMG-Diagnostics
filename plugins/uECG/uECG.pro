@@ -1,4 +1,5 @@
 QMAKE_PROJECT_NAME = uECG-plugin
+TARGET  = $$qtLibraryTarget(uECG)
 
 # Check if the plugin config file exists
 ! include( ../plugin.pri ) {
@@ -18,7 +19,7 @@ SOURCES = \
     uecgplugin.cpp \
     uecgseries.cpp
 
-TARGET  = $$qtLibraryTarget(uECG)
-#DESTDIR = ../plugins
+DISTFILES += \
+    uecgplugin.json
 
 CONFIG += install_ok  # Do not cargo-cult this!

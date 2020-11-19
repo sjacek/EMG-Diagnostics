@@ -74,6 +74,6 @@ void EmgViewer::initGUI()
     setColor(QColor("#404040"));
 }
 
-void addDatasource(DataSeries* datasource) {
+void addDatasource(DataSeries* series) {
 
 }

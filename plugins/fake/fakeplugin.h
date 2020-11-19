@@ -34,16 +34,14 @@
 #include <QtCore/QtPlugin>
 #include "plugin.h"
 
-class UEcgPlugin : public QObject, Plugin
+class FakePlugin : public QObject, Plugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "fakeplugin.json")
     Q_INTERFACES(Plugin)
 
 public:
-    explicit UEcgPlugin(QObject *parent = nullptr);
-
-    virtual QString getName() { return "FakePlugin"; }
+    explicit FakePlugin(QObject* parent = nullptr);
 
 signals:
 

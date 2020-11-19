@@ -29,7 +29,10 @@
 
 #include "uecgplugin.h"
 
-UEcgPlugin::UEcgPlugin(QObject *parent) : QObject(parent)
-{
+#include <QtCore/QPluginLoader>
 
+
+UEcgPlugin::UEcgPlugin(QObject* parent)
+    : QObject(parent)
+{
 }

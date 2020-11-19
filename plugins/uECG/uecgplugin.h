@@ -41,9 +41,7 @@ class UEcgPlugin : public QObject, Plugin
     Q_INTERFACES(Plugin)
 
 public:
-    explicit UEcgPlugin(QObject *parent = nullptr);
-
-    virtual QString getName() { return "uECGPlugin"; }
+    explicit UEcgPlugin(QObject* parent = nullptr);
 
 signals:
 

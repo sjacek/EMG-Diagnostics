@@ -29,7 +29,11 @@
 
 #include "fakeplugin.h"
 
-UEcgPlugin::UEcgPlugin(QObject *parent) : QObject(parent)
-{
+#include <QtCore/QDebug>
+#include <QtCore/QPluginLoader>
 
+
+FakePlugin::FakePlugin(QObject* parent)
+    : QObject(parent)
+{
 }

@@ -31,13 +31,43 @@
 #define PLUGIN_H
 
 #include <QtCore/QObject>
+#include <QtCore/QPluginLoader>
+
+QT_BEGIN_NAMESPACE
+QT_END_NAMESPACE
 
 class Plugin
 {
 public:
+    explicit Plugin() : m_pPluginLoader(nullptr) {}
+
     virtual ~Plugin() = default;
 
-    virtual QString getName() = 0;
+    virtual QString getName() const {
+        return getMetaDataValue("Name");
+    }
+
+    virtual QString getVersion() const {
+        return getMetaDataValue("Version");
+    }
+
+    friend class EmgApplication;
+
+protected:
+    void setPluginLoader(QPluginLoader* pluginLoader) {
+        m_pPluginLoader = pluginLoader;
+    }
+
+    const QPluginLoader* getPluginLoader() const {
+        return m_pPluginLoader;
+    }
+
+    virtual QString getMetaDataValue(QString valueName) const {
+        return getPluginLoader()->metaData().value("MetaData").toObject().value(valueName).toString();
+    }
+
+private:
+    const QPluginLoader* m_pPluginLoader;
 };
 
 QT_BEGIN_NAMESPACE

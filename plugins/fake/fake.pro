@@ -1,4 +1,5 @@
 QMAKE_PROJECT_NAME = fake
+TARGET  = $$qtLibraryTarget(fake)
 
 # Check if the plugin config file exists
 ! include( ../plugin.pri ) {
@@ -18,7 +19,7 @@ SOURCES = \
     fakeplugin.cpp \
     fakeseries.cpp
 
-TARGET  = $$qtLibraryTarget(fake)
-#DESTDIR = ../plugins
+DISTFILES += \
+    fakeplugin.json
 
 CONFIG += install_ok  # Do not cargo-cult this!
