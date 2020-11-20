@@ -28,7 +28,7 @@
  ****************************************************************************/
 
 import QtQuick 2.0
-import QtCharts 2.1
+import QtCharts 2.15
 
 //![1]
 ChartView {
@@ -43,10 +43,11 @@ ChartView {
                 dataSource.update(chartView.series(i));
     }
     Component.onCompleted: {
-        if (!series("signal 1").useOpenGL) {
-            openGLSupported = false
-            openGL = false
-        }
+        changeSeriesType("line")
+//        if (!series("signal 1").useOpenGL) {
+//            openGLSupported = false
+//            openGL = false
+//        }
     }
 
     ValueAxis {
@@ -67,21 +68,22 @@ ChartView {
         max: 1024
     }
 
-    LineSeries {
-        id: lineSeries1
-        name: "signal 1"
-        axisX: axisX
-        axisY: axisY1
-        useOpenGL: chartView.openGL
-    }
-    LineSeries {
-        id: lineSeries2
-        name: "signal 2"
-        axisX: axisX
-        axisYRight: axisY2
-        useOpenGL: chartView.openGL
-    }
-//![1]
+//    LineSeries {
+//        id: lineSeries1
+//        name: "signal 1"
+//        axisX: axisX
+//        axisY: axisY1
+//        useOpenGL: chartView.openGL
+//    }
+//    LineSeries {
+//        id: lineSeries2
+//        name: "signal 2"
+//        axisX: axisX
+//        axisYRight: axisY2
+//        useOpenGL: chartView.openGL
+//    }
+
+    //![1]
 
     //![2]
     Timer {
@@ -114,30 +116,29 @@ ChartView {
             break;
         }
 
-        var series1 = chartView.createSeries(seriesType, "signal 1", axisX, axisY1);
-        var series2 = chartView.createSeries(seriesType, "signal 2", axisX, axisY2);
+        for (var i = 0; i <= 1; i++) {
+            var name = "signal " + i
 
-        switch (type) {
-        case "line":
-            series1.useOpenGL = chartView.openGL
-            series2.useOpenGL = chartView.openGL
-            break;
-        case "scatter":
-            series1.markerSize = 2;
-            series1.borderColor = "transparent";
-            series1.useOpenGL = chartView.openGL
+            var axisY = i === 0 ? axisY1 : axisY2;
+            var series = chartView.createSeries(seriesType, name, axisX, axisY);
 
-            series2.markerSize = 2;
-            series2.borderColor = "transparent";
-            series2.useOpenGL = chartView.openGL
-            break;
+            switch (type) {
+            case "line":
+                series.useOpenGL = chartView.openGL
+                break;
+            case "scatter":
+                series.markerSize = 2;
+                series.borderColor = "transparent";
+                series.useOpenGL = chartView.openGL
+                break;
+            }
         }
     }
 
-    function createAxis(min, max) {
-        // The following creates a ValueAxis object that can be then set as a x or y axis for a series
-        return Qt.createQmlObject("import QtQuick 2.0; import QtCharts 2.0; ValueAxis { min: " + min + "; max: " + max + " }", chartView);
-    }
+//    function createAxis(min, max) {
+//        // The following creates a ValueAxis object that can be then set as a x or y axis for a series
+//        return Qt.createQmlObject("import QtQuick 2.0; import QtCharts 2.15; ValueAxis { min: " + min + "; max: " + max + " }", chartView);
+//    }
     //![3]
 
     function setAnimations(enabled) {
