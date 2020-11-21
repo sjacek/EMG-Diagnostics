@@ -51,9 +51,15 @@ EmgApplication* EmgApplication::theApp;
 
 void EmgApplication::loadPlugins()
 {
+//    const QVector<QStaticPlugin> staticPlugins = QPluginLoader::staticPlugins();
+//    for (const QStaticPlugin& staticPlugin : staticPlugins)
+//    {
+//        // TODO:
+//    }
+
     qDebug() << "library Paths" << libraryPaths();
 
-    QDir dir(QCoreApplication::applicationDirPath());
+    QDir dir(applicationDirPath());
 #if defined(Q_OS_WIN)
     if (dir.dirName().toLower() == "debug" || dir.dirName().toLower() == "release")
         dir.cdUp();

@@ -27,7 +27,7 @@
  **
  ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 
 Item {
     id: emgviewer
@@ -58,15 +58,7 @@ Item {
         anchors.right: parent.right
 
         onSignalSourceChanged: {
-            switch (source) {
-            case "sin":
-                dataSource.generateData(0, signalCount, sampleCount);
-                break;
-            case "linear":
-                dataSource.generateData(1, signalCount, sampleCount);
-                break;
-            }
-
+            dataSource.generateData(signalCount, sampleCount);
             scopeView.axisX().max = sampleCount;
         }
         onSeriesTypeChanged: scopeView.changeSeriesType(type);

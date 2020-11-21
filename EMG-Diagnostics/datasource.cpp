@@ -44,7 +44,7 @@ DataSource::DataSource(QObject *parent) :
     qRegisterMetaType<QAbstractSeries*>();
     qRegisterMetaType<QAbstractAxis*>();
 
-    generateData(0, 5, 1024);
+    generateData(5, 1024);
 }
 
 void DataSource::update(QAbstractSeries *series)
@@ -61,7 +61,7 @@ void DataSource::update(QAbstractSeries *series)
     }
 }
 
-void DataSource::generateData(int type, int rowCount, int colCount)
+void DataSource::generateData(int rowCount, int colCount)
 {
     // Remove previous data
     m_data.clear();
@@ -71,23 +71,9 @@ void DataSource::generateData(int type, int rowCount, int colCount)
         QList<QPointF> points;
         points.reserve(colCount);
         for (int j(0); j < colCount; j++) {
-            qreal x(0);
-            qreal y(0);
-            switch (type) {
-            case 0:
-                // data with sin + random component
-                y = qSin(M_PI / 50 * j) + 0.5 + QRandomGenerator::global()->generateDouble();
-                x = j;
-                break;
-            case 1:
-                // linear data
-                x = j;
-                y = (qreal) i / 10;
-                break;
-            default:
-                // unknown, do nothing
-                break;
-            }
+            // data with sin + random component
+            qreal y = qSin(M_PI / 50 * j) + 0.5 + QRandomGenerator::global()->generateDouble();
+            qreal x = j;
             points.append(QPointF(x, y));
         }
         m_data.append(points);

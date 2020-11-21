@@ -27,7 +27,7 @@
  **
  ****************************************************************************/
 
-import QtQuick 2.0
+import QtQuick 2.1
 import QtCharts 2.15
 
 //![1]
@@ -44,10 +44,6 @@ ChartView {
     }
     Component.onCompleted: {
         changeSeriesType("line")
-//        if (!series("signal 1").useOpenGL) {
-//            openGLSupported = false
-//            openGL = false
-//        }
     }
 
     ValueAxis {
@@ -67,22 +63,6 @@ ChartView {
         min: 0
         max: 1024
     }
-
-//    LineSeries {
-//        id: lineSeries1
-//        name: "signal 1"
-//        axisX: axisX
-//        axisY: axisY1
-//        useOpenGL: chartView.openGL
-//    }
-//    LineSeries {
-//        id: lineSeries2
-//        name: "signal 2"
-//        axisX: axisX
-//        axisYRight: axisY2
-//        useOpenGL: chartView.openGL
-//    }
-
     //![1]
 
     //![2]
@@ -102,10 +82,9 @@ ChartView {
     function changeSeriesType(type) {
         chartView.removeAllSeries();
 
-        // Create two new series of the correct type. Axis x is the same for both of the series,
+        // Create new series of the correct type. Axis x is the same for both of the series,
         // but the series have their own y-axes to make it possible to control the y-offset
         // of the "signal sources".
-
         var seriesType;
         switch (type) {
         case "line":
@@ -116,7 +95,7 @@ ChartView {
             break;
         }
 
-        for (var i = 0; i <= 1; i++) {
+        for (var i = 0; i <= dataSource.count() - 1; i++) {
             var name = "signal " + i
 
             var axisY = i === 0 ? axisY1 : axisY2;
@@ -134,11 +113,6 @@ ChartView {
             }
         }
     }
-
-//    function createAxis(min, max) {
-//        // The following creates a ValueAxis object that can be then set as a x or y axis for a series
-//        return Qt.createQmlObject("import QtQuick 2.0; import QtCharts 2.15; ValueAxis { min: " + min + "; max: " + max + " }", chartView);
-//    }
     //![3]
 
     function setAnimations(enabled) {

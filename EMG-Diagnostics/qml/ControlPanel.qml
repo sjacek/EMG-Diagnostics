@@ -38,7 +38,7 @@ ColumnLayout {
     signal animationsEnabled(bool enabled)
     signal seriesTypeChanged(string type)
     signal refreshRateChanged(variant rate);
-    signal signalSourceChanged(string source, int signalCount, int sampleCount);
+    signal signalSourceChanged(int signalCount, int sampleCount);
     signal antialiasingEnabled(bool enabled)
     signal openGlChanged(bool enabled)
 
@@ -64,25 +64,11 @@ ColumnLayout {
     }
 
     MultiButton {
-        id: signalSourceButton
-        text: "Source: "
-        items: ["sin", "linear"]
-        currentSelection: 0
-        onSelectionChanged: signalSourceChanged(
-                                selection,
-                                5,
-                                sampleCountButton.items[sampleCountButton.currentSelection]);
-    }
-
-    MultiButton {
         id: sampleCountButton
         text: "Samples: "
         items: ["6", "128", "1024", "10000"]
         currentSelection: 2
-        onSelectionChanged: signalSourceChanged(
-                                signalSourceButton.items[signalSourceButton.currentSelection],
-                                5,
-                                selection);
+        onSelectionChanged: signalSourceChanged(5, selection);
     }
 
     MultiButton {

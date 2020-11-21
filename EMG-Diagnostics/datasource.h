@@ -44,7 +44,8 @@ public:
 Q_SIGNALS:
 
 public slots:
-    void generateData(int type, int rowCount, int colCount);
+    int count() { return 2; }
+    void generateData(int rowCount, int colCount);
     void update(QAbstractSeries* series);
 
 private:
