@@ -47,6 +47,14 @@ EmgApplication::EmgApplication(int &argc, char **argv, int flags)
     theApp = this;
 }
 
+QDebug operator<< (QDebug debug, const Plugin& plugin)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "Plugin(" << plugin.getName() << ", " << plugin.getVersion() << ")";
+
+    return debug;
+}
+
 EmgApplication* EmgApplication::theApp;
 
 void EmgApplication::loadPlugins()
@@ -102,7 +110,7 @@ void EmgApplication::loadPluginsFromDir(const QDir& dir)
             if (Plugin* plugin = qobject_cast<Plugin*>(object))
             {
                 plugin->setPluginLoader(pluginLoader);
-                qInfo() << "loaded plugin" << fileName << plugin->getName();
+                qInfo() << "loaded plugin" << fileName << *plugin;
                 m_Plugins.append(plugin);
             }
             else
@@ -113,3 +121,4 @@ void EmgApplication::loadPluginsFromDir(const QDir& dir)
         }
     }
 }
+

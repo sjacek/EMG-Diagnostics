@@ -35,10 +35,6 @@
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
 
-#include "emgapplication.h"
-#include "dataseries.h"
-#include "plugin.h"
-
 EmgViewer::EmgViewer()
     : m_DataSource(this)
 {
@@ -47,6 +43,8 @@ EmgViewer::EmgViewer()
 
 void EmgViewer::initGUI()
 {
+    qDebug() << "EmgViewer::initGUI()";
+
     // TODO: remove in Release profile
     // The following are needed to make the app run without having to install the module
     // in desktop environments.
@@ -63,11 +61,6 @@ void EmgViewer::initGUI()
     setTitle(QStringLiteral("EMG Diagnostics"));
 
     rootContext()->setContextProperty("dataSource", &m_DataSource);
-
-    qDebug() << "EmgViewer::initGUI()";
-    foreach (Plugin* plugin, EmgApplication::theApp->getPlugins()) {
-        qDebug() << plugin->getName();
-    }
 
     setSource(QUrl("qrc:/qml/emgviewer.qml"));
     setResizeMode(QQuickView::SizeRootObjectToView);

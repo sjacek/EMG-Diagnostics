@@ -37,12 +37,26 @@
 FakePlugin::FakePlugin(QObject* parent)
     : QObject(parent)
     , Plugin()
+    , m_dataSeriesIdx(0)
 {
 }
 
 void FakePlugin::init(int cols) {
     this->cols = cols;
 
-    DataSeries* series = new FakeSeries(this);
+    FakeSeries* series = new FakeSeries(this);
+    series->init(cols);
     m_series.append(series);
+}
+
+int FakePlugin::registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries)
+{
+    int ret = 0;
+    for (DataSeries* series : m_series)
+    {
+        QString name = QString("fake%1").arg(m_dataSeriesIdx++);
+        mapDataSeries[name] = series;
+        ret++;
+    }
+    return ret;
 }

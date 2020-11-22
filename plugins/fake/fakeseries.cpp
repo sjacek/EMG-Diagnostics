@@ -29,14 +29,56 @@
 
 #include "fakeseries.h"
 
+#include <QtCore/QtDebug>
+#include <QtCore/QtMath>
+#include <QtCore/QRandomGenerator>
+#include <QtCharts/QXYSeries>
+
+QT_CHARTS_USE_NAMESPACE
+
+Q_DECLARE_METATYPE(QAbstractSeries *)
+Q_DECLARE_METATYPE(QAbstractAxis *)
+
 FakeSeries::FakeSeries(QObject* parent)
     : QObject(parent)
-{}
-
-void FakeSeries::init(int cols) {
-
+    , m_index(-1)
+{
+    qRegisterMetaType<QAbstractSeries*>();
+    qRegisterMetaType<QAbstractAxis*>();
 }
 
-void FakeSeries::update(QAbstractSeries* series) {
+void FakeSeries::init(int cols)
+{
+    qDebug() << "FakeSeries::init(" << cols << ")";
+    // Remove previous data
+    m_data.clear();
+    m_data.reserve(DATA_SIZE);
 
+    // Append the new data depending on the type
+    for (int i(0); i < DATA_SIZE; i++) {
+        QList<QPointF> points;
+        points.reserve(cols);
+        for (int j(0); j < cols; j++) {
+            // data with sin + random component
+            qreal y = qSin(M_PI / 50 * j) + 0.5 + QRandomGenerator::global()->generateDouble();
+            qreal x = j;
+            points.append(QPointF(x, y));
+        }
+        m_data.insert(i, points);
+    }
+}
+
+void FakeSeries::update(QAbstractSeries* series)
+{
+    qDebug() << this << "index:" << m_index << "; series:" << series->name() << series << "; m_data.count:" << m_data.count();
+    Q_ASSERT(m_data.count());
+    if (series) {
+        QXYSeries *xySeries = static_cast<QXYSeries *>(series);
+        if (++m_index > DATA_SIZE - 1)
+            m_index = 0;
+
+        QList<QPointF> points = m_data.at(m_index);
+        // Use replace instead of clear + append, it's optimized for performance
+        xySeries->replace(points);
+    }
 }

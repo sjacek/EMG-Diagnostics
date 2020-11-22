@@ -44,10 +44,12 @@ public:
     explicit FakePlugin(QObject* parent = nullptr);
 
     virtual void init(int cols);
-    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
+//    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
+    virtual int registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries);
 
 private:
     int cols;
+    int m_dataSeriesIdx;
 
     QList<DataSeries*> m_series;
 

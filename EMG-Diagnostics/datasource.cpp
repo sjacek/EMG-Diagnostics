@@ -60,7 +60,9 @@ void DataSource::init(int colCount)
     m_dataSeries["signal 1"] = signal1;
 
     for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
+        qDebug() << "DataSource::init" << *plugin;
         plugin->init(colCount);
+        plugin->registerDataSeries(m_dataSeries);
     }
 }
 
@@ -92,15 +94,6 @@ LocalDataSeries::LocalDataSeries(QObject* parent)
     : QObject(parent)
     , m_index(-1)
 {
-}
-
-QList<DataSeries*> DataSource::getSeries() const
-{
-    QList<DataSeries*> ret;
-    for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
-        ret.append(plugin->getDataSeries());
-    }
-    return ret;
 }
 
 void DataSource::update(QAbstractSeries* series)

@@ -37,3 +37,8 @@ UEcgPlugin::UEcgPlugin(QObject* parent)
     , Plugin()
 {
 }
+
+int UEcgPlugin::registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries)
+{
+    return 0;
+}

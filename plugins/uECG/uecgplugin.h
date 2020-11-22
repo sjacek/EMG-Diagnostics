@@ -44,7 +44,8 @@ public:
     explicit UEcgPlugin(QObject* parent = nullptr);
 
     virtual void init(int cols) {}
-    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
+//    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
+    virtual int registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries);
 
 signals:
 

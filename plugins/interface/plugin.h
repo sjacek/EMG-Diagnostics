@@ -43,16 +43,21 @@ public:
 
     virtual void init(int colCount) = 0;
 
-    virtual QList<DataSeries*> getDataSeries() const = 0;
+//    virtual QList<DataSeries*> getDataSeries() const = 0;
+    virtual int registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries) = 0;
 
     virtual ~Plugin() = default;
 
-    virtual QString getName() const {
+    QString getName() const {
         return getMetaDataValue("Name");
     }
 
-    virtual QString getVersion() const {
+    QString getVersion() const {
         return getMetaDataValue("Version");
+    }
+
+    QString getFileName() const {
+        return getPluginLoader()->fileName();
     }
 
     friend class EmgApplication;
@@ -66,7 +71,7 @@ protected:
         return m_pPluginLoader;
     }
 
-    virtual QString getMetaDataValue(QString valueName) const {
+    QString getMetaDataValue(QString valueName) const {
         return getPluginLoader()->metaData().value("MetaData").toObject().value(valueName).toString();
     }
 
@@ -74,12 +79,13 @@ private:
     const QPluginLoader* m_pPluginLoader;
 };
 
+QDebug operator<< (QDebug debug, const Plugin& plugin);
+
 QT_BEGIN_NAMESPACE
 
 #define Plugin_iid "com.github.sjacek.EMG-Diagnostics.Plugin"
 
 Q_DECLARE_INTERFACE(Plugin, Plugin_iid)
 QT_END_NAMESPACE
-
 
 #endif // PLUGIN_H

@@ -39,7 +39,9 @@ public:
     explicit FakeSeries(QObject* parent);
 
 private:
-    QList<QPointF> m_data;
+    const int DATA_SIZE = 5;
+    QList<QList<QPointF>> m_data;
+    int m_index;
 
 public:
     virtual void init(int colCount);

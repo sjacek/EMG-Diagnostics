@@ -75,7 +75,7 @@ public slots:
 private:
     QMap<QString, DataSeries*> m_dataSeries;
 
-    QList<DataSeries*> getSeries() const;
+//    QList<DataSeries*> getSeries() const;
 };
 
 #endif // DATASOURCE_H
