@@ -43,7 +43,13 @@ class UEcgPlugin : public QObject, Plugin
 public:
     explicit UEcgPlugin(QObject* parent = nullptr);
 
+    virtual void init(int cols) {}
+    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
+
 signals:
+
+private:
+    QList<DataSeries*> m_series;
 
 };
 

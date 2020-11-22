@@ -29,11 +29,20 @@
 
 #include "fakeplugin.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QPluginLoader>
+//#include <QtCore/QDebug>
+
+#include "fakeseries.h"
 
 
 FakePlugin::FakePlugin(QObject* parent)
     : QObject(parent)
+    , Plugin()
 {
+}
+
+void FakePlugin::init(int cols) {
+    this->cols = cols;
+
+    DataSeries* series = new FakeSeries(this);
+    m_series.append(series);
 }

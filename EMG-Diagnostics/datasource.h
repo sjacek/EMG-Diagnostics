@@ -33,7 +33,28 @@
 #include <QtCore/QObject>
 #include <QtCharts/QAbstractSeries>
 
+#include "dataseries.h"
+
+QT_BEGIN_NAMESPACE
+//class DataSeries;
+QT_END_NAMESPACE
+
 QT_CHARTS_USE_NAMESPACE
+
+class LocalDataSeries : public QObject, public DataSeries {
+    Q_OBJECT
+public:
+    explicit LocalDataSeries(QObject* parent = nullptr);
+
+public:
+    virtual void init(int colCount);
+    virtual void update(QAbstractSeries* series);
+
+private:
+    const int DATA_SIZE = 5;
+    QList<QList<QPointF>> m_data;
+    int m_index;
+};
 
 class DataSource : public QObject
 {
@@ -44,13 +65,17 @@ public:
 Q_SIGNALS:
 
 public slots:
-    int count() { return 2; }
-    void generateData(int rowCount, int colCount);
+    int count() { return m_dataSeries.count(); }
+
+    void init(int colCount);
     void update(QAbstractSeries* series);
 
+    QString getSeriesName(int n) const;
+
 private:
-    QList<QList<QPointF>> m_data;
-    int m_index;
+    QMap<QString, DataSeries*> m_dataSeries;
+
+    QList<DataSeries*> getSeries() const;
 };
 
 #endif // DATASOURCE_H

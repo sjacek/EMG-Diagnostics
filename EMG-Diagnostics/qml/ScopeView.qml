@@ -93,23 +93,20 @@ ChartView {
         case "scatter":
             seriesType = ChartView.SeriesTypeScatter;
             break;
+        case "spline":
+            seriesType = ChartView.SeriesTypeSpline;
+            break;
         }
 
         for (var i = 0; i <= dataSource.count() - 1; i++) {
-            var name = "signal " + i
+            var name = dataSource.getSeriesName(i)
 
             var axisY = i === 0 ? axisY1 : axisY2;
             var series = chartView.createSeries(seriesType, name, axisX, axisY);
-
-            switch (type) {
-            case "line":
-                series.useOpenGL = chartView.openGL
-                break;
-            case "scatter":
+            series.useOpenGL = chartView.openGL
+            if (type === "scatter") {
                 series.markerSize = 2;
                 series.borderColor = "transparent";
-                series.useOpenGL = chartView.openGL
-                break;
             }
         }
     }

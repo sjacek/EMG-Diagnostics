@@ -34,5 +34,6 @@
 
 UEcgPlugin::UEcgPlugin(QObject* parent)
     : QObject(parent)
+    , Plugin()
 {
 }

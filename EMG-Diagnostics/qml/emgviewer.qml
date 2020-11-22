@@ -30,7 +30,7 @@
 import QtQuick 2.1
 
 Item {
-    id: emgviewer
+    id: emgViewer
     width: 600
     height: 400
 
@@ -40,7 +40,7 @@ Item {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: controlPanel.left
-        height: emgviewer.height
+        height: emgViewer.height
 
         onOpenGLSupportedChanged: {
             if (!openGLSupported) {
@@ -58,7 +58,7 @@ Item {
         anchors.right: parent.right
 
         onSignalSourceChanged: {
-            dataSource.generateData(signalCount, sampleCount);
+            dataSource.init(sampleCount);
             scopeView.axisX().max = sampleCount;
         }
         onSeriesTypeChanged: scopeView.changeSeriesType(type);
@@ -68,5 +68,4 @@ Item {
             scopeView.openGL = enabled;
         }
     }
-
 }

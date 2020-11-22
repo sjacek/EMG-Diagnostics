@@ -91,10 +91,8 @@ void EmgApplication::loadPlugins()
 
 void EmgApplication::loadPluginsFromDir(const QDir& dir)
 {
-    qDebug() << "Plugins dir:" << dir;
-
     const QStringList entries = dir.entryList(QDir::Files);
-    qDebug() << "entries:"  << entries;
+    qDebug() << "Plugins dir:" << dir.absolutePath() << "; entries:"  << entries;
 
     for (QString fileName : entries)
     {

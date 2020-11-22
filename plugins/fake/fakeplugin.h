@@ -43,6 +43,14 @@ class FakePlugin : public QObject, Plugin
 public:
     explicit FakePlugin(QObject* parent = nullptr);
 
+    virtual void init(int cols);
+    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
+
+private:
+    int cols;
+
+    QList<DataSeries*> m_series;
+
 signals:
 
 };

@@ -30,21 +30,14 @@
 #ifndef DATASERIES_H
 #define DATASERIES_H
 
-#include <QtCore/QObject>
 #include <QtCharts/QAbstractSeries>
 
 QT_CHARTS_USE_NAMESPACE
 
-class DataSeries : public QObject
+class DataSeries
 {
-    Q_OBJECT
 public:
-    explicit DataSeries(QObject *parent = 0) : QObject(parent) {};
-
-Q_SIGNALS:
-
-public slots:
-    virtual void generateData(int type, int rowCount, int colCount) = 0;
+//    virtual void init(int) = 0;
     virtual void update(QAbstractSeries *series) = 0;
 };
 

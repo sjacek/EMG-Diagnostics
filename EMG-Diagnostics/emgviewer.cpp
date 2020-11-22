@@ -73,7 +73,3 @@ void EmgViewer::initGUI()
     setResizeMode(QQuickView::SizeRootObjectToView);
     setColor(QColor("#404040"));
 }
-
-void addDatasource(DataSeries* series) {
-
-}

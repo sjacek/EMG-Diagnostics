@@ -32,42 +32,46 @@
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QtMath>
 
+#include "emgapplication.h"
+#include "dataseries.h"
+#include "plugin.h"
+
 QT_CHARTS_USE_NAMESPACE
 
 Q_DECLARE_METATYPE(QAbstractSeries *)
 Q_DECLARE_METATYPE(QAbstractAxis *)
 
-DataSource::DataSource(QObject *parent) :
-    QObject(parent),
-    m_index(-1)
+DataSource::DataSource(QObject *parent)
+    : QObject(parent)
 {
     qRegisterMetaType<QAbstractSeries*>();
     qRegisterMetaType<QAbstractAxis*>();
 
-    generateData(5, 1024);
+    init(1024);
 }
 
-void DataSource::update(QAbstractSeries *series)
+void DataSource::init(int colCount)
 {
-    if (series) {
-        QXYSeries *xySeries = static_cast<QXYSeries *>(series);
-        m_index++;
-        if (m_index > m_data.count() - 1)
-            m_index = 0;
+    LocalDataSeries* signal0 = new LocalDataSeries(this);
+    signal0->init(colCount);
+    m_dataSeries["signal 0"] = signal0;
+    LocalDataSeries* signal1 = new LocalDataSeries(this);
+    signal1->init(colCount);
+    m_dataSeries["signal 1"] = signal1;
 
-        QList<QPointF> points = m_data.at(m_index);
-        // Use replace instead of clear + append, it's optimized for performance
-        xySeries->replace(points);
+    for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
+        plugin->init(colCount);
     }
 }
 
-void DataSource::generateData(int rowCount, int colCount)
+void LocalDataSeries::init(int colCount)
 {
     // Remove previous data
     m_data.clear();
+    m_data.reserve(DATA_SIZE);
 
     // Append the new data depending on the type
-    for (int i(0); i < rowCount; i++) {
+    for (int i(0); i < DATA_SIZE; i++) {
         QList<QPointF> points;
         points.reserve(colCount);
         for (int j(0); j < colCount; j++) {
@@ -76,6 +80,46 @@ void DataSource::generateData(int rowCount, int colCount)
             qreal x = j;
             points.append(QPointF(x, y));
         }
-        m_data.append(points);
+        m_data.insert(i, points);
+    }
+}
+
+QString DataSource::getSeriesName(int n) const {
+    return m_dataSeries.keys().at(n);
+}
+
+LocalDataSeries::LocalDataSeries(QObject* parent)
+    : QObject(parent)
+    , m_index(-1)
+{
+}
+
+QList<DataSeries*> DataSource::getSeries() const
+{
+    QList<DataSeries*> ret;
+    for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
+        ret.append(plugin->getDataSeries());
+    }
+    return ret;
+}
+
+void DataSource::update(QAbstractSeries* series)
+{
+    if (series)
+        if (m_dataSeries.contains(series->name()))
+            m_dataSeries[series->name()]->update(series);
+}
+
+void LocalDataSeries::update(QAbstractSeries* series)
+{
+//    qDebug() << this << "index:" << m_index << "; series:" << series->name() << series;
+    if (series) {
+        QXYSeries *xySeries = static_cast<QXYSeries *>(series);
+        if (++m_index > DATA_SIZE - 1)
+            m_index = 0;
+
+        QList<QPointF> points = m_data.at(m_index);
+        // Use replace instead of clear + append, it's optimized for performance
+        xySeries->replace(points);
     }
 }

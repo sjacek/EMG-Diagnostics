@@ -30,16 +30,20 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include <QtCore/QObject>
 #include <QtCore/QPluginLoader>
 
 QT_BEGIN_NAMESPACE
+class DataSeries;
 QT_END_NAMESPACE
 
 class Plugin
 {
 public:
     explicit Plugin() : m_pPluginLoader(nullptr) {}
+
+    virtual void init(int colCount) = 0;
+
+    virtual QList<DataSeries*> getDataSeries() const = 0;
 
     virtual ~Plugin() = default;
 

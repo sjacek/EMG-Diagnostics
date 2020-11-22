@@ -38,7 +38,7 @@ ColumnLayout {
     signal animationsEnabled(bool enabled)
     signal seriesTypeChanged(string type)
     signal refreshRateChanged(variant rate);
-    signal signalSourceChanged(int signalCount, int sampleCount);
+    signal signalSourceChanged(int sampleCount);
     signal antialiasingEnabled(bool enabled)
     signal openGlChanged(bool enabled)
 
@@ -58,7 +58,7 @@ ColumnLayout {
 
     MultiButton {
         text: "Graph: "
-        items: ["line", "scatter"]
+        items: ["line", "scatter", "spline"]
         currentSelection: 0
         onSelectionChanged: seriesTypeChanged(items[currentSelection]);
     }
@@ -67,8 +67,8 @@ ColumnLayout {
         id: sampleCountButton
         text: "Samples: "
         items: ["6", "128", "1024", "10000"]
-        currentSelection: 2
-        onSelectionChanged: signalSourceChanged(5, selection);
+        currentSelection: 1
+        onSelectionChanged: signalSourceChanged(selection);
     }
 
     MultiButton {
