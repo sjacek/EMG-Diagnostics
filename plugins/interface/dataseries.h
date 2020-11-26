@@ -37,8 +37,17 @@ QT_CHARTS_USE_NAMESPACE
 class DataSeries
 {
 public:
-//    virtual void init(int) = 0;
+    DataSeries() : m_cols(-1) {}
+    virtual ~DataSeries() = default;
+
+    virtual void init() = 0;
     virtual void update(QAbstractSeries *series) = 0;
+
+    virtual void setCols(int cols) { m_cols = cols; }
+    virtual int cols() const { return m_cols; }
+
+private:
+    int m_cols;
 };
 
 #endif // DATASERIES_H

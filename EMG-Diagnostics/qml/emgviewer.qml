@@ -58,8 +58,8 @@ Item {
         anchors.right: parent.right
 
         onSignalSourceChanged: {
-            dataSource.init(sampleCount);
             scopeView.axisX().max = sampleCount;
+            dataSource.init(sampleCount);
         }
         onSeriesTypeChanged: scopeView.changeSeriesType(type);
         onRefreshRateChanged: scopeView.changeRefreshRate(rate);

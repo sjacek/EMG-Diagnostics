@@ -32,20 +32,26 @@
 
 #include "dataseries.h"
 
+QT_BEGIN_NAMESPACE
+class Plugin;
+QT_END_NAMESPACE
+
+
 class FakeSeries : public QObject, public DataSeries
 {
     Q_OBJECT
 public:
     explicit FakeSeries(QObject* parent);
 
+    virtual ~FakeSeries();
+
+    virtual void init();
+    virtual void update(QAbstractSeries* series);
+
 private:
     const int DATA_SIZE = 5;
     QList<QList<QPointF>> m_data;
     int m_index;
-
-public:
-    virtual void init(int colCount);
-    virtual void update(QAbstractSeries* series);
 };
 
 #endif // FAKESERIES_H

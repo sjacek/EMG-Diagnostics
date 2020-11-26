@@ -43,9 +43,6 @@ public:
 
     virtual void init(int colCount) = 0;
 
-//    virtual QList<DataSeries*> getDataSeries() const = 0;
-    virtual int registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries) = 0;
-
     virtual ~Plugin() = default;
 
     QString getName() const {

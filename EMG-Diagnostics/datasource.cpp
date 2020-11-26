@@ -52,67 +52,34 @@ DataSource::DataSource(QObject *parent)
 
 void DataSource::init(int colCount)
 {
-    LocalDataSeries* signal0 = new LocalDataSeries(this);
-    signal0->init(colCount);
-    m_dataSeries["signal 0"] = signal0;
-    LocalDataSeries* signal1 = new LocalDataSeries(this);
-    signal1->init(colCount);
-    m_dataSeries["signal 1"] = signal1;
+    m_dataSeries.clear();
 
     for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
         qDebug() << "DataSource::init" << *plugin;
+        QObject* objectPlugin = dynamic_cast<QObject*>(plugin);
+        connect(objectPlugin, SIGNAL(seriesCreated(QString,DataSeries*)), SLOT(onSeriesCreated(QString,DataSeries*)));
         plugin->init(colCount);
-        plugin->registerDataSeries(m_dataSeries);
+        qDebug() << m_dataSeries.keys();
     }
 }
 
-void LocalDataSeries::init(int colCount)
+void DataSource::onSeriesCreated(QString name, DataSeries* series)
 {
-    // Remove previous data
-    m_data.clear();
-    m_data.reserve(DATA_SIZE);
-
-    // Append the new data depending on the type
-    for (int i(0); i < DATA_SIZE; i++) {
-        QList<QPointF> points;
-        points.reserve(colCount);
-        for (int j(0); j < colCount; j++) {
-            // data with sin + random component
-            qreal y = qSin(M_PI / 50 * j) + 0.5 + QRandomGenerator::global()->generateDouble();
-            qreal x = j;
-            points.append(QPointF(x, y));
-        }
-        m_data.insert(i, points);
-    }
+    qDebug() << "onSeriesCreated(" << name << ", " << series << ")";
+    m_dataSeries[name] = series;
 }
 
 QString DataSource::getSeriesName(int n) const {
     return m_dataSeries.keys().at(n);
 }
 
-LocalDataSeries::LocalDataSeries(QObject* parent)
-    : QObject(parent)
-    , m_index(-1)
-{
-}
-
 void DataSource::update(QAbstractSeries* series)
 {
-    if (series)
-        if (m_dataSeries.contains(series->name()))
-            m_dataSeries[series->name()]->update(series);
-}
-
-void LocalDataSeries::update(QAbstractSeries* series)
-{
-//    qDebug() << this << "index:" << m_index << "; series:" << series->name() << series;
     if (series) {
-        QXYSeries *xySeries = static_cast<QXYSeries *>(series);
-        if (++m_index > DATA_SIZE - 1)
-            m_index = 0;
-
-        QList<QPointF> points = m_data.at(m_index);
-        // Use replace instead of clear + append, it's optimized for performance
-        xySeries->replace(points);
+        qDebug() << "DataSource::update 1: " << series->name();
+        if (m_dataSeries.contains(series->name())) {
+            qDebug() << "DataSource::update 2";
+            m_dataSeries[series->name()]->update(series);
+        }
     }
 }

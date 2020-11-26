@@ -29,7 +29,7 @@
 
 #include "fakeplugin.h"
 
-//#include <QtCore/QDebug>
+#include <QtCore/QDebug>
 
 #include "fakeseries.h"
 
@@ -42,21 +42,8 @@ FakePlugin::FakePlugin(QObject* parent)
 }
 
 void FakePlugin::init(int cols) {
-    this->cols = cols;
-
     FakeSeries* series = new FakeSeries(this);
-    series->init(cols);
+    series->setCols(cols);
     m_series.append(series);
-}
-
-int FakePlugin::registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries)
-{
-    int ret = 0;
-    for (DataSeries* series : m_series)
-    {
-        QString name = QString("fake%1").arg(m_dataSeriesIdx++);
-        mapDataSeries[name] = series;
-        ret++;
-    }
-    return ret;
+    emit seriesCreated("fake0", series);
 }

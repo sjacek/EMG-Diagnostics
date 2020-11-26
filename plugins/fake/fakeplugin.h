@@ -34,7 +34,7 @@
 #include <QtCore/QtPlugin>
 #include "plugin.h"
 
-class FakePlugin : public QObject, Plugin
+class FakePlugin : public QObject, public Plugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "fakeplugin.json")
@@ -44,17 +44,14 @@ public:
     explicit FakePlugin(QObject* parent = nullptr);
 
     virtual void init(int cols);
-//    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
-    virtual int registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries);
 
 private:
-    int cols;
     int m_dataSeriesIdx;
 
     QList<DataSeries*> m_series;
 
 signals:
-
+    void seriesCreated(QString name, DataSeries* series);
 };
 
 #endif // UECGPLUGIN_H

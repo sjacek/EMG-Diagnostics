@@ -47,9 +47,14 @@ FakeSeries::FakeSeries(QObject* parent)
     qRegisterMetaType<QAbstractAxis*>();
 }
 
-void FakeSeries::init(int cols)
+FakeSeries::~FakeSeries(){
+    qDebug() << "FakeSeries destructor";
+}
+
+
+void FakeSeries::init()
 {
-    qDebug() << "FakeSeries::init(" << cols << ")";
+    qDebug() << "FakeSeries::init(" << cols() << ")";
     // Remove previous data
     m_data.clear();
     m_data.reserve(DATA_SIZE);
@@ -57,8 +62,8 @@ void FakeSeries::init(int cols)
     // Append the new data depending on the type
     for (int i(0); i < DATA_SIZE; i++) {
         QList<QPointF> points;
-        points.reserve(cols);
-        for (int j(0); j < cols; j++) {
+        points.reserve(cols());
+        for (int j(0); j < cols(); j++) {
             // data with sin + random component
             qreal y = qSin(M_PI / 50 * j) + 0.5 + QRandomGenerator::global()->generateDouble();
             qreal x = j;
@@ -71,6 +76,9 @@ void FakeSeries::init(int cols)
 void FakeSeries::update(QAbstractSeries* series)
 {
     qDebug() << this << "index:" << m_index << "; series:" << series->name() << series << "; m_data.count:" << m_data.count();
+    if (cols() != m_data.count())
+        init();
+
     Q_ASSERT(m_data.count());
     if (series) {
         QXYSeries *xySeries = static_cast<QXYSeries *>(series);
