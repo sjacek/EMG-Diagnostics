@@ -46,8 +46,6 @@ public:
     virtual void init(int cols);
 
 private:
-    int m_dataSeriesIdx;
-
     QList<DataSeries*> m_series;
 
 signals:

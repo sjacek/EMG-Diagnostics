@@ -47,11 +47,6 @@ FakeSeries::FakeSeries(QObject* parent)
     qRegisterMetaType<QAbstractAxis*>();
 }
 
-FakeSeries::~FakeSeries(){
-    qDebug() << "FakeSeries destructor";
-}
-
-
 void FakeSeries::init()
 {
     qDebug() << "FakeSeries::init(" << cols() << ")";
@@ -76,7 +71,7 @@ void FakeSeries::init()
 void FakeSeries::update(QAbstractSeries* series)
 {
     qDebug() << this << "index:" << m_index << "; series:" << series->name() << series << "; m_data.count:" << m_data.count();
-    if (cols() != m_data.count())
+    if (m_data.empty() || cols() != m_data.begin()->count())
         init();
 
     Q_ASSERT(m_data.count());

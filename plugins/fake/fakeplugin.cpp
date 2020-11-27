@@ -37,13 +37,15 @@
 FakePlugin::FakePlugin(QObject* parent)
     : QObject(parent)
     , Plugin()
-    , m_dataSeriesIdx(0)
 {
 }
 
 void FakePlugin::init(int cols) {
-    FakeSeries* series = new FakeSeries(this);
-    series->setCols(cols);
-    m_series.append(series);
-    emit seriesCreated("fake0", series);
+    for (int i(0); i < 2; i++)
+    {
+        FakeSeries* series = new FakeSeries(this);
+        series->setCols(cols);
+        m_series.append(series);
+        emit seriesCreated(QString("fake%1").arg(i), series);
+    }
 }

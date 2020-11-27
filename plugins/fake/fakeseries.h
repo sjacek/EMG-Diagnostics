@@ -43,8 +43,6 @@ class FakeSeries : public QObject, public DataSeries
 public:
     explicit FakeSeries(QObject* parent);
 
-    virtual ~FakeSeries();
-
     virtual void init();
     virtual void update(QAbstractSeries* series);
 
