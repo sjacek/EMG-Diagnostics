@@ -6,7 +6,7 @@
 #include <QtCharts/QAbstractSeries>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
-#include <QtCore/qglobal.h>
+#include <QtCore/QtGlobal>
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QObject>
 #include <QtCore/QPluginLoader>
