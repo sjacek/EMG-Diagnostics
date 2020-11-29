@@ -43,7 +43,7 @@ EmgViewer::EmgViewer()
 
 void EmgViewer::initGUI()
 {
-    qDebug() << "EmgViewer::initGUI()";
+    qCDebug(cat) << "initGUI()";
 
     // TODO: remove in Release profile
     // The following are needed to make the app run without having to install the module
@@ -56,7 +56,7 @@ void EmgViewer::initGUI()
     engine()->addImportPath(extraImportPath.arg(
                                 QGuiApplication::applicationDirPath(),
                                 QString::fromLatin1("qml")));
-    QObject::connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
+    connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
 
     setTitle(QStringLiteral("EMG Diagnostics"));
 

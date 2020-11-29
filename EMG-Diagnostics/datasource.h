@@ -32,11 +32,10 @@
 
 #include <QtCore/QObject>
 #include <QtCharts/QAbstractSeries>
-
-#include "dataseries.h"
+#include <QtCore/QLoggingCategory>
 
 QT_BEGIN_NAMESPACE
-//class DataSeries;
+class DataSeries;
 QT_END_NAMESPACE
 
 QT_CHARTS_USE_NAMESPACE
@@ -44,24 +43,26 @@ QT_CHARTS_USE_NAMESPACE
 class DataSource : public QObject
 {
     Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, "DataSource")
 public:
     explicit DataSource(QObject* parent);
 
-Q_SIGNALS:
+    Q_INVOKABLE int count() { return m_dataSeries.count(); }
 
-public slots:
-    int count() { return m_dataSeries.count(); }
+    Q_INVOKABLE void init(int colCount);
+    Q_INVOKABLE void update(QAbstractSeries* series);
 
-    void init(int colCount);
-    void update(QAbstractSeries* series);
+    Q_INVOKABLE QString getSeriesName(int n) const;
 
-    QString getSeriesName(int n) const;
+    Q_INVOKABLE DataSeries& series(QString name) const;
 
 private slots:
     void onSeriesCreated(QString name, DataSeries* series);
 
 private:
     QMap<QString, DataSeries*> m_dataSeries;
+
+    void connectPlugins();
 
 //    QList<DataSeries*> getSeries() const;
 };

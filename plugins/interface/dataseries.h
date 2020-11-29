@@ -30,24 +30,35 @@
 #ifndef DATASERIES_H
 #define DATASERIES_H
 
+#include "plugin_global.h"
+
 #include <QtCharts/QAbstractSeries>
+#include <QtCore/QLoggingCategory>
 
 QT_CHARTS_USE_NAMESPACE
 
-class DataSeries
+class INTERFACEPLUGINSHARED_EXPORT DataSeries : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(int cols READ cols WRITE setCols NOTIFY colsChanged)
+    Q_LOGGING_CATEGORY(cat, "DataSeries")
 public:
-    DataSeries() : m_cols(-1) {}
-    virtual ~DataSeries() = default;
+    explicit DataSeries(QObject* parent) : QObject(parent), m_cols(0) {}
 
     virtual void init() = 0;
     virtual void update(QAbstractSeries *series) = 0;
+
 
     virtual void setCols(int cols) { m_cols = cols; }
     virtual int cols() const { return m_cols; }
 
 private:
     int m_cols;
+
+signals:
+    void colsChanged();
 };
+
+Q_DECLARE_METATYPE(DataSeries*)
 
 #endif // DATASERIES_H

@@ -65,7 +65,7 @@ void EmgApplication::loadPlugins()
 //        // TODO:
 //    }
 
-    qDebug() << "library Paths" << libraryPaths();
+    qCDebug(cat) << "library Paths" << libraryPaths();
 
     QDir dir(applicationDirPath());
 #if defined(Q_OS_WIN)
@@ -79,8 +79,8 @@ void EmgApplication::loadPlugins()
     }
 #endif
 //    if (dir.dirName() == "bin")
-    dir.cdUp();
-    qDebug() << "Base dir:" << dir;
+//    dir.cdUp();
+    qCDebug(cat) << "Base dir:" << dir;
 
     QDir pluginsDir = dir;
     if (pluginsDir.cd("lib/plugins")) {
@@ -100,7 +100,7 @@ void EmgApplication::loadPlugins()
 void EmgApplication::loadPluginsFromDir(const QDir& dir)
 {
     const QStringList entries = dir.entryList(QDir::Files);
-    qDebug() << "Plugins dir:" << dir.absolutePath() << "; entries:"  << entries;
+    qCDebug(cat) << "Plugins dir:" << dir.absolutePath() << "; entries:"  << entries;
 
     for (QString fileName : entries)
     {
@@ -110,12 +110,12 @@ void EmgApplication::loadPluginsFromDir(const QDir& dir)
             if (Plugin* plugin = qobject_cast<Plugin*>(object))
             {
                 plugin->setPluginLoader(pluginLoader);
-                qInfo() << "loaded plugin" << fileName << *plugin;
+                qCInfo(cat) << "loaded plugin" << fileName << *plugin;
                 m_Plugins.append(plugin);
             }
             else
             {
-                qWarning() << "failed loading plugin" << fileName;
+                qCWarning(cat) << "failed loading plugin" << fileName;
                 pluginLoader->unload();
             }
         }

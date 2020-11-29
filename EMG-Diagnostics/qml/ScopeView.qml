@@ -72,7 +72,6 @@ ChartView {
         running: true
         repeat: true
         onTriggered: {
-            console.debug("chartView.count:" + chartView.count)
             for (var i = 0; i <= chartView.count; i++)
                 dataSource.update(chartView.series(i));
         }
@@ -100,7 +99,11 @@ ChartView {
         }
 
         for (var i = 0; i <= dataSource.count() - 1; i++) {
-            var series = chartView.createSeries(seriesType, dataSource.getSeriesName(i), axisX, i === 0 ? axisY1 : axisY2);
+            var name = dataSource.getSeriesName(i);
+            var dataSeries = dataSource.series(name)
+//            console.debug(dataSeries.cols)
+
+            var series = chartView.createSeries(seriesType, name, axisX, i === 0 ? axisY1 : axisY2);
             series.useOpenGL = chartView.openGL
             if (type === "scatter") {
                 series.markerSize = 2;

@@ -1,5 +1,7 @@
 TEMPLATE = subdirs
 SUBDIRS = \
-    EMG-Diagnostics \
     libuECG \
-    plugins
+    plugins \
+    EMG-Diagnostics \
+
+CONFIG += ordered

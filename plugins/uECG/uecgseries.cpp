@@ -30,7 +30,7 @@
 #include "uecgseries.h"
 
 UEcgSeries::UEcgSeries(QObject* parent)
-    : QObject(parent)
+    : DataSeries(parent)
 {
 }
 

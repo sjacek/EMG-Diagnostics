@@ -32,13 +32,16 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QtPlugin>
+#include <QtCore/QLoggingCategory>
+
 #include "plugin.h"
 
-class FakePlugin : public QObject, public Plugin
+class FakePlugin : public Plugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "fakeplugin.json")
     Q_INTERFACES(Plugin)
+    Q_LOGGING_CATEGORY(cat, "FakePlugin")
 
 public:
     explicit FakePlugin(QObject* parent = nullptr);
@@ -48,8 +51,8 @@ public:
 private:
     QList<DataSeries*> m_series;
 
-signals:
-    void seriesCreated(QString name, DataSeries* series);
+//signals:
+//    void seriesCreated(QString name, DataSeries* series);
 };
 
 #endif // UECGPLUGIN_H

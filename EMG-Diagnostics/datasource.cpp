@@ -38,8 +38,8 @@
 
 QT_CHARTS_USE_NAMESPACE
 
-Q_DECLARE_METATYPE(QAbstractSeries *)
-Q_DECLARE_METATYPE(QAbstractAxis *)
+Q_DECLARE_METATYPE(QAbstractSeries*)
+Q_DECLARE_METATYPE(QAbstractAxis*)
 
 DataSource::DataSource(QObject *parent)
     : QObject(parent)
@@ -47,7 +47,16 @@ DataSource::DataSource(QObject *parent)
     qRegisterMetaType<QAbstractSeries*>();
     qRegisterMetaType<QAbstractAxis*>();
 
+    connectPlugins();
     init(1024);
+}
+
+void DataSource::connectPlugins()
+{
+    for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
+        qCDebug(cat) << "connectPlugins" << *plugin;
+        connect(plugin, SIGNAL(seriesCreated(QString,DataSeries*)), SLOT(onSeriesCreated(QString,DataSeries*)));
+    }
 }
 
 void DataSource::init(int colCount)
@@ -55,31 +64,38 @@ void DataSource::init(int colCount)
     m_dataSeries.clear();
 
     for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
-        qDebug() << "DataSource::init" << *plugin;
-        QObject* objectPlugin = dynamic_cast<QObject*>(plugin);
-        connect(objectPlugin, SIGNAL(seriesCreated(QString,DataSeries*)), SLOT(onSeriesCreated(QString,DataSeries*)));
+        qCDebug(cat) << "init" << *plugin;
         plugin->init(colCount);
-        qDebug() << m_dataSeries.keys();
     }
 }
 
 void DataSource::onSeriesCreated(QString name, DataSeries* series)
 {
-    qDebug() << "onSeriesCreated(" << name << ", " << series << ")";
     m_dataSeries[name] = series;
 }
 
-QString DataSource::getSeriesName(int n) const {
+QString DataSource::getSeriesName(int n) const
+{
     return m_dataSeries.keys().at(n);
 }
 
 void DataSource::update(QAbstractSeries* series)
 {
-    if (series) {
-        qDebug() << "DataSource::update 1: " << series->name();
-        if (m_dataSeries.contains(series->name())) {
-            qDebug() << "DataSource::update 2";
+    if (series)
+    {
+//        qCDebug(cat) << "DataSource::update 1: " << series->name();
+        if (m_dataSeries.contains(series->name()))
+        {
+//            qCDebug(cat) << "DataSource::update 2";
             m_dataSeries[series->name()]->update(series);
         }
     }
+}
+
+DataSeries& DataSource::series(QString name) const
+{
+//    if (m_dataSeries.contains(name))
+        return *m_dataSeries[name];
+
+//    return new DataSeries();
 }

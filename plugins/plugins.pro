@@ -1,4 +1,7 @@
 TEMPLATE = subdirs
 SUBDIRS = \
+    interface \
     fake \
-#    uECG
+    uECG
+
+CONFIG += ordered

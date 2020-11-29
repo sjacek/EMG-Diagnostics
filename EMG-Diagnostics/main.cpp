@@ -30,9 +30,12 @@
 #include "emgapplication.h"
 #include "emgviewer.h"
 
+#include <QtCore/QLoggingCategory>
+
 int main(int argc, char *argv[])
 {
-    // Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
+    qSetMessagePattern("[%{time yyyyMMdd h:mm:ss.zzz t} %{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}] %{file}:%{line} - %{message}");
+
     EmgApplication app(argc, argv);
 
     EmgViewer viewer;

@@ -31,6 +31,8 @@
 #define EMGVIEWER_H
 
 #include <QtQuick/QQuickView>
+#include <QtCore/QLoggingCategory>
+
 #include "datasource.h"
 #include "dataseries.h"
 
@@ -41,7 +43,7 @@ QT_END_NAMESPACE
 class EmgViewer : public QQuickView
 {
     Q_OBJECT
-
+    Q_LOGGING_CATEGORY(cat, "EmgViewer")
 public:
     EmgViewer();
 

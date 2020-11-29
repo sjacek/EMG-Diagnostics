@@ -35,8 +35,7 @@
 
 
 FakePlugin::FakePlugin(QObject* parent)
-    : QObject(parent)
-    , Plugin()
+    : Plugin()
 {
 }
 

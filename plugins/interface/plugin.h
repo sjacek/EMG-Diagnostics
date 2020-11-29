@@ -30,16 +30,21 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
+#include "plugin_global.h"
+
 #include <QtCore/QPluginLoader>
+#include <QtCore/QLoggingCategory>
 
 QT_BEGIN_NAMESPACE
 class DataSeries;
 QT_END_NAMESPACE
 
-class Plugin
+class INTERFACEPLUGINSHARED_EXPORT Plugin : public QObject
 {
+    Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, "Plugin")
 public:
-    explicit Plugin() : m_pPluginLoader(nullptr) {}
+    explicit Plugin() : QObject(), m_pPluginLoader(nullptr) {}
 
     virtual void init(int colCount) = 0;
 
@@ -74,14 +79,15 @@ protected:
 
 private:
     const QPluginLoader* m_pPluginLoader;
+
+signals:
+    void seriesCreated(QString name, DataSeries* series);
 };
 
 QDebug operator<< (QDebug debug, const Plugin& plugin);
 
 QT_BEGIN_NAMESPACE
-
 #define Plugin_iid "com.github.sjacek.EMG-Diagnostics.Plugin"
-
 Q_DECLARE_INTERFACE(Plugin, Plugin_iid)
 QT_END_NAMESPACE
 

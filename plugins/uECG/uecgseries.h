@@ -31,10 +31,12 @@
 #define UECGSERIES_H
 
 #include "dataseries.h"
+#include <QtCore/QLoggingCategory>
 
-class UEcgSeries : public QObject, public DataSeries
+class UEcgSeries : public DataSeries
 {
     Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, "UEcgSeries")
 public:
     explicit UEcgSeries(QObject* parent = nullptr);
 

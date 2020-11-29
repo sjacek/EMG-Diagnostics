@@ -33,12 +33,11 @@
 
 
 UEcgPlugin::UEcgPlugin(QObject* parent)
-    : QObject(parent)
-    , Plugin()
+    : Plugin()
 {
 }
 
-int UEcgPlugin::registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries)
+void UEcgPlugin::init(int cols)
 {
-    return 0;
+    // TODO:
 }

@@ -31,15 +31,17 @@
 #define EMGAPPLICATION_H
 
 #include <QtWidgets/QApplication>
-//#include <QtCore/qglobal.h>
+#include <QtCore/QLoggingCategory>
 
 QT_BEGIN_NAMESPACE
 class Plugin;
 class QDir;
 QT_END_NAMESPACE
 
+// Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
 class EmgApplication : public QApplication
 {
+    Q_LOGGING_CATEGORY(cat, "EmgApplication")
 public:
 #ifdef Q_QDOC
     EmgApplication(int &argc, char **argv);

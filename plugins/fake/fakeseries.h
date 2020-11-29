@@ -32,14 +32,12 @@
 
 #include "dataseries.h"
 
-QT_BEGIN_NAMESPACE
-class Plugin;
-QT_END_NAMESPACE
+#include <QtCore/QLoggingCategory>
 
-
-class FakeSeries : public QObject, public DataSeries
+class FakeSeries : public DataSeries
 {
     Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, "FakeSeries")
 public:
     explicit FakeSeries(QObject* parent);
 

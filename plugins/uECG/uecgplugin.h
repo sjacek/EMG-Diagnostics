@@ -32,18 +32,20 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QtPlugin>
+#include <QtCore/QLoggingCategory>
 #include "plugin.h"
 
-class UEcgPlugin : public QObject, public Plugin
+class UEcgPlugin : public Plugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "uecgplugin.json")
     Q_INTERFACES(Plugin)
+    Q_LOGGING_CATEGORY(cat, "UEcgPlugin")
 
 public:
     explicit UEcgPlugin(QObject* parent = nullptr);
 
-//    virtual void init(int cols) {}
+    virtual void init(int cols);
 //    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
 //    virtual int registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries);
 
