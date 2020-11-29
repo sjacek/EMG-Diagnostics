@@ -29,10 +29,6 @@
 
 #include "pluginsocket.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QPluginLoader>
-#include <QCoreApplication>
-
 #include "plugin.h"
 
 PluginSocket::PluginSocket(QObject* parent)

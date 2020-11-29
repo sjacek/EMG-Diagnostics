@@ -30,10 +30,6 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
-#include <QtCore/QObject>
-//#include <QtCore/qglobal.h>
-#include <QtCore/QLoggingCategory>
-
 #include "singleton.h"
 #include "plugin_global.h"
 

@@ -32,9 +32,6 @@
 
 #include "plugin_global.h"
 
-#include <QtCore/QPluginLoader>
-#include <QtCore/QLoggingCategory>
-
 QT_BEGIN_NAMESPACE
 class DataSeries;
 QT_END_NAMESPACE
