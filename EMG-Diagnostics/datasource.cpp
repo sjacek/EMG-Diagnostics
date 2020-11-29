@@ -28,11 +28,7 @@
  ****************************************************************************/
 
 #include "datasource.h"
-#include <QtCharts/QXYSeries>
-#include <QtCore/QRandomGenerator>
-#include <QtCore/QtMath>
 
-//#include "emgapplication.h"
 #include "dataseries.h"
 #include "plugin.h"
 #include "pluginsocket.h"

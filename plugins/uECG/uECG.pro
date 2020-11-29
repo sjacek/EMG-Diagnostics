@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS = \
+    pch.h \
     uecgplugin.h \
     uecgseries.h
 SOURCES = \
@@ -32,5 +33,14 @@ SOURCES = \
 
 DISTFILES += \
     uecgplugin.json
+
+win32:CONFIG(release, debug|release): LIBS += -L$${LIB_DIR}/release/ -l$${INTERFACE_LIB_NAME}
+else:win32:CONFIG(debug, debug|release): LIBS += -L$${LIB_DIR}/debug/ -l$${INTERFACE_LIB_NAME}
+else:unix: LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
+
+unix {
+    target.path = /usr/lib
+    INSTALLS += target
+}
 
 CONFIG += install_ok  # Do not cargo-cult this!

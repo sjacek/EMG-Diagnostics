@@ -30,9 +30,6 @@
 #ifndef EMGVIEWER_H
 #define EMGVIEWER_H
 
-#include <QtQuick/QQuickView>
-#include <QtCore/QLoggingCategory>
-
 #include "datasource.h"
 #include "dataseries.h"
 

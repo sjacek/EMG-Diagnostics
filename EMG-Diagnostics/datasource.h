@@ -30,10 +30,6 @@
 #ifndef DATASOURCE_H
 #define DATASOURCE_H
 
-#include <QtCore/QObject>
-#include <QtCharts/QAbstractSeries>
-#include <QtCore/QLoggingCategory>
-
 QT_BEGIN_NAMESPACE
 class DataSeries;
 QT_END_NAMESPACE

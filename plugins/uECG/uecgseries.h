@@ -31,7 +31,6 @@
 #define UECGSERIES_H
 
 #include "dataseries.h"
-#include <QtCore/QLoggingCategory>
 
 class UEcgSeries : public DataSeries
 {

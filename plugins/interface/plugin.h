@@ -44,7 +44,7 @@ class INTERFACEPLUGINSHARED_EXPORT Plugin : public QObject
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit Plugin() : QObject(), m_pPluginLoader(nullptr) {}
+    explicit Plugin(QObject* parent) : QObject(parent), m_pPluginLoader(nullptr) {}
 
     virtual void init(int colCount) = 0;
 

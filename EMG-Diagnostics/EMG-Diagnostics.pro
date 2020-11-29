@@ -1,7 +1,6 @@
 QMAKE_PROJECT_NAME = EMG-Diagnostics
 
 BUILD_ROOT_DIR=$${OUT_PWD}/../App
-SRC_ROOT_DIR=$${PWD}/..
 
 # Check if the config file exists
 ! include( ../common.pri ) {
@@ -23,6 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
+    pch.h \
     datasource.h \
     emgviewer.h
 

@@ -27,11 +27,7 @@
  **
  ****************************************************************************/
 
-//#include "emgapplication.h"
 #include "emgviewer.h"
-
-#include <QtWidgets/QApplication>
-#include <QtCore/QLoggingCategory>
 
 int main(int argc, char *argv[])
 {

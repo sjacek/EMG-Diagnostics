@@ -42,21 +42,13 @@ class Plugin;
 class QDir;
 QT_END_NAMESPACE
 
-class INTERFACEPLUGINSHARED_EXPORT PluginSocket : public QObject
+class INTERFACEPLUGINSHARED_EXPORT PluginSocket : public QObject, public Singleton<PluginSocket>
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     explicit PluginSocket(QObject* parent = nullptr);
     ~PluginSocket() = default;
-
-    static PluginSocket& instance() {
-        static PluginSocket* _instance = 0;
-        if ( _instance == 0 ) {
-            _instance = new PluginSocket();
-        }
-        return *_instance;
-    }
 
 public:
     const QList<Plugin*>& getPlugins() { return m_Plugins; }

@@ -30,26 +30,29 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-#include <QtCore/qglobal.h>
+#include <type_traits>
 
+template <typename T, typename D = T>
 class Singleton
 {
-protected:
-    Singleton() {}
-    Singleton(const Singleton&) {}
-    // In C++11, copy constructor and assignment operator could be deleted (= delete)
-//    Singleton& (const Singleton&) {
-//        return *this;
-//    }
+    friend D;
+    static_assert(std::is_base_of_v<T, D>, "T should be a base type for D");
 
 public:
-    static Singleton& instance() {
-        static Singleton * _instance = 0;
-        if ( _instance == 0 ) {
-            _instance = new Singleton();
-        }
-        return *_instance;
-    }
+    static T& instance();
+
+private:
+    Singleton() = default;
+    ~Singleton() = default;
+    Singleton( const Singleton& ) = delete;
+    Singleton& operator=( const Singleton& ) = delete;
 };
+
+template <typename T, typename D>
+T& Singleton<T, D>::instance()
+{
+    static D inst;
+    return inst;
+}
 
 #endif // SINGLETON_H

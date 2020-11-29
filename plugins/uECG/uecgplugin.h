@@ -30,9 +30,6 @@
 #ifndef UECGPLUGIN_H
 #define UECGPLUGIN_H
 
-#include <QtCore/QObject>
-#include <QtCore/QtPlugin>
-#include <QtCore/QLoggingCategory>
 #include "plugin.h"
 
 class UEcgPlugin : public Plugin

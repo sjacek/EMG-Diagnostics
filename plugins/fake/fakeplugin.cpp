@@ -29,13 +29,11 @@
 
 #include "fakeplugin.h"
 
-#include <QtCore/QDebug>
-
 #include "fakeseries.h"
 
 
 FakePlugin::FakePlugin(QObject* parent)
-    : Plugin()
+    : Plugin(parent)
 {
 }
 

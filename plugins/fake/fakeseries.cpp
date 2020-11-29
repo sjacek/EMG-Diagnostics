@@ -29,13 +29,6 @@
 
 #include "fakeseries.h"
 
-#include <QtCore/QtDebug>
-#include <QtCore/QtMath>
-#include <QtCore/QRandomGenerator>
-#include <QtCharts/QXYSeries>
-
-QT_CHARTS_USE_NAMESPACE
-
 Q_DECLARE_METATYPE(QAbstractSeries *)
 Q_DECLARE_METATYPE(QAbstractAxis *)
 

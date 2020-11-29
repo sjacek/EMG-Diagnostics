@@ -29,12 +29,6 @@
 
 #include "emgviewer.h"
 
-#include <QtWidgets/QApplication>
-#include <QtCore/QDebug>
-#include <QtWidgets/QMessageBox>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-
 EmgViewer::EmgViewer()
     : m_DataSource(this)
 {

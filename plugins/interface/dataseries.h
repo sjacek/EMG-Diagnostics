@@ -32,11 +32,6 @@
 
 #include "plugin_global.h"
 
-#include <QtCharts/QAbstractSeries>
-#include <QtCore/QLoggingCategory>
-
-QT_CHARTS_USE_NAMESPACE
-
 class INTERFACEPLUGINSHARED_EXPORT DataSeries : public QObject
 {
     Q_OBJECT

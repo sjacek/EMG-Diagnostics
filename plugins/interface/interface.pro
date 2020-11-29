@@ -5,7 +5,7 @@ QMAKE_PROJECT_NAME = interface
     error( "Couldn't find the plugins.pri file!" )
 }
 
-QT       -= gui
+QT -= gui
 
 TARGET  = $${INTERFACE_LIB_NAME}
 #TARGET  = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
@@ -25,15 +25,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+PRECOMPILED_HEADER = interface_pch.h
+
 SOURCES += \
     pluginsocket.cpp
 
 HEADERS += \
+        interface_pch.h \
         plugin.h \
         plugin_global.h \
-        dataseries.h \
+        singleton.h \
         pluginsocket.h \
-        singleton.h
+        dataseries.h
 
 unix {
     target.path = /usr/lib

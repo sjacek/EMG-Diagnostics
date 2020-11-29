@@ -25,12 +25,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS = \
     fakeplugin.h \
-    fakeseries.h
+    fakeseries.h \
+    pch.h
+
 SOURCES = \
     fakeplugin.cpp \
     fakeseries.cpp
 
 DISTFILES += \
     fakeplugin.json
+
+win32:CONFIG(release, debug|release): LIBS += -L$${LIB_DIR}/release/ -l$${INTERFACE_LIB_NAME}
+else:win32:CONFIG(debug, debug|release): LIBS += -L$${LIB_DIR}/debug/ -l$${INTERFACE_LIB_NAME}
+else:unix: LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
+
+unix {
+    target.path = /usr/lib
+    INSTALLS += target
+}
 
 CONFIG += install_ok  # Do not cargo-cult this!
