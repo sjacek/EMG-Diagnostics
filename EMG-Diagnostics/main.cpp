@@ -35,7 +35,8 @@
 
 int main(int argc, char *argv[])
 {
-    qSetMessagePattern("[%{time yyyyMMdd h:mm:ss.zzz t} %{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}] %{file}:%{line} - %{message}");
+//    qSetMessagePattern("[%{time yyyyMMdd h:mm:ss.zzz t} %{if-debug}Debug%{endif}%{if-info}Info%{endif}%{if-warning}Warning%{endif}%{if-critical}Critical%{endif}%{if-fatal}Fatal%{endif}] %{file}:%{line} - %{message}");
+    qSetMessagePattern("[%{time yyyyMMdd h:mm:ss.zzz t} %{type}] %{category}::%{function}:%{line} - %{message}");
 
     QApplication app(argc, argv);
 

@@ -31,7 +31,7 @@
 #define SOCKET_H
 
 #include <QtCore/QObject>
-#include <QtCore/qglobal.h>
+//#include <QtCore/qglobal.h>
 #include <QtCore/QLoggingCategory>
 
 #include "singleton.h"
@@ -45,7 +45,7 @@ QT_END_NAMESPACE
 class INTERFACEPLUGINSHARED_EXPORT PluginSocket : public QObject
 {
     Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, "Socket")
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     explicit PluginSocket(QObject* parent = nullptr);
     ~PluginSocket() = default;

@@ -40,7 +40,7 @@ class UEcgPlugin : public Plugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "uecgplugin.json")
     Q_INTERFACES(Plugin)
-    Q_LOGGING_CATEGORY(cat, "UEcgPlugin")
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 
 public:
     explicit UEcgPlugin(QObject* parent = nullptr);

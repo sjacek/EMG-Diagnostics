@@ -43,7 +43,7 @@ QT_CHARTS_USE_NAMESPACE
 class DataSource : public QObject
 {
     Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, "DataSource")
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     explicit DataSource(QObject* parent);
 

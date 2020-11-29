@@ -6,13 +6,11 @@ TARGET  = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
     error( "Couldn't find the plugins.pri file!" )
 }
 
-QT       -= gui
+QT -= gui
 
 TEMPLATE = lib
 
 CONFIG += plugin
-
-#DEFINES += PLUGIN_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -34,19 +32,5 @@ SOURCES = \
 
 DISTFILES += \
     fakeplugin.json
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
-win32:CONFIG(release, debug|release): LIBS += -L$${LIB_DIR}/release/ -l$${INTERFACE_LIB_NAME}
-else:win32:CONFIG(debug, debug|release): LIBS += -L$${LIB_DIR}/debug/ -l$${INTERFACE_LIB_NAME}
-else:unix: LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
-
-INCLUDEPATH += $$PWD/../$${INTERFACE_SRC_NAME}
-DEPENDPATH += $$PWD/../$${INTERFACE_SRC_NAME}
-
-DESTDIR = $${PLUGINS_DIR}
 
 CONFIG += install_ok  # Do not cargo-cult this!

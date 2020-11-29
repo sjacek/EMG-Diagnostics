@@ -43,7 +43,7 @@ QT_END_NAMESPACE
 class EmgViewer : public QQuickView
 {
     Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, "EmgViewer")
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     EmgViewer();
 

@@ -36,7 +36,7 @@
 class UEcgSeries : public DataSeries
 {
     Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, "UEcgSeries")
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     explicit UEcgSeries(QObject* parent = nullptr);
 

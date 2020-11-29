@@ -41,7 +41,7 @@ class INTERFACEPLUGINSHARED_EXPORT DataSeries : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int cols READ cols WRITE setCols NOTIFY colsChanged)
-    Q_LOGGING_CATEGORY(cat, "DataSeries")
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     explicit DataSeries(QObject* parent) : QObject(parent), m_cols(0) {}
 

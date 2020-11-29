@@ -10,7 +10,6 @@ QT       -= gui
 TARGET  = $${INTERFACE_LIB_NAME}
 #TARGET  = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
 
-#TARGET = InterfacePlugin
 TEMPLATE = lib
 
 DEFINES += INTERFACEPLUGIN_LIBRARY

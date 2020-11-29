@@ -42,7 +42,7 @@ QT_END_NAMESPACE
 class INTERFACEPLUGINSHARED_EXPORT Plugin : public QObject
 {
     Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, "Plugin")
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     explicit Plugin() : QObject(), m_pPluginLoader(nullptr) {}
 
