@@ -32,9 +32,10 @@
 #include <QtCore/QRandomGenerator>
 #include <QtCore/QtMath>
 
-#include "emgapplication.h"
+//#include "emgapplication.h"
 #include "dataseries.h"
 #include "plugin.h"
+#include "pluginsocket.h"
 
 QT_CHARTS_USE_NAMESPACE
 
@@ -53,7 +54,7 @@ DataSource::DataSource(QObject *parent)
 
 void DataSource::connectPlugins()
 {
-    for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
+    for (Plugin* plugin : PluginSocket::instance().getPlugins()) {
         qCDebug(cat) << "connectPlugins" << *plugin;
         connect(plugin, SIGNAL(seriesCreated(QString,DataSeries*)), SLOT(onSeriesCreated(QString,DataSeries*)));
     }
@@ -63,7 +64,7 @@ void DataSource::init(int colCount)
 {
     m_dataSeries.clear();
 
-    for (Plugin* plugin : EmgApplication::theApp->getPlugins()) {
+    for (Plugin* plugin : PluginSocket::instance().getPlugins()) {
         qCDebug(cat) << "init" << *plugin;
         plugin->init(colCount);
     }

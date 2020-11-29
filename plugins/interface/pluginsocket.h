@@ -27,74 +27,48 @@
  **
  ****************************************************************************/
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
+#ifndef SOCKET_H
+#define SOCKET_H
 
-#include "plugin_global.h"
-
-#include <QtCore/QPluginLoader>
+#include <QtCore/QObject>
+#include <QtCore/qglobal.h>
 #include <QtCore/QLoggingCategory>
 
+#include "singleton.h"
+#include "plugin_global.h"
+
 QT_BEGIN_NAMESPACE
-class DataSeries;
+class Plugin;
+class QDir;
 QT_END_NAMESPACE
 
-class INTERFACEPLUGINSHARED_EXPORT Plugin : public QObject
+class INTERFACEPLUGINSHARED_EXPORT PluginSocket : public QObject
 {
     Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, "Plugin")
+    Q_LOGGING_CATEGORY(cat, "Socket")
 public:
-    explicit Plugin() : QObject(), m_pPluginLoader(nullptr) {}
+    explicit PluginSocket(QObject* parent = nullptr);
+    ~PluginSocket() = default;
 
-    virtual void init(int colCount) = 0;
-
-    virtual ~Plugin() = default;
-
-    QString getName() const {
-        return getMetaDataValue("Name");
+    static PluginSocket& instance() {
+        static PluginSocket* _instance = 0;
+        if ( _instance == 0 ) {
+            _instance = new PluginSocket();
+        }
+        return *_instance;
     }
 
-    QString getVersion() const {
-        return getMetaDataValue("Version");
-    }
-
-    QString getFileName() const {
-        return getPluginLoader()->fileName();
-    }
-
-    friend class PluginSocket;
+public:
+    const QList<Plugin*>& getPlugins() { return m_Plugins; }
 
 protected:
-    void setPluginLoader(QPluginLoader* pluginLoader) {
-        m_pPluginLoader = pluginLoader;
-    }
+    QList<Plugin*> m_Plugins;
 
-    const QPluginLoader* getPluginLoader() const {
-        return m_pPluginLoader;
-    }
-
-    QString getMetaDataValue(QString valueName) const {
-        return getPluginLoader()->metaData().value("MetaData").toObject().value(valueName).toString();
-    }
-
-private:
-    const QPluginLoader* m_pPluginLoader;
+    void loadPlugins();
+    void loadPluginsFromDir(const QDir& dir);
 
 signals:
-    void seriesCreated(QString name, DataSeries* series);
+
 };
 
-inline QDebug operator<< (QDebug debug, const Plugin& plugin)
-{
-    QDebugStateSaver saver(debug);
-    debug.nospace() << "Plugin(" << plugin.getName() << ", " << plugin.getVersion() << ")";
-
-    return debug;
-}
-
-QT_BEGIN_NAMESPACE
-#define Plugin_iid "com.github.sjacek.EMG-Diagnostics.Plugin"
-Q_DECLARE_INTERFACE(Plugin, Plugin_iid)
-QT_END_NAMESPACE
-
-#endif // PLUGIN_H
+#endif // SOCKET_H

@@ -27,41 +27,29 @@
  **
  ****************************************************************************/
 
-#ifndef EMGAPPLICATION_H
-#define EMGAPPLICATION_H
+#ifndef SINGLETON_H
+#define SINGLETON_H
 
-#include <QtWidgets/QApplication>
-#include <QtCore/QLoggingCategory>
+#include <QtCore/qglobal.h>
 
-QT_BEGIN_NAMESPACE
-class Plugin;
-class QDir;
-QT_END_NAMESPACE
-
-// Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
-class EmgApplication : public QApplication
+class Singleton
 {
-    Q_LOGGING_CATEGORY(cat, "EmgApplication")
-public:
-#ifdef Q_QDOC
-    EmgApplication(int &argc, char **argv);
-#else
-    EmgApplication(int &argc, char **argv, int flags = ApplicationFlags);
-#endif
-
-private:
-    QList<Plugin*> m_Plugins;
-
-    void loadPlugins();
-    void loadPluginsFromDir(const QDir& dir);
-
+protected:
+    Singleton() {}
+    Singleton(const Singleton&) {}
+    // In C++11, copy constructor and assignment operator could be deleted (= delete)
+//    Singleton& (const Singleton&) {
+//        return *this;
+//    }
 
 public:
-    const QList<Plugin*>& getPlugins() {
-        return m_Plugins;
+    static Singleton& instance() {
+        static Singleton * _instance = 0;
+        if ( _instance == 0 ) {
+            _instance = new Singleton();
+        }
+        return *_instance;
     }
-
-    static EmgApplication* theApp;
 };
 
-#endif // EMGAPPLICATION_H
+#endif // SINGLETON_H

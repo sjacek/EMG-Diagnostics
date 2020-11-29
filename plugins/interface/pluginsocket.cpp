@@ -27,37 +27,21 @@
  **
  ****************************************************************************/
 
-#include "emgapplication.h"
+#include "pluginsocket.h"
 
-#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QPluginLoader>
+#include <QCoreApplication>
 
 #include "plugin.h"
 
-#ifdef Q_QDOC
-EmgApplication::EmgApplication(int &argc, char **argv)
-    : QApplication(argc, argv)
-#else
-EmgApplication::EmgApplication(int &argc, char **argv, int flags)
-    : QApplication(argc, argv, flags)
-#endif
+PluginSocket::PluginSocket(QObject* parent)
+    : QObject(parent)
 {
     loadPlugins();
-    theApp = this;
 }
 
-QDebug operator<< (QDebug debug, const Plugin& plugin)
-{
-    QDebugStateSaver saver(debug);
-    debug.nospace() << "Plugin(" << plugin.getName() << ", " << plugin.getVersion() << ")";
-
-    return debug;
-}
-
-EmgApplication* EmgApplication::theApp;
-
-void EmgApplication::loadPlugins()
+void PluginSocket::loadPlugins()
 {
 //    const QVector<QStaticPlugin> staticPlugins = QPluginLoader::staticPlugins();
 //    for (const QStaticPlugin& staticPlugin : staticPlugins)
@@ -65,9 +49,9 @@ void EmgApplication::loadPlugins()
 //        // TODO:
 //    }
 
-    qCDebug(cat) << "library Paths" << libraryPaths();
+    qCDebug(cat) << "library Paths" << qApp->libraryPaths();
 
-    QDir dir(applicationDirPath());
+    QDir dir(qApp->applicationDirPath());
 #if defined(Q_OS_WIN)
     if (dir.dirName().toLower() == "debug" || dir.dirName().toLower() == "release")
         dir.cdUp();
@@ -91,13 +75,13 @@ void EmgApplication::loadPlugins()
     if (pluginsDir.cd("plugins")) {
         loadPluginsFromDir(pluginsDir);
 
-        for (const QFileInfo &fileinfo : pluginsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
+        for (const QFileInfo& fileinfo : pluginsDir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot)) {
             loadPluginsFromDir(fileinfo.absoluteFilePath());
         }
     }
 }
 
-void EmgApplication::loadPluginsFromDir(const QDir& dir)
+void PluginSocket::loadPluginsFromDir(const QDir& dir)
 {
     const QStringList entries = dir.entryList(QDir::Files);
     qCDebug(cat) << "Plugins dir:" << dir.absolutePath() << "; entries:"  << entries;
@@ -121,4 +105,3 @@ void EmgApplication::loadPluginsFromDir(const QDir& dir)
         }
     }
 }
-

@@ -26,12 +26,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     datasource.h \
-    emgapplication.h \
     emgviewer.h
 
 SOURCES += \
     datasource.cpp \
-    emgapplication.cpp \
     emgviewer.cpp \
     main.cpp
 
