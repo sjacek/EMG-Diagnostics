@@ -32,14 +32,12 @@
 
 #include "dataseries.h"
 
-#include <QtCore/QLoggingCategory>
-
-class FakeSeries : public DataSeries
+class SineSeries : public DataSeries
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit FakeSeries(QObject* parent);
+    explicit SineSeries(QObject* parent);
 
     virtual void init();
     virtual void update(QAbstractSeries* series);

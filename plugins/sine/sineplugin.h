@@ -27,20 +27,25 @@
  **
  ****************************************************************************/
 
-#include "fakeplugin.h"
+#ifndef SINEPLUGIN_H
+#define SINEPLUGIN_H
 
-#include "fakeseries.h"
+#include "plugin.h"
 
-
-SinePlugin::SinePlugin(QObject* parent)
-    : Plugin(parent)
+class SinePlugin : public Plugin
 {
-}
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "sineplugin.json")
+    Q_INTERFACES(Plugin)
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 
-void SinePlugin::init(int cols)
-{
-    SineSeries* series = new SineSeries(this);
-    series->setCols(cols);
-    m_series.append(series);
-    emit seriesCreated("fake", series);
-}
+public:
+    explicit SinePlugin(QObject* parent = nullptr);
+
+    virtual void init(int cols);
+
+private:
+    QList<DataSeries*> m_series;
+};
+
+#endif // SINEPLUGIN_H

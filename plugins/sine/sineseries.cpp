@@ -27,7 +27,7 @@
  **
  ****************************************************************************/
 
-#include "fakeseries.h"
+#include "sineseries.h"
 
 Q_DECLARE_METATYPE(QAbstractSeries *)
 Q_DECLARE_METATYPE(QAbstractAxis *)

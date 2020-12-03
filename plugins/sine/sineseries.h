@@ -27,20 +27,25 @@
  **
  ****************************************************************************/
 
-#include "fakeplugin.h"
+#ifndef SINESERIES_H
+#define SINESERIES_H
 
-#include "fakeseries.h"
+#include "dataseries.h"
 
-
-SinePlugin::SinePlugin(QObject* parent)
-    : Plugin(parent)
+class SineSeries : public DataSeries
 {
-}
+    Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
+public:
+    explicit SineSeries(QObject* parent);
 
-void SinePlugin::init(int cols)
-{
-    SineSeries* series = new SineSeries(this);
-    series->setCols(cols);
-    m_series.append(series);
-    emit seriesCreated("fake", series);
-}
+    virtual void init();
+    virtual void update(QAbstractSeries* series);
+
+private:
+    const int DATA_SIZE = 5;
+    QList<QList<QPointF>> m_data;
+    int m_index;
+};
+
+#endif // SINESERIES_H

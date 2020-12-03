@@ -27,12 +27,12 @@
  **
  ****************************************************************************/
 
-#ifndef UECGPLUGIN_H
-#define UECGPLUGIN_H
+#ifndef FAKEPLUGIN_H
+#define FAKEPLUGIN_H
 
 #include "plugin.h"
 
-class FakePlugin : public Plugin
+class SinePlugin : public Plugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "fakeplugin.json")
@@ -40,7 +40,7 @@ class FakePlugin : public Plugin
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 
 public:
-    explicit FakePlugin(QObject* parent = nullptr);
+    explicit SinePlugin(QObject* parent = nullptr);
 
     virtual void init(int cols);
 
@@ -48,4 +48,4 @@ private:
     QList<DataSeries*> m_series;
 };
 
-#endif // UECGPLUGIN_H
+#endif // FAKEPLUGIN_H

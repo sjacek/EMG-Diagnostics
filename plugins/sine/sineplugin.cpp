@@ -27,9 +27,9 @@
  **
  ****************************************************************************/
 
-#include "fakeplugin.h"
+#include "sineplugin.h"
 
-#include "fakeseries.h"
+#include "sineseries.h"
 
 
 SinePlugin::SinePlugin(QObject* parent)
@@ -42,5 +42,5 @@ void SinePlugin::init(int cols)
     SineSeries* series = new SineSeries(this);
     series->setCols(cols);
     m_series.append(series);
-    emit seriesCreated("fake", series);
+    emit seriesCreated("sine", series);
 }
