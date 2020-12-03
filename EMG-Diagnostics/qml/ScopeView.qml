@@ -86,13 +86,11 @@ ChartView {
 
     function setupAllSeries(type) {
         var seriesNames = []
-        for (var i = 0; i < chartView.count; i++) {
+        for (var i = 0; i < chartView.count; i++)
             seriesNames.push(chartView.series(i).name)
-        }
 
-        for (var i = 0; i < seriesNames.length; i++) {
-            setupSeries(seriesNames[i], type)
-        }
+        for (var n in seriesNames)
+            setupSeries(seriesNames[n], type)
     }
 
     function setupSeries(name, type) {
