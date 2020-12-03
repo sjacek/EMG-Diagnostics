@@ -39,8 +39,8 @@ class SineSeries : public DataSeries
 public:
     explicit SineSeries(QObject* parent);
 
-    virtual void init();
-    virtual void update(QAbstractSeries* series);
+    void init() override;
+    void update(QAbstractSeries* series) override;
 
 private:
     const int DATA_SIZE = 5;

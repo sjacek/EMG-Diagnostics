@@ -43,7 +43,7 @@ private:
     QList<QPointF> m_data;
 
 public:
-    virtual void update(QAbstractSeries* series);
+    void update(QAbstractSeries* series) override;
 };
 
 #endif // UECGSERIES_H

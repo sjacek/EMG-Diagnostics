@@ -42,7 +42,7 @@ class SinePlugin : public Plugin
 public:
     explicit SinePlugin(QObject* parent = nullptr);
 
-    virtual void init(int cols);
+    void init(int cols) override;
 
 private:
     QList<DataSeries*> m_series;

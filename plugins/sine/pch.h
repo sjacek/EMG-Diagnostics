@@ -7,6 +7,7 @@
 #include <QtCore/QtMath>
 #include <QtCore/QtPlugin>
 #include <QtCore/QRandomGenerator>
+#include <QtCore/QTimer>
 #include <QtCharts/QXYSeries>
 
 QT_CHARTS_USE_NAMESPACE

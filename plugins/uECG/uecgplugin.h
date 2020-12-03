@@ -42,7 +42,7 @@ class UEcgPlugin : public Plugin
 public:
     explicit UEcgPlugin(QObject* parent = nullptr);
 
-    virtual void init(int cols);
+    void init(int cols) override;
 //    virtual QList<DataSeries*> getDataSeries() const { return m_series; }
 //    virtual int registerDataSeries(QMap<QString, DataSeries*>& mapDataSeries);
 
