@@ -43,7 +43,7 @@ class INTERFACEPLUGINSHARED_EXPORT Plugin : public QObject
 public:
     explicit Plugin(QObject* parent) : QObject(parent), m_pPluginLoader(nullptr) {}
 
-    virtual void init(int colCount) = 0;
+    virtual void init(int cols) = 0;
 
     virtual ~Plugin() = default;
 

@@ -31,11 +31,6 @@
 #define EMGVIEWER_H
 
 #include "datasource.h"
-#include "dataseries.h"
-
-QT_BEGIN_NAMESPACE
-class QDir;
-QT_END_NAMESPACE
 
 class EmgViewer : public QQuickView
 {
@@ -46,12 +41,8 @@ public:
 
 private:
     DataSource m_DataSource;
-//    DataSeries* m_pDataSource;
-//    QList<DataSeries*> m_DataSources;
 
     void initGUI();
-
-    void addDatasource(DataSeries* datasource);
 };
 
 #endif // EMGVIEWER_H

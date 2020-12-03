@@ -45,30 +45,37 @@ DataSource::DataSource(QObject *parent)
     qRegisterMetaType<QAbstractAxis*>();
 
     connectPlugins();
-    init(1024);
 }
 
 void DataSource::connectPlugins()
 {
     for (Plugin* plugin : PluginSocket::instance().getPlugins()) {
         qCDebug(cat) << "connectPlugins" << *plugin;
-        connect(plugin, SIGNAL(seriesCreated(QString,DataSeries*)), SLOT(onSeriesCreated(QString,DataSeries*)));
+        connect(plugin, &Plugin::seriesCreated, [=](const QString& name, DataSeries* series) {
+            qCDebug(cat) << "received seriesCreated(" << name << ", " << series << ")";
+            m_dataSeries[name] = series;
+            emit seriesCreated(name);
+        });
     }
 }
 
-void DataSource::init(int colCount)
+void DataSource::init(int cols)
 {
     m_dataSeries.clear();
 
-    for (Plugin* plugin : PluginSocket::instance().getPlugins()) {
+    for (Plugin* plugin : PluginSocket::instance().getPlugins())
+    {
         qCDebug(cat) << "init" << *plugin;
-        plugin->init(colCount);
+        plugin->init(cols);
     }
 }
 
-void DataSource::onSeriesCreated(QString name, DataSeries* series)
+void DataSource::setCols(int cols)
 {
-    m_dataSeries[name] = series;
+    for (DataSeries* series : m_dataSeries.values())
+    {
+        series->setCols(cols);
+    }
 }
 
 QString DataSource::getSeriesName(int n) const

@@ -33,6 +33,8 @@ EmgViewer::EmgViewer()
     : m_DataSource(this)
 {
     initGUI();
+
+    m_DataSource.init(1024);
 }
 
 void EmgViewer::initGUI()
@@ -56,7 +58,7 @@ void EmgViewer::initGUI()
 
     rootContext()->setContextProperty("dataSource", &m_DataSource);
 
-    setSource(QUrl("qrc:/qml/emgviewer.qml"));
+    setSource(QUrl("qrc:/qml/EmgViewer.qml"));
     setResizeMode(QQuickView::SizeRootObjectToView);
     setColor(QColor("#404040"));
 }

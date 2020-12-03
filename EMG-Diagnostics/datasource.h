@@ -45,15 +45,13 @@ public:
 
     Q_INVOKABLE int count() { return m_dataSeries.count(); }
 
-    Q_INVOKABLE void init(int colCount);
+    Q_INVOKABLE void init(int cols);
+    Q_INVOKABLE void setCols(int cols);
     Q_INVOKABLE void update(QAbstractSeries* series);
 
     Q_INVOKABLE QString getSeriesName(int n) const;
 
     Q_INVOKABLE DataSeries& series(QString name) const;
-
-private slots:
-    void onSeriesCreated(QString name, DataSeries* series);
 
 private:
     QMap<QString, DataSeries*> m_dataSeries;
@@ -61,6 +59,9 @@ private:
     void connectPlugins();
 
 //    QList<DataSeries*> getSeries() const;
+
+signals:
+    void seriesCreated(const QString& name);
 };
 
 #endif // DATASOURCE_H

@@ -30,7 +30,6 @@
 import QtQuick 2.1
 import QtCharts 2.15
 
-//![1]
 ChartView {
     id: chartView
     animationOptions: ChartView.NoAnimation
@@ -43,7 +42,16 @@ ChartView {
                 dataSource.update(chartView.series(i));
     }
     Component.onCompleted: {
-        changeSeriesType("line")
+//        setupAllSeries("line")
+    }
+
+    Connections {
+        target: dataSource
+
+        function onSeriesCreated(name) {
+            console.log("series ", name, " created")
+            setupSeries(name, "line")
+        }
     }
 
     ValueAxis {
@@ -63,28 +71,36 @@ ChartView {
         min: 0
         max: 1024
     }
-    //![1]
 
-    //![2]
     Timer {
         id: refreshTimer
         interval: 1 / 60 * 1000 // 60 Hz
         running: true
         repeat: true
         onTriggered: {
-            for (var i = 0; i <= chartView.count; i++)
+            for (var i = 0; i < chartView.count; i++)
                 dataSource.update(chartView.series(i));
         }
     }
-    //![2]
 
-    //![3]
-    function changeSeriesType(type) {
-        chartView.removeAllSeries();
 
-        // Create new series of the correct type. Axis x is the same for both of the series,
-        // but the series have their own y-axes to make it possible to control the y-offset
-        // of the "signal sources".
+    function setupAllSeries(type) {
+        var seriesNames = []
+        for (var i = 0; i < chartView.count; i++) {
+            seriesNames.push(chartView.series(i).name)
+        }
+
+        for (var i = 0; i < seriesNames.length; i++) {
+            setupSeries(seriesNames[i], type)
+        }
+    }
+
+    function setupSeries(name, type) {
+        console.log("setupSeries(", name, ",", type, ")")
+        var series = chartView.series(name)
+        if (series !== null)
+            chartView.removeSeries(series)
+
         var seriesType;
         switch (type) {
         case "line":
@@ -98,26 +114,17 @@ ChartView {
             break;
         }
 
-        for (var i = 0; i <= dataSource.count() - 1; i++) {
-            var name = dataSource.getSeriesName(i);
-            var dataSeries = dataSource.series(name)
-//            console.debug(dataSeries.cols)
+        series = chartView.createSeries(seriesType, name, axisX, axisY1);
 
-            var series = chartView.createSeries(seriesType, name, axisX, i === 0 ? axisY1 : axisY2);
-            series.useOpenGL = chartView.openGL
-            if (type === "scatter") {
-                series.markerSize = 2;
-                series.borderColor = "transparent";
-            }
+        series.useOpenGL = chartView.openGL
+        if (type === "scatter") {
+            series.markerSize = 2;
+            series.borderColor = "transparent";
         }
     }
-    //![3]
 
     function setAnimations(enabled) {
-        if (enabled)
-            chartView.animationOptions = ChartView.SeriesAnimations;
-        else
-            chartView.animationOptions = ChartView.NoAnimation;
+        chartView.animationOptions = enabled ? ChartView.SeriesAnimations : ChartView.NoAnimation;
     }
 
     function changeRefreshRate(rate) {

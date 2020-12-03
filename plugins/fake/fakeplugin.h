@@ -46,9 +46,6 @@ public:
 
 private:
     QList<DataSeries*> m_series;
-
-//signals:
-//    void seriesCreated(QString name, DataSeries* series);
 };
 
 #endif // UECGPLUGIN_H

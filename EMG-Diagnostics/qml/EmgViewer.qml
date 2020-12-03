@@ -59,9 +59,9 @@ Item {
 
         onSignalSourceChanged: {
             scopeView.axisX().max = sampleCount;
-            dataSource.init(sampleCount);
+            dataSource.setCols(sampleCount);
         }
-        onSeriesTypeChanged: scopeView.changeSeriesType(type);
+        onSeriesTypeChanged: scopeView.setupAllSeries(type);
         onRefreshRateChanged: scopeView.changeRefreshRate(rate);
         onAntialiasingEnabled: scopeView.antialiasing = enabled;
         onOpenGlChanged: {

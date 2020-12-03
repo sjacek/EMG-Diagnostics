@@ -37,7 +37,8 @@ FakePlugin::FakePlugin(QObject* parent)
 {
 }
 
-void FakePlugin::init(int cols) {
+void FakePlugin::init(int cols)
+{
     for (int i(0); i < 2; i++)
     {
         FakeSeries* series = new FakeSeries(this);
