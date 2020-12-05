@@ -44,7 +44,13 @@ public:
 
 private:
     QList<QPointF> m_data;
-    int m_index;
+    qreal m_x;
+    int m_timerPaintSine;
+
+    void paintSine();
+
+protected:
+    void timerEvent(QTimerEvent *event) override;
 };
 
 #endif // SINESERIES_H

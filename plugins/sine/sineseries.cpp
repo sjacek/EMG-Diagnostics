@@ -34,10 +34,12 @@ Q_DECLARE_METATYPE(QAbstractAxis *)
 
 SineSeries::SineSeries(QObject* parent)
     : DataSeries(parent)
-    , m_index(-1)
+    , m_x(0.0)
 {
     qRegisterMetaType<QAbstractSeries*>();
     qRegisterMetaType<QAbstractAxis*>();
+
+    m_timerPaintSine = startTimer(1ms);
 }
 
 void SineSeries::init()
@@ -57,11 +59,29 @@ void SineSeries::update(QAbstractSeries* series)
 
 //    Q_ASSERT(m_data.count());
     if (series) {
-        QXYSeries *xySeries = static_cast<QXYSeries *>(series);
-        if (++m_index > cols() - 1)
-            m_index = 0;
+        QXYSeries* xySeries = static_cast<QXYSeries*>(series);
 
         // Use replace instead of clear + append, it's optimized for performance
         xySeries->replace(m_data);
     }
+}
+
+void SineSeries::timerEvent(QTimerEvent* event)
+{
+    if (event->timerId() == m_timerPaintSine)
+    {
+        paintSine();
+    }
+}
+
+void SineSeries::paintSine()
+{
+    qCDebug(cat) << m_x;
+
+    for (QPointF& point : m_data)
+        point.setX(point.x() + 1);
+
+    qreal y = qSin(M_PI / 50 * m_x);
+    m_data.append(QPointF(0, y));
+    m_x++;
 }

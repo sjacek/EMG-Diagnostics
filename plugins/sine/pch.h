@@ -6,11 +6,13 @@
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QtMath>
 #include <QtCore/QtPlugin>
-#include <QtCore/QRandomGenerator>
-#include <QtCore/QTimer>
+#include <QtCore/QTimerEvent>
 #include <QtCharts/QXYSeries>
 
 QT_CHARTS_USE_NAMESPACE
+
+#include <chrono>
+using namespace std::chrono;
 
 #include "interface_pch.h"
 
