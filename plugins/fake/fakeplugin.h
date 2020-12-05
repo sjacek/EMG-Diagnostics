@@ -32,7 +32,7 @@
 
 #include "plugin.h"
 
-class SinePlugin : public Plugin
+class FakePlugin : public Plugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "fakeplugin.json")
@@ -40,7 +40,7 @@ class SinePlugin : public Plugin
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 
 public:
-    explicit SinePlugin(QObject* parent = nullptr);
+    explicit FakePlugin(QObject* parent = nullptr);
 
     void init(int cols) override;
 

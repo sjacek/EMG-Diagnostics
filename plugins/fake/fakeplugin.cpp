@@ -32,14 +32,14 @@
 #include "fakeseries.h"
 
 
-SinePlugin::SinePlugin(QObject* parent)
+FakePlugin::FakePlugin(QObject* parent)
     : Plugin(parent)
 {
 }
 
-void SinePlugin::init(int cols)
+void FakePlugin::init(int cols)
 {
-    SineSeries* series = new SineSeries(this);
+    FakeSeries* series = new FakeSeries(this);
     series->setCols(cols);
     m_series.append(series);
     emit seriesCreated("fake", series);

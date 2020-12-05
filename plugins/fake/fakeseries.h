@@ -32,12 +32,12 @@
 
 #include "dataseries.h"
 
-class SineSeries : public DataSeries
+class FakeSeries : public DataSeries
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit SineSeries(QObject* parent);
+    explicit FakeSeries(QObject* parent);
 
     void init() override;
     void update(QAbstractSeries* series) override;

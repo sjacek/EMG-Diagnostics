@@ -32,7 +32,7 @@
 Q_DECLARE_METATYPE(QAbstractSeries *)
 Q_DECLARE_METATYPE(QAbstractAxis *)
 
-SineSeries::SineSeries(QObject* parent)
+FakeSeries::FakeSeries(QObject* parent)
     : DataSeries(parent)
     , m_index(-1)
 {
@@ -40,7 +40,7 @@ SineSeries::SineSeries(QObject* parent)
     qRegisterMetaType<QAbstractAxis*>();
 }
 
-void SineSeries::init()
+void FakeSeries::init()
 {
     qCDebug(cat) << "init(" << cols() << ")";
     // Remove previous data
@@ -61,7 +61,7 @@ void SineSeries::init()
     }
 }
 
-void SineSeries::update(QAbstractSeries* series)
+void FakeSeries::update(QAbstractSeries* series)
 {
 //    qCDebug(cat) << this << "index:" << m_index << "; series:" << series->name() << series << "; m_data.count:" << m_data.count();
     if (m_data.empty() || cols() != m_data.begin()->count())
