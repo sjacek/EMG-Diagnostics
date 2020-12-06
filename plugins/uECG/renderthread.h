@@ -27,25 +27,35 @@
  **
  ****************************************************************************/
 
-#ifndef UECGPLUGIN_H
-#define UECGPLUGIN_H
+#ifndef RENDERTHREAD_H
+#define RENDERTHREAD_H
 
-#include "plugin.h"
-
-class UecgPlugin : public Plugin
+class RenderThread : public QThread
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "uecgplugin.json")
-    Q_INTERFACES(Plugin)
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
-
 public:
-    explicit UecgPlugin(QObject* parent = nullptr);
+    RenderThread(QObject* parent = nullptr);
+    ~RenderThread();
 
-    void init(int cols) override;
+    void render();
+
+    QList<QPointF> copyPoints();
+
+protected:
+    void run() override;
 
 private:
-    QList<DataSeries*> m_series;
+    QMutex m_Mutex;
+    QWaitCondition m_Condition;
+
+    QList<QPointF> m_Points;
+    unsigned int m_X = 0;
+
+    bool m_Abort = false;
+    bool m_Restart = false;
+
+    void drawSine();
 };
 
-#endif // UECGPLUGIN_H
+#endif // RENDERTHREAD_H

@@ -27,25 +27,53 @@
  **
  ****************************************************************************/
 
-#ifndef UECGPLUGIN_H
-#define UECGPLUGIN_H
+#include "renderthread.h"
 
-#include "plugin.h"
-
-class UecgPlugin : public Plugin
+RenderThread::RenderThread(QObject* parent)
+    : QThread(parent)
 {
-    Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "uecgplugin.json")
-    Q_INTERFACES(Plugin)
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
+    setObjectName(typeid(this).name());
+}
 
-public:
-    explicit UecgPlugin(QObject* parent = nullptr);
+RenderThread::~RenderThread()
+{
+    m_Abort = true;
+}
 
-    void init(int cols) override;
+QList<QPointF> RenderThread::copyPoints() {
+    QMutexLocker locker(&m_Mutex);
+    return m_Points;
+}
 
-private:
-    QList<DataSeries*> m_series;
-};
+void RenderThread::render()
+{
+    QMutexLocker locker(&m_Mutex);
 
-#endif // UECGPLUGIN_H
+    if (!isRunning()) {
+        start(LowPriority);
+    } else {
+        m_Restart = true;
+        m_Condition.wakeOne();
+    }
+}
+
+void RenderThread::run()
+{
+    while (!m_Abort && !isInterruptionRequested() )
+    {
+        drawSine();
+        msleep(10);
+    }
+}
+
+void RenderThread::drawSine()
+{
+    QMutexLocker locker(&m_Mutex);
+
+    for (QPointF& point : m_Points)
+        point.setX(point.x() + 1);
+
+    qreal y = qSin(M_PI / 50 * m_X + 20);
+    m_Points.append(QPointF(0, y));
+    m_X++;
+}

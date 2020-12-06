@@ -29,12 +29,18 @@
 
 #include "uecgplugin.h"
 
-UEcgPlugin::UEcgPlugin(QObject* parent)
+#include "uecgseries.h"
+
+
+UecgPlugin::UecgPlugin(QObject* parent)
     : Plugin(parent)
 {
 }
 
-void UEcgPlugin::init(int cols)
+void UecgPlugin::init(int cols)
 {
-    // TODO:
+    UecgSeries* series = new UecgSeries(this);
+    series->setCols(cols);
+    m_series.append(series);
+    emit seriesCreated("uecg", series);
 }

@@ -29,11 +29,40 @@
 
 #include "uecgseries.h"
 
-UEcgSeries::UEcgSeries(QObject* parent)
+Q_DECLARE_METATYPE(QAbstractSeries *)
+Q_DECLARE_METATYPE(QAbstractAxis *)
+
+UecgSeries::UecgSeries(QObject* parent)
     : DataSeries(parent)
+    , m_Thread(this)
 {
+    qRegisterMetaType<QAbstractSeries*>();
+    qRegisterMetaType<QAbstractAxis*>();
 }
 
-void UEcgSeries::update(QAbstractSeries* series) {
+UecgSeries::~UecgSeries()
+{
+    m_Thread.quit();
+    m_Thread.wait();
+}
 
+void UecgSeries::init()
+{
+    m_Thread.render();
+}
+
+void UecgSeries::update(QAbstractSeries* series)
+{
+    QList<QPointF> points = m_Thread.copyPoints();
+    if (!points.count())
+        init();
+    else
+    {
+        if (series) {
+            QXYSeries* xySeries = static_cast<QXYSeries*>(series);
+
+            // Use replace instead of clear + append, it's optimized for performance
+            xySeries->replace(points);
+        }
+    }
 }

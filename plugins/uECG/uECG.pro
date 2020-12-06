@@ -25,9 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS = \
     pch.h \
+    renderthread.h \
     uecgplugin.h \
     uecgseries.h
 SOURCES = \
+    renderthread.cpp \
     uecgplugin.cpp \
     uecgseries.cpp
 

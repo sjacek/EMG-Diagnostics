@@ -31,19 +31,22 @@
 #define UECGSERIES_H
 
 #include "dataseries.h"
+#include "renderthread.h"
 
-class UEcgSeries : public DataSeries
+class UecgSeries : public DataSeries
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit UEcgSeries(QObject* parent = nullptr);
+    explicit UecgSeries(QObject* parent);
+    ~UecgSeries();
+
+    void update(QAbstractSeries* series) override;
 
 private:
-    QList<QPointF> m_data;
+    RenderThread m_Thread;
 
-public:
-    void update(QAbstractSeries* series) override;
+    void init();
 };
 
 #endif // UECGSERIES_H
