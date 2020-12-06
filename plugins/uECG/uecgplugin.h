@@ -46,6 +46,9 @@ public:
 
 private:
     QList<DataSeries*> m_series;
+
+    void initDevice();
+    void initSeries(int cols);
 };
 
 #endif // UECGPLUGIN_H

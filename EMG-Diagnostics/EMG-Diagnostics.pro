@@ -34,10 +34,6 @@ SOURCES += \
 RESOURCES += qml.qrc
 
 DISTFILES +=
-#    qml/ControlPanel.qml \
-#    qml/MultiButton.qml \
-#    qml/ScopeView.qml \
-#    qml/EmgViewer.qml
 
 TRANSLATIONS += \
     EMG-Diagnostics_en_GB.ts

@@ -38,6 +38,7 @@ public:
     RenderThread(QObject* parent = nullptr);
     ~RenderThread();
 
+    void init();
     void render();
 
     QList<QPointF> copyPoints();
@@ -55,7 +56,7 @@ private:
     bool m_Abort = false;
     bool m_Restart = false;
 
-    void drawSine();
+    void drawChart();
 };
 
 #endif // RENDERTHREAD_H

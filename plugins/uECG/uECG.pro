@@ -36,9 +36,14 @@ SOURCES = \
 DISTFILES += \
     uecgplugin.json
 
-win32:CONFIG(release, debug|release): LIBS += -L$${LIB_DIR}/release/ -l$${INTERFACE_LIB_NAME}
-else:win32:CONFIG(debug, debug|release): LIBS += -L$${LIB_DIR}/debug/ -l$${INTERFACE_LIB_NAME}
-else:unix: LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
+win32:CONFIG(release, debug|release): LIBS += -L$${LIB_DIR}/release/
+else:win32:CONFIG(debug, debug|release): LIBS += -L$${LIB_DIR}/debug/
+else:unix: LIBS += -L$${LIB_DIR}
+
+LIBS += -l$${INTERFACE_LIB_NAME} -luECG
+
+INCLUDEPATH += $$PWD/../../libuECG
+DEPENDPATH += $$PWD/../../libuECG
 
 unix {
     target.path = /usr/lib

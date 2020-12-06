@@ -33,6 +33,13 @@ RenderThread::RenderThread(QObject* parent)
     : QThread(parent)
 {
     setObjectName(typeid(this).name());
+
+    init();
+}
+
+void RenderThread::init()
+{
+
 }
 
 RenderThread::~RenderThread()
@@ -61,12 +68,12 @@ void RenderThread::run()
 {
     while (!m_Abort && !isInterruptionRequested() )
     {
-        drawSine();
+        drawChart();
         msleep(10);
     }
 }
 
-void RenderThread::drawSine()
+void RenderThread::drawChart()
 {
     QMutexLocker locker(&m_Mutex);
 
