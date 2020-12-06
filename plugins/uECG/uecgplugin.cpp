@@ -30,7 +30,7 @@
 #include "uecgplugin.h"
 
 #include "uecgseries.h"
-#include "uecg.h"
+#include <uecg.h>
 
 UecgPlugin::UecgPlugin(QObject* parent)
     : Plugin(parent)
@@ -45,7 +45,8 @@ void UecgPlugin::init(int cols)
 
 void UecgPlugin::initDevice()
 {
-
+    serial_functions_init();
+    serial_main_init();
 }
 
 void UecgPlugin::initSeries(int cols)
