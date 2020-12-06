@@ -13,5 +13,4 @@ DEPENDPATH += $${SRC_ROOT_DIR}/plugins/$${INTERFACE_SRC_NAME}
 CONFIG += rtti c++17
 
 PRECOMPILED_HEADER = pch.h
-#DEFINES += USING_PCH
 CONFIG += precompile_header

@@ -1,7 +1,15 @@
+QMAKE_PROJECT_NAME = libuECG
+#TARGET = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
+TARGET = uECG
+
 CONFIG -= qt
 
 TEMPLATE = lib
 DEFINES += LIBUECG_LIBRARY
+
+BUILD_ROOT_DIR=$${OUT_PWD}/../App
+APP_DIR=$${BUILD_ROOT_DIR}
+LIB_DIR=$${BUILD_ROOT_DIR}/lib
 
 #CONFIG += c++11
 
@@ -11,20 +19,22 @@ DEFINES += LIBUECG_LIBRARY
 
 SOURCES += \
     device_functions.c \
-    libuecg.cpp \
     packet_parser.c \
     serial_functions.c
 
 HEADERS += \
     definitions.h \
     device_functions.h \
-    libuECG_global.h \
-    libuecg.h \
     packet_parser.h \
-    serial_functions.h
+    serial_functions.h \
+    uecg.h \
+    uecg_global.h \
+    uecg_version.h
 
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+DESTDIR = $${LIB_DIR}
