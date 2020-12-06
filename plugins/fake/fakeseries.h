@@ -39,13 +39,14 @@ class FakeSeries : public DataSeries
 public:
     explicit FakeSeries(QObject* parent);
 
-    void init() override;
     void update(QAbstractSeries* series) override;
 
 private:
     const int DATA_SIZE = 5;
     QList<QList<QPointF>> m_data;
-    int m_index;
+    int m_index = -1;
+
+    void init();
 };
 
 #endif // FAKESERIES_H

@@ -34,54 +34,35 @@ Q_DECLARE_METATYPE(QAbstractAxis *)
 
 SineSeries::SineSeries(QObject* parent)
     : DataSeries(parent)
-    , m_x(0.0)
+    , m_Thread(this)
 {
     qRegisterMetaType<QAbstractSeries*>();
     qRegisterMetaType<QAbstractAxis*>();
+}
 
-    m_timerPaintSine = startTimer(1ms);
+SineSeries::~SineSeries()
+{
+    m_Thread.quit();
+    m_Thread.wait();
 }
 
 void SineSeries::init()
 {
-    qCDebug(cat) << "init(" << cols() << ")";
-    // Remove previous data
-    m_data.clear();
-    m_data.reserve(cols());
-
+    m_Thread.render();
 }
 
 void SineSeries::update(QAbstractSeries* series)
 {
-//    qCDebug(cat) << this << "index:" << m_index << "; series:" << series->name() << series << "; m_data.count:" << m_data.count();
-//    if (m_data.empty() || cols() != m_data.count())
-//        init();
-
-//    Q_ASSERT(m_data.count());
-    if (series) {
-        QXYSeries* xySeries = static_cast<QXYSeries*>(series);
-
-        // Use replace instead of clear + append, it's optimized for performance
-        xySeries->replace(m_data);
-    }
-}
-
-void SineSeries::timerEvent(QTimerEvent* event)
-{
-    if (event->timerId() == m_timerPaintSine)
+    QList<QPointF> points = m_Thread.copyPoints();
+    if (!points.count())
+        init();
+    else
     {
-        paintSine();
+        if (series) {
+            QXYSeries* xySeries = static_cast<QXYSeries*>(series);
+
+            // Use replace instead of clear + append, it's optimized for performance
+            xySeries->replace(points);
+        }
     }
-}
-
-void SineSeries::paintSine()
-{
-    qCDebug(cat) << m_x;
-
-    for (QPointF& point : m_data)
-        point.setX(point.x() + 1);
-
-    qreal y = qSin(M_PI / 50 * m_x);
-    m_data.append(QPointF(0, y));
-    m_x++;
 }

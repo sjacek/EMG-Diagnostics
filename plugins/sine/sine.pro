@@ -25,10 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS = \
     pch.h \
+    renderthread.h \
     sineplugin.h \
     sineseries.h
 
 SOURCES = \
+    renderthread.cpp \
     sineplugin.cpp \
     sineseries.cpp
 

@@ -27,33 +27,35 @@
  **
  ****************************************************************************/
 
-#ifndef DATASERIES_H
-#define DATASERIES_H
+#ifndef RENDERTHREAD_H
+#define RENDERTHREAD_H
 
-#include "plugin_global.h"
-
-class INTERFACEPLUGINSHARED_EXPORT DataSeries : public QObject
+class RenderThread : public QThread
 {
     Q_OBJECT
-//    Q_PROPERTY(int cols READ cols WRITE setCols NOTIFY colsChanged)
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit DataSeries(QObject* parent) : QObject(parent), m_cols(0) {}
+    RenderThread(QObject* parent = nullptr);
+    ~RenderThread();
 
-//    virtual void init() = 0;
-    virtual void update(QAbstractSeries *series) = 0;
+    void render();
 
+    QList<QPointF> copyPoints();
 
-    virtual void setCols(int cols) { m_cols = cols; }
-    virtual int cols() const { return m_cols; }
+protected:
+    void run() override;
 
 private:
-    int m_cols;
+    QMutex m_Mutex;
+    QWaitCondition m_Condition;
 
-//signals:
-//    void colsChanged();
+    QList<QPointF> m_Points;
+    unsigned int m_X = 0;
+
+    bool m_Abort = false;
+    bool m_Restart = false;
+
+    void drawSine();
 };
 
-Q_DECLARE_METATYPE(DataSeries*)
-
-#endif // DATASERIES_H
+#endif // RENDERTHREAD_H

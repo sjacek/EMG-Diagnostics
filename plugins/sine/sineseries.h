@@ -31,6 +31,7 @@
 #define SINESERIES_H
 
 #include "dataseries.h"
+#include "renderthread.h"
 
 class SineSeries : public DataSeries
 {
@@ -38,19 +39,14 @@ class SineSeries : public DataSeries
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
     explicit SineSeries(QObject* parent);
+    ~SineSeries();
 
-    void init() override;
     void update(QAbstractSeries* series) override;
 
 private:
-    QList<QPointF> m_data;
-    qreal m_x;
-    int m_timerPaintSine;
+    RenderThread m_Thread;
 
-    void paintSine();
-
-protected:
-    void timerEvent(QTimerEvent *event) override;
+    void init();
 };
 
 #endif // SINESERIES_H

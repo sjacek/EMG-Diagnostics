@@ -84,7 +84,7 @@ signals:
 inline QDebug operator<< (QDebug debug, const Plugin& plugin)
 {
     QDebugStateSaver saver(debug);
-    debug.nospace() << "Plugin(" << plugin.getName() << ", " << plugin.getVersion() << ")";
+    debug.nospace() << typeid(plugin).name() << "(" << plugin.getName() << ", " << plugin.getVersion() << ")";
 
     return debug;
 }

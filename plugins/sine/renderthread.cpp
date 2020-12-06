@@ -27,33 +27,53 @@
  **
  ****************************************************************************/
 
-#ifndef DATASERIES_H
-#define DATASERIES_H
+#include "renderthread.h"
 
-#include "plugin_global.h"
-
-class INTERFACEPLUGINSHARED_EXPORT DataSeries : public QObject
+RenderThread::RenderThread(QObject* parent)
+    : QThread(parent)
 {
-    Q_OBJECT
-//    Q_PROPERTY(int cols READ cols WRITE setCols NOTIFY colsChanged)
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
-public:
-    explicit DataSeries(QObject* parent) : QObject(parent), m_cols(0) {}
+    setObjectName(typeid(this).name());
+}
 
-//    virtual void init() = 0;
-    virtual void update(QAbstractSeries *series) = 0;
+RenderThread::~RenderThread()
+{
+    m_Abort = true;
+}
 
+QList<QPointF> RenderThread::copyPoints() {
+    QMutexLocker locker(&m_Mutex);
+    return m_Points;
+}
 
-    virtual void setCols(int cols) { m_cols = cols; }
-    virtual int cols() const { return m_cols; }
+void RenderThread::render()
+{
+    QMutexLocker locker(&m_Mutex);
 
-private:
-    int m_cols;
+    if (!isRunning()) {
+        start(LowPriority);
+    } else {
+        m_Restart = true;
+        m_Condition.wakeOne();
+    }
+}
 
-//signals:
-//    void colsChanged();
-};
+void RenderThread::run()
+{
+    while (!m_Abort && !isInterruptionRequested() )
+    {
+        drawSine();
+        msleep(10);
+    }
+}
 
-Q_DECLARE_METATYPE(DataSeries*)
+void RenderThread::drawSine()
+{
+    QMutexLocker locker(&m_Mutex);
 
-#endif // DATASERIES_H
+    for (QPointF& point : m_Points)
+        point.setX(point.x() + 1);
+
+    qreal y = qSin(M_PI / 50 * m_X);
+    m_Points.append(QPointF(0, y));
+    m_X++;
+}

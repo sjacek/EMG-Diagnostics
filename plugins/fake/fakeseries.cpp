@@ -34,7 +34,6 @@ Q_DECLARE_METATYPE(QAbstractAxis *)
 
 FakeSeries::FakeSeries(QObject* parent)
     : DataSeries(parent)
-    , m_index(-1)
 {
     qRegisterMetaType<QAbstractSeries*>();
     qRegisterMetaType<QAbstractAxis*>();
