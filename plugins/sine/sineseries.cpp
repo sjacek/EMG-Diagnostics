@@ -29,9 +29,6 @@
 
 #include "sineseries.h"
 
-Q_DECLARE_METATYPE(QAbstractSeries *)
-Q_DECLARE_METATYPE(QAbstractAxis *)
-
 SineSeries::SineSeries(QObject* parent, const QString& name)
     : DataSeries(parent, name)
     , m_Thread(this)
@@ -49,20 +46,4 @@ SineSeries::~SineSeries()
 void SineSeries::init()
 {
     m_Thread.render();
-}
-
-void SineSeries::update(QAbstractSeries* series)
-{
-    QList<QPointF> points = m_Thread.copyPoints();
-    if (!points.count())
-        init();
-    else
-    {
-        if (series) {
-            QXYSeries* xySeries = static_cast<QXYSeries*>(series);
-
-            // Use replace instead of clear + append, it's optimized for performance
-            xySeries->replace(points);
-        }
-    }
 }

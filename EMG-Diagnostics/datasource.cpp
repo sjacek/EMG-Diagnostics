@@ -52,6 +52,7 @@ void DataSource::connectPlugins()
             m_dataSeries[name] = series;
 
             connect(series, &DataSeries::pointAdded, [=](QPointF point) {
+//                qCDebug(cat) << "received pointAdded(" << point << ", " << *series << ")";
                 emit pointAdded(series->getName(), point);
             });
         });
@@ -80,19 +81,6 @@ void DataSource::setCols(int cols)
 QString DataSource::getSeriesName(int n) const
 {
     return m_dataSeries.keys().at(n);
-}
-
-void DataSource::update(QAbstractSeries* series)
-{
-    if (series)
-    {
-//        qCDebug(cat) << "DataSource::update 1: " << series->name();
-        if (m_dataSeries.contains(series->name()))
-        {
-//            qCDebug(cat) << "DataSource::update 2";
-            m_dataSeries[series->name()]->update(series);
-        }
-    }
 }
 
 DataSeries& DataSource::getSeries(QString name) const

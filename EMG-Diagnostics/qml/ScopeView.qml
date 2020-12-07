@@ -38,9 +38,9 @@ ChartView {
     property bool openGL: true
     property bool openGLSupported: true
     onOpenGLChanged: {
-        if (openGLSupported)
-            for (var i = 0; i <= chartView.count; i++)
-                dataSource.update(chartView.series(i));
+//        if (openGLSupported)
+//            for (var i = 0; i <= chartView.count; i++)
+//                dataSource.update(chartView.series(i));
     }
     Component.onCompleted: {
 //        setupAllSeries("line")
@@ -50,6 +50,7 @@ ChartView {
         target: dataSource
 
         function onPointAdded(seriesName, point) {
+//            console.log(seriesName, point.x, point.y)
             var series = chartView.series(seriesName)
             if (series === null)
                 series = setupSeries(seriesName, "line")

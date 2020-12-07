@@ -40,8 +40,6 @@ public:
 
     void render();
 
-    QList<QPointF> copyPoints();
-
 protected:
     void run() override;
 
@@ -49,7 +47,6 @@ private:
     QMutex m_Mutex;
     QWaitCondition m_Condition;
 
-    QList<QPointF> m_Points;
     unsigned int m_X = 0;
 
     bool m_Abort = false;

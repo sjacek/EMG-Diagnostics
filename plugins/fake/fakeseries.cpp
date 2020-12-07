@@ -47,28 +47,28 @@ void FakeSeries::init()
         points.reserve(getCols());
         for (int j(0); j < getCols(); j++) {
             // data with sin + random component
-            QPointF point(j, qSin(M_PI / 50 * j) + 0.5 + QRandomGenerator::global()->generateDouble());
-            points.append(point);
-            emit pointAdded(point);
+            qreal y = qSin(M_PI / 50 * j) + 0.5 + QRandomGenerator::global()->generateDouble();
+            points.append(QPointF(j, y));
+            emit pointAdded(QPointF(j, y));
         }
         m_data.insert(i, points);
     }
 }
 
-void FakeSeries::update(QAbstractSeries* series)
-{
-//    qCDebug(cat) << this << "index:" << m_index << "; series:" << series->name() << series << "; m_data.count:" << m_data.count();
-    if (m_data.empty() || getCols() != m_data.begin()->count())
-        init();
+//void FakeSeries::update(QAbstractSeries* series)
+//{
+////    qCDebug(cat) << this << "index:" << m_index << "; series:" << series->name() << series << "; m_data.count:" << m_data.count();
+//    if (m_data.empty() || getCols() != m_data.begin()->count())
+//        init();
 
-    Q_ASSERT(m_data.count());
-    if (series) {
-        QXYSeries *xySeries = static_cast<QXYSeries *>(series);
-        if (++m_index > DATA_SIZE - 1)
-            m_index = 0;
+//    Q_ASSERT(m_data.count());
+//    if (series) {
+//        QXYSeries *xySeries = static_cast<QXYSeries *>(series);
+//        if (++m_index > DATA_SIZE - 1)
+//            m_index = 0;
 
-        QList<QPointF> points = m_data.at(m_index);
-        // Use replace instead of clear + append, it's optimized for performance
-        xySeries->replace(points);
-    }
-}
+//        QList<QPointF> points = m_data.at(m_index);
+//        // Use replace instead of clear + append, it's optimized for performance
+//        xySeries->replace(points);
+//    }
+//}

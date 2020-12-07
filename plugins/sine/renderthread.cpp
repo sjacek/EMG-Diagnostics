@@ -40,11 +40,6 @@ RenderThread::~RenderThread()
     m_Abort = true;
 }
 
-QList<QPointF> RenderThread::copyPoints() {
-    QMutexLocker locker(&m_Mutex);
-    return m_Points;
-}
-
 void RenderThread::render()
 {
     QMutexLocker locker(&m_Mutex);
@@ -59,6 +54,8 @@ void RenderThread::render()
 
 void RenderThread::run()
 {
+//    QMutexLocker locker(&m_Mutex);
+
     while (!m_Abort && !isInterruptionRequested() )
     {
         drawSine();
@@ -70,10 +67,6 @@ void RenderThread::drawSine()
 {
     QMutexLocker locker(&m_Mutex);
 
-    for (QPointF& point : m_Points)
-        point.setX(point.x() + 1);
-
     qreal y = qSin(M_PI / 50 * m_X);
-    m_Points.append(QPointF(0, y));
     emit pointAdded(QPointF(m_X++, y));
 }

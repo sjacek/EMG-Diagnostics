@@ -45,7 +45,6 @@ public:
 
     Q_INVOKABLE void init(int cols);
     Q_INVOKABLE void setCols(int cols);
-    Q_INVOKABLE void update(QAbstractSeries* series);
 
     Q_INVOKABLE QString getSeriesName(int n) const;
 

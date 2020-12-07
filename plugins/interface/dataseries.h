@@ -44,8 +44,6 @@ public:
         , cols(0)
     {}
 
-    virtual void update(QAbstractSeries *series) = 0;
-
     virtual void setCols(int cols) { this->cols = cols; }
     virtual int getCols() const { return cols; }
 
@@ -60,6 +58,14 @@ signals:
     void colsChanged();
     void pointAdded(const QPointF& point);
 };
+
+inline QDebug operator<< (QDebug debug, const DataSeries& series)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << typeid(series).name() << "(" << series.getName() << ")";
+
+    return debug;
+}
 
 Q_DECLARE_METATYPE(DataSeries*)
 

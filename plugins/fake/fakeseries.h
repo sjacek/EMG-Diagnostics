@@ -39,7 +39,7 @@ class FakeSeries : public DataSeries
 public:
     explicit FakeSeries(QObject* parent, const QString& name);
 
-    void update(QAbstractSeries* series) override;
+//    void update(QAbstractSeries* series) override;
 
 private:
     const int DATA_SIZE = 5;

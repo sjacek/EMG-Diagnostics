@@ -41,8 +41,6 @@ public:
     explicit SineSeries(QObject* parent, const QString& name);
     ~SineSeries();
 
-    void update(QAbstractSeries* series) override;
-
 private:
     RenderThread m_Thread;
 
