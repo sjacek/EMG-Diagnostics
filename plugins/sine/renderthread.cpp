@@ -73,7 +73,7 @@ void RenderThread::drawSine()
     for (QPointF& point : m_Points)
         point.setX(point.x() + 1);
 
-    QPointF point(0, qSin(M_PI / 50 * m_X++));
-    m_Points.append(point);
-    emit pointAdded(point);
+    qreal y = qSin(M_PI / 50 * m_X);
+    m_Points.append(QPointF(0, y));
+    emit pointAdded(QPointF(m_X++, y));
 }

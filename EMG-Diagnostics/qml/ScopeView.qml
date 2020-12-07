@@ -32,7 +32,8 @@ import QtCharts 2.15
 
 ChartView {
     id: chartView
-    animationOptions: ChartView.NoAnimation
+//    animationOptions: ChartView.NoAnimation
+    animationOptions: ChartView.SeriesAnimations
     theme: ChartView.ChartThemeDark
     property bool openGL: true
     property bool openGLSupported: true
@@ -48,9 +49,12 @@ ChartView {
     Connections {
         target: dataSource
 
-        function onSeriesCreated(name) {
-            console.log("series ", name, " created")
-            setupSeries(name, "line")
+        function onPointAdded(seriesName, point) {
+            var series = chartView.series(seriesName)
+            if (series === null)
+                series = setupSeries(seriesName, "line")
+
+            series.append(point.x, point.y)
         }
     }
 
@@ -72,18 +76,6 @@ ChartView {
         max: 1024
     }
 
-    Timer {
-        id: refreshTimer
-        interval: 1 / 60 * 1000 // 60 Hz
-        running: true
-        repeat: true
-        onTriggered: {
-            for (var i = 0; i < chartView.count; i++)
-                dataSource.update(chartView.series(i));
-        }
-    }
-
-
     function setupAllSeries(type) {
         var seriesNames = []
         for (var i = 0; i < chartView.count; i++)
@@ -94,7 +86,6 @@ ChartView {
     }
 
     function setupSeries(name, type) {
-        console.log("setupSeries(", name, ",", type, ")")
         var series = chartView.series(name)
         if (series !== null)
             chartView.removeSeries(series)
@@ -119,13 +110,34 @@ ChartView {
             series.markerSize = 2;
             series.borderColor = "transparent";
         }
-    }
 
-    function setAnimations(enabled) {
-        chartView.animationOptions = enabled ? ChartView.SeriesAnimations : ChartView.NoAnimation;
+        return series
     }
 
     function changeRefreshRate(rate) {
         refreshTimer.interval = 1 / Number(rate) * 1000;
+    }
+
+    Rectangle {
+        id: horizontalScrollMask
+        visible: false
+    }
+
+    MouseArea {
+        id: chartMouseAreaA
+        anchors.fill: parent
+        acceptedButtons: Qt.LeftButton
+
+        onMouseXChanged: {
+            if ((mouse.buttons & Qt.LeftButton) == Qt.LeftButton) {
+                chartView.scrollLeft(mouseX - horizontalScrollMask.x);
+                horizontalScrollMask.x = mouseX;
+            }
+        }
+        onPressed: {
+            if (mouse.button == Qt.LeftButton) {
+                horizontalScrollMask.x = mouseX;
+            }
+        }
     }
 }

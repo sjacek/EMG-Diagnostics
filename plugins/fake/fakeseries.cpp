@@ -29,14 +29,9 @@
 
 #include "fakeseries.h"
 
-Q_DECLARE_METATYPE(QAbstractSeries *)
-Q_DECLARE_METATYPE(QAbstractAxis *)
-
 FakeSeries::FakeSeries(QObject* parent, const QString& name)
     : DataSeries(parent, name)
 {
-    qRegisterMetaType<QAbstractSeries*>();
-    qRegisterMetaType<QAbstractAxis*>();
 }
 
 void FakeSeries::init()

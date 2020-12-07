@@ -36,10 +36,8 @@ SineSeries::SineSeries(QObject* parent, const QString& name)
     : DataSeries(parent, name)
     , m_Thread(this)
 {
-    qRegisterMetaType<QAbstractSeries*>();
-    qRegisterMetaType<QAbstractAxis*>();
-
     connect(&m_Thread, &RenderThread::pointAdded, this, &SineSeries::pointAdded);
+    init();
 }
 
 SineSeries::~SineSeries()

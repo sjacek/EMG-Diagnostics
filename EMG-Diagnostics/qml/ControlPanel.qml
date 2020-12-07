@@ -35,7 +35,6 @@ ColumnLayout {
     property alias antialiasButton: antialiasButton
     spacing: 8
     Layout.fillHeight: true
-    signal animationsEnabled(bool enabled)
     signal seriesTypeChanged(string type)
     signal refreshRateChanged(variant rate);
     signal signalSourceChanged(int sampleCount);

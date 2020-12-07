@@ -30,8 +30,6 @@
 #ifndef DATASOURCE_H
 #define DATASOURCE_H
 
-#include "seriesmodel.h"
-
 QT_CHARTS_USE_NAMESPACE
 
 class DataSeries;
@@ -51,16 +49,15 @@ public:
 
     Q_INVOKABLE QString getSeriesName(int n) const;
 
-    Q_INVOKABLE DataSeries& series(QString name) const;
+    Q_INVOKABLE DataSeries& getSeries(QString name) const;
 
 private:
     QMap<QString, DataSeries*> m_dataSeries;
-    SeriesModel m_Model;
 
     void connectPlugins();
 
 signals:
-    void seriesCreated(const QString& name);
+    void pointAdded(const QString& series, const QPointF& point);
 };
 
 #endif // DATASOURCE_H

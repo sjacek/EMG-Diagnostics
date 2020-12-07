@@ -24,14 +24,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 HEADERS += \
     pch.h \
     datasource.h \
-    emgviewer.h \
-    seriesmodel.h
+    emgviewer.h
 
 SOURCES += \
     datasource.cpp \
     emgviewer.cpp \
-    main.cpp \
-    seriesmodel.cpp
+    main.cpp
 
 RESOURCES += qml.qrc
 

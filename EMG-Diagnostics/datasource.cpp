@@ -41,29 +41,20 @@ Q_DECLARE_METATYPE(QAbstractAxis*)
 DataSource::DataSource(QObject *parent)
     : QObject(parent)
 {
-    qRegisterMetaType<QAbstractSeries*>();
-    qRegisterMetaType<QAbstractAxis*>();
-
     connectPlugins();
 }
 
 void DataSource::connectPlugins()
 {
     for (Plugin* plugin : PluginSocket::instance().getPlugins()) {
-        qCDebug(cat) << "connectPlugins" << *plugin;
-
         connect(plugin, &Plugin::seriesCreated, [=](const QString& name, DataSeries* series) {
             qCDebug(cat) << "received seriesCreated(" << name << ", " << series << ")";
             m_dataSeries[name] = series;
 
-            connect(series, &DataSeries::pointAdded, [=](const QPointF& point) {
-                qCDebug(cat) << "pointAdded" << series->getName() << point;
-                m_Model.addPoint(series->getName(), point);
+            connect(series, &DataSeries::pointAdded, [=](QPointF point) {
+                emit pointAdded(series->getName(), point);
             });
-
-            emit seriesCreated(name);
         });
-
     }
 }
 
@@ -104,7 +95,7 @@ void DataSource::update(QAbstractSeries* series)
     }
 }
 
-DataSeries& DataSource::series(QString name) const
+DataSeries& DataSource::getSeries(QString name) const
 {
 //    if (m_dataSeries.contains(name))
         return *m_dataSeries[name];

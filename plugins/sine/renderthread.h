@@ -58,7 +58,7 @@ private:
     void drawSine();
 
 signals:
-    void pointAdded(const QPointF& point);
+    void pointAdded(QPointF point);
 };
 
 #endif // RENDERTHREAD_H
