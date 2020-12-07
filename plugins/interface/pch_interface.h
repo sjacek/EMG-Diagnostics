@@ -27,23 +27,19 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_H
-#define PCH_H
+#ifndef INTERFACE_PCH_H
+#define INTERFACE_PCH_H
 
-#include <QtCore/QAbstractListModel>
+#include <type_traits>
+
 #include <QtCharts/QAbstractSeries>
-#include <QtWidgets/QApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QObject>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
+#include <QtCore/QtGlobal>
 #include <QtCore/QLoggingCategory>
-#include <QtCore/QtMath>
-#include <QtWidgets/QMessageBox>
-#include <QtCore/QRandomGenerator>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
-#include <QtCharts/QXYSeries>
+#include <QtCore/QObject>
+#include <QtCore/QPluginLoader>
 
-#include "pch_interface.h"
+QT_CHARTS_USE_NAMESPACE
 
-#endif // PCH_H
+#endif // INTERFACE_PCH_H

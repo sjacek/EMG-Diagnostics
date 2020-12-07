@@ -39,8 +39,10 @@ SinePlugin::SinePlugin(QObject* parent)
 
 void SinePlugin::init(int cols)
 {
-    SineSeries* series = new SineSeries(this);
+    const QString seriesName = "sine";
+
+    SineSeries* series = new SineSeries(this, seriesName);
     series->setCols(cols);
     m_series.append(series);
-    emit seriesCreated("sine", series);
+    emit seriesCreated(seriesName, series);
 }

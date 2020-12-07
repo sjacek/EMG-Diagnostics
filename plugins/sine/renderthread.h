@@ -40,8 +40,6 @@ public:
 
     void render();
 
-    QList<QPointF> copyPoints();
-
 protected:
     void run() override;
 
@@ -49,13 +47,15 @@ private:
     QMutex m_Mutex;
     QWaitCondition m_Condition;
 
-    QList<QPointF> m_Points;
     unsigned int m_X = 0;
 
     bool m_Abort = false;
     bool m_Restart = false;
 
     void drawSine();
+
+signals:
+    void pointAdded(QPointF point);
 };
 
 #endif // RENDERTHREAD_H
