@@ -26,13 +26,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # overwritten common.pri
-PRECOMPILED_HEADER = interface_pch.h
+PRECOMPILED_HEADER = \
+    pch_interface.h
 
 SOURCES += \
     pluginsocket.cpp
 
 HEADERS += \
-        interface_pch.h \
+        pch_interface.h \
         plugin.h \
         plugin_global.h \
         singleton.h \

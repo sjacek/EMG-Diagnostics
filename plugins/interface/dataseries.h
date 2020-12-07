@@ -35,24 +35,37 @@
 class INTERFACEPLUGINSHARED_EXPORT DataSeries : public QObject
 {
     Q_OBJECT
-//    Q_PROPERTY(int cols READ cols WRITE setCols NOTIFY colsChanged)
+    Q_PROPERTY(int getCols READ getCols WRITE setCols NOTIFY colsChanged)
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit DataSeries(QObject* parent) : QObject(parent), m_cols(0) {}
+    explicit DataSeries(QObject* parent, const QString& name)
+        : QObject(parent)
+        , name(name)
+        , cols(0)
+    {}
 
-//    virtual void init() = 0;
-    virtual void update(QAbstractSeries *series) = 0;
+    virtual void setCols(int cols) { this->cols = cols; }
+    virtual int getCols() const { return cols; }
 
-
-    virtual void setCols(int cols) { m_cols = cols; }
-    virtual int cols() const { return m_cols; }
+    virtual void setSeriesName(QString name) { this->name = name; }
+    virtual QString getName() const { return name; }
 
 private:
-    int m_cols;
+    QString name;
+    int cols;
 
-//signals:
-//    void colsChanged();
+signals:
+    void colsChanged();
+    void pointAdded(const QPointF& point);
 };
+
+inline QDebug operator<< (QDebug debug, const DataSeries& series)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << typeid(series).name() << "(" << series.getName() << ")";
+
+    return debug;
+}
 
 Q_DECLARE_METATYPE(DataSeries*)
 

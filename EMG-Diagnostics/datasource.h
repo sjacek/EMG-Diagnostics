@@ -30,11 +30,9 @@
 #ifndef DATASOURCE_H
 #define DATASOURCE_H
 
-QT_BEGIN_NAMESPACE
-class DataSeries;
-QT_END_NAMESPACE
-
 QT_CHARTS_USE_NAMESPACE
+
+class DataSeries;
 
 class DataSource : public QObject
 {
@@ -47,21 +45,18 @@ public:
 
     Q_INVOKABLE void init(int cols);
     Q_INVOKABLE void setCols(int cols);
-    Q_INVOKABLE void update(QAbstractSeries* series);
 
     Q_INVOKABLE QString getSeriesName(int n) const;
 
-    Q_INVOKABLE DataSeries& series(QString name) const;
+    Q_INVOKABLE DataSeries& getSeries(QString name) const;
 
 private:
     QMap<QString, DataSeries*> m_dataSeries;
 
     void connectPlugins();
 
-//    QList<DataSeries*> getSeries() const;
-
 signals:
-    void seriesCreated(const QString& name);
+    void pointAdded(const QString& series, const QPointF& point);
 };
 
 #endif // DATASOURCE_H

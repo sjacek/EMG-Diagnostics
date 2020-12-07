@@ -51,8 +51,10 @@ void UecgPlugin::initDevice()
 
 void UecgPlugin::initSeries(int cols)
 {
-    UecgSeries* series = new UecgSeries(this);
+    const QString seriesName = "uecg0";
+
+    UecgSeries* series = new UecgSeries(this, seriesName);
     series->setCols(cols);
     m_series.append(series);
-    emit seriesCreated("uecg", series);
+    emit seriesCreated(seriesName, series);
 }
