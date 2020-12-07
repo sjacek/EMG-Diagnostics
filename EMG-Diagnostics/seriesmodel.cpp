@@ -27,23 +27,48 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_H
-#define PCH_H
+#include "seriesmodel.h"
 
-#include <QtCore/QAbstractListModel>
-#include <QtCharts/QAbstractSeries>
-#include <QtWidgets/QApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QObject>
-#include <QtCore/QLoggingCategory>
-#include <QtCore/QtMath>
-#include <QtWidgets/QMessageBox>
-#include <QtCore/QRandomGenerator>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
-#include <QtCharts/QXYSeries>
+SeriesModel::SeriesModel(QObject* parent)
+    : QAbstractListModel(parent)
+{
+}
 
-#include "pch_interface.h"
+void SeriesModel::addPoint(const QString& series, const QPointF &point)
+{
+    int row = m_vPoints.size();
 
-#endif // PCH_H
+    beginInsertRows(QModelIndex(), row, row);
+    m_vSeries.append(series);
+    m_vPoints.append(point);
+    endInsertRows();
+}
+
+QVariant SeriesModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+//    if (role == Qt::DecorationRole)
+//        return QIcon(points.value(index.row()), m_PieceSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+//    else if (role == Qt::UserRole)
+//        return pixmaps.value(index.row());
+//    else if (role == Qt::UserRole + 1)
+//        return locations.value(index.row());
+    switch (role) {
+    case Qt::DecorationRole:
+//        return QIcon(points.value(index.row()), m_PieceSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        break;
+    case Qt::UserRole:
+        return m_vSeries.value(index.row());
+    case Qt::UserRole + 1:
+        return m_vPoints.value(index.row());
+    }
+
+    return QVariant();
+}
+
+int SeriesModel::rowCount(const QModelIndex &parent) const
+{
+    return parent.isValid() ? 0 : m_vPoints.count();
+}

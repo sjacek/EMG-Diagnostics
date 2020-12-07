@@ -38,7 +38,7 @@ class UecgSeries : public DataSeries
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit UecgSeries(QObject* parent);
+    explicit UecgSeries(QObject* parent, const QString& name);
     ~UecgSeries();
 
     void update(QAbstractSeries* series) override;

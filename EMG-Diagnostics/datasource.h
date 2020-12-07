@@ -30,11 +30,11 @@
 #ifndef DATASOURCE_H
 #define DATASOURCE_H
 
-QT_BEGIN_NAMESPACE
-class DataSeries;
-QT_END_NAMESPACE
+#include "seriesmodel.h"
 
 QT_CHARTS_USE_NAMESPACE
+
+class DataSeries;
 
 class DataSource : public QObject
 {
@@ -55,10 +55,9 @@ public:
 
 private:
     QMap<QString, DataSeries*> m_dataSeries;
+    SeriesModel m_Model;
 
     void connectPlugins();
-
-//    QList<DataSeries*> getSeries() const;
 
 signals:
     void seriesCreated(const QString& name);

@@ -51,11 +51,19 @@ void DataSource::connectPlugins()
 {
     for (Plugin* plugin : PluginSocket::instance().getPlugins()) {
         qCDebug(cat) << "connectPlugins" << *plugin;
+
         connect(plugin, &Plugin::seriesCreated, [=](const QString& name, DataSeries* series) {
             qCDebug(cat) << "received seriesCreated(" << name << ", " << series << ")";
             m_dataSeries[name] = series;
+
+            connect(series, &DataSeries::pointAdded, [=](const QPointF& point) {
+                qCDebug(cat) << "pointAdded" << series->getName() << point;
+                m_Model.addPoint(series->getName(), point);
+            });
+
             emit seriesCreated(name);
         });
+
     }
 }
 

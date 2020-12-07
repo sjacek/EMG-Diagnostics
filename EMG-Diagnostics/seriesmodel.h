@@ -27,23 +27,39 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_H
-#define PCH_H
+#ifndef POINTMODEL_H
+#define POINTMODEL_H
 
-#include <QtCore/QAbstractListModel>
-#include <QtCharts/QAbstractSeries>
-#include <QtWidgets/QApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QObject>
-#include <QtCore/QLoggingCategory>
-#include <QtCore/QtMath>
-#include <QtWidgets/QMessageBox>
-#include <QtCore/QRandomGenerator>
-#include <QtQml/QQmlContext>
-#include <QtQml/QQmlEngine>
-#include <QtQuick/QQuickView>
-#include <QtCharts/QXYSeries>
+class SeriesModel : public QAbstractListModel
+{
+    Q_OBJECT
+public:
+    explicit SeriesModel() = default;
+    explicit SeriesModel(QObject* parent);
 
-#include "pch_interface.h"
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-#endif // PCH_H
+//    Qt::ItemFlags flags(const QModelIndex &index) const override;
+//    bool removeRows(int row, int count, const QModelIndex &parent) override;
+
+//    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
+//                      int row, int column, const QModelIndex &parent) override;
+//    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+//    QStringList mimeTypes() const override;
+    int rowCount(const QModelIndex &parent) const override;
+//    Qt::DropActions supportedDropActions() const override;
+
+//    void addPiece(const QPixmap &pixmap, const QPoint &location);
+//    void addPieces(const QPixmap &pixmap);
+
+    void addPoint(const QString& series, const QPointF& point);
+
+private:
+    QVector<QString> m_vSeries;
+    QVector<QPointF> m_vPoints;
+
+signals:
+
+};
+
+#endif // POINTMODEL_H

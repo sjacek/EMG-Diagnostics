@@ -80,7 +80,7 @@ void RenderThread::drawChart()
     for (QPointF& point : m_Points)
         point.setX(point.x() + 1);
 
-    qreal y = qSin(M_PI / 50 * m_X + 20);
-    m_Points.append(QPointF(0, y));
-    m_X++;
+    QPointF point(0, qSin(M_PI / 50 * m_X++ + 20));
+    m_Points.append(point);
+    emit pointAdded(point);
 }

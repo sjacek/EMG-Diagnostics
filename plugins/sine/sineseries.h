@@ -38,7 +38,7 @@ class SineSeries : public DataSeries
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit SineSeries(QObject* parent);
+    explicit SineSeries(QObject* parent, const QString& name);
     ~SineSeries();
 
     void update(QAbstractSeries* series) override;

@@ -37,7 +37,7 @@ class FakeSeries : public DataSeries
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    explicit FakeSeries(QObject* parent);
+    explicit FakeSeries(QObject* parent, const QString& name);
 
     void update(QAbstractSeries* series) override;
 

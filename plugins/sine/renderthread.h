@@ -56,6 +56,9 @@ private:
     bool m_Restart = false;
 
     void drawSine();
+
+signals:
+    void pointAdded(const QPointF& point);
 };
 
 #endif // RENDERTHREAD_H

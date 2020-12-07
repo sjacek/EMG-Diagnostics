@@ -39,8 +39,10 @@ FakePlugin::FakePlugin(QObject* parent)
 
 void FakePlugin::init(int cols)
 {
-    FakeSeries* series = new FakeSeries(this);
+    const QString seriesName = "fake";
+
+    FakeSeries* series = new FakeSeries(this, seriesName);
     series->setCols(cols);
     m_series.append(series);
-    emit seriesCreated("fake", series);
+    emit seriesCreated(seriesName, series);
 }
