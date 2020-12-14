@@ -49,9 +49,7 @@ qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
 else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
 !isEmpty(target.path): INSTALLS += target
 
-win32:CONFIG(release, debug|release): LIBS += -L$${LIB_DIR}/release/ -l$${INTERFACE_LIB_NAME}
-else:win32:CONFIG(debug, debug|release): LIBS += -L$${LIB_DIR}/debug/ -l$${INTERFACE_LIB_NAME}
-else:unix: LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
+LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
 
 #INCLUDEPATH += $$PWD/../plugins/$${INTERFACE_SRC_NAME}
 #DEPENDPATH += $$PWD/../plugins/$${INTERFACE_SRC_NAME}
