@@ -7,10 +7,6 @@ CONFIG -= qt
 TEMPLATE = lib
 DEFINES += LIBUECG_LIBRARY
 
-BUILD_ROOT_DIR=$${OUT_PWD}/../App
-APP_DIR=$${BUILD_ROOT_DIR}
-LIB_DIR=$${BUILD_ROOT_DIR}/lib
-
 #CONFIG += c++11
 
 # You can make your code fail to compile if it uses deprecated APIs.

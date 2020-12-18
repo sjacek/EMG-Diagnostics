@@ -1,9 +1,6 @@
 QMAKE_PROJECT_NAME = EMG-Diagnostics
 
-BUILD_ROOT_DIR=$${OUT_PWD}/../App
-
-# Check if the config file exists
-! include( ../common.pri ) {
+! include( $$TOP_SRCDIR/common.pri ) {
     error( "Couldn't find the common.pri file!" )
 }
 
@@ -51,11 +48,8 @@ else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
 
 LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
 
-#INCLUDEPATH += $$PWD/../plugins/$${INTERFACE_SRC_NAME}
-#DEPENDPATH += $$PWD/../plugins/$${INTERFACE_SRC_NAME}
-
 DISTFILES +=
 
-DESTDIR = $${APP_DIR}
+DESTDIR = $${BIN_DIR}
 
 CONFIG += install_ok  # Do not cargo-cult this!

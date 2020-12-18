@@ -1,8 +1,7 @@
 QMAKE_PROJECT_NAME = interface
 
-# Check if the config file exists
-! include( ../plugins.pri ) {
-    error( "Couldn't find the plugins.pri file!" )
+! include( $$TOP_SRCDIR/plugins/plugins.pri ) {
+    error( "Couldn't find the plugins/plugins.pri file!" )
 }
 
 QT -= gui
