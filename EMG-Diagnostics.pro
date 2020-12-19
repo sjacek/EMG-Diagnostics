@@ -7,8 +7,9 @@ SUBDIRS = \
     plugins \
     EMG-Diagnostics \
 
-plugins.depends = 3rdparty/qextserialport
+plugins.depends = 3rdparty/qextserialport libQuECG
 EMG-Diagnostics.depends = plugins
 
 OTHER_FILES += \
-    .qmake.conf
+    .qmake.conf \
+    .qmake.cache

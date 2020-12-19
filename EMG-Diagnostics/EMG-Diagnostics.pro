@@ -1,9 +1,6 @@
 QMAKE_PROJECT_NAME = EMG-Diagnostics
 
-! include( $$TOP_SRCDIR/plugins/interface/interface.pri ) {
-    error( "Couldn't find the plugins/interface/interface.pri file!" )
-}
-
+include( $$TOP_SRCDIR/plugins/interface/interface.pri )
 
 QT += charts qml quick
 
@@ -55,5 +52,3 @@ LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
 DISTFILES +=
 
 DESTDIR = $${BIN_DIR}
-
-CONFIG += install_ok  # Do not cargo-cult this!

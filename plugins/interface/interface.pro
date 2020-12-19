@@ -1,9 +1,5 @@
 QMAKE_PROJECT_NAME = interface
 
-! include( interface.pri ) {
-    error( "Couldn't find the interface.pri file!" )
-}
-
 QT -= gui
 
 TARGET  = $${INTERFACE_LIB_NAME}
@@ -39,6 +35,9 @@ HEADERS += \
         pluginsocket.h \
         dataseries.h
 
+OTHER_FILES += \
+    interface.pri
+
 unix {
     target.path = /usr/lib
     INSTALLS += target
@@ -46,7 +45,3 @@ unix {
 
 DESTDIR = $${LIB_DIR}
 
-CONFIG += install_ok  # Do not cargo-cult this!
-
-DISTFILES += \
-    interface.pri

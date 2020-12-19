@@ -1,16 +1,9 @@
 QMAKE_PROJECT_NAME = uECG
 TARGET  = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
 
-! include( $$TOP_SRCDIR/plugins/plugins.pri ) {
-    error( "Couldn't find the plugins/plugins.pri file!" )
-}
-! include( $$TOP_SRCDIR/plugins/interface/interface.pri ) {
-    error( "Couldn't find the plugins/interface/interface.pri file!" )
-}
-
-! include( $$TOP_SRCDIR/libQuECG/libQuECG.pri ) {
-    error( "Couldn't find the libQuECG/libQuECG.pri file!" )
-}
+include( $$TOP_SRCDIR/plugins/plugins.pri )
+include( $$TOP_SRCDIR/plugins/interface/interface.pri )
+include( $$TOP_SRCDIR/libQuECG/libQuECG.pri )
 
 QT -= gui
 
@@ -47,24 +40,16 @@ DISTFILES += \
 INCLUDEPATH += $$TOP_SRCDIR/libuECG
 DEPENDPATH += $$TOP_SRCDIR/libuECG
 
-INCLUDEPATH += $$TOP_SRCDIR/libQuECG
-DEPENDPATH += $$TOP_SRCDIR/libQuECG
-
 LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME} -luECG
 
 INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
 DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
 LIBS += -L$$TOP_BUILDDIR/3rdparty/qextserialport -lQt5ExtSerialPort
-#INCLUDEPATH += /opt/Qt/5.15.2/gcc_64/include/QtExtSerialPort
-#DEFINES += QEXTSERIALPORT_USING_SHARED
 
 #CONFIG += qesp_linux_udev
 #include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)
-
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
-
-CONFIG += install_ok  # Do not cargo-cult this!

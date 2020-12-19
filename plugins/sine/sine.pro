@@ -1,12 +1,8 @@
 QMAKE_PROJECT_NAME = sine
 TARGET  = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
 
-! include( $$TOP_SRCDIR/plugins/plugins.pri ) {
-    error( "Couldn't find the plugins/plugins.pri file!" )
-}
-! include( $$TOP_SRCDIR/plugins/interface/interface.pri ) {
-    error( "Couldn't find the plugins/interface/interface.pri file!" )
-}
+include( $$TOP_SRCDIR/plugins/plugins.pri )
+include( $$TOP_SRCDIR/plugins/interface/interface.pri )
 
 QT -= gui
 
@@ -47,5 +43,3 @@ unix {
     target.path = /usr/lib
     INSTALLS += target
 }
-
-CONFIG += install_ok  # Do not cargo-cult this!

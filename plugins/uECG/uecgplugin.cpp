@@ -45,8 +45,8 @@ void UecgPlugin::init(int cols)
 
 void UecgPlugin::initDevice()
 {
-    serial_functions_init();
-    serial_main_init();
+//    serial_functions_init();
+//    serial_main_init();
 }
 
 void UecgPlugin::initSeries(int cols)
