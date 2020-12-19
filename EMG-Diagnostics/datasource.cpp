@@ -27,6 +27,7 @@
  **
  ****************************************************************************/
 
+#include "pch.h"
 #include "datasource.h"
 
 #include "dataseries.h"

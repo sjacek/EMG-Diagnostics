@@ -1,8 +1,3 @@
-# Check if the config file exists
-! include( $$TOP_SRCDIR/common.pri ) {
-    error( "Couldn't find the common.pri file!" )
-}
-
 DEFINES += BUILD_NAME=\\\"$${TARGET}\\\"
 
 ## Default rules for plugins deployment.

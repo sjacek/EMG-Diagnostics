@@ -27,6 +27,7 @@
  **
  ****************************************************************************/
 
+#include "pch.h"
 #include "emgviewer.h"
 
 //Q_DECLARE_METATYPE(QAbstractSeries *)

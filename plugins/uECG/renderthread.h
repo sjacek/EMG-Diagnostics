@@ -48,6 +48,8 @@ private:
     QMutex m_Mutex;
     QWaitCondition m_Condition;
 
+    QextSerialEnumerator serialEnumerator;
+
     unsigned int m_X = 0;
 
     bool m_Abort = false;

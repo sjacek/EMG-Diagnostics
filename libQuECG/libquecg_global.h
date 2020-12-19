@@ -1,0 +1,10 @@
+#ifndef LIBQUECG_GLOBAL_H
+#define LIBQUECG_GLOBAL_H
+
+#if defined(LIBQUECG_LIBRARY)
+#  define LIBQUECG_EXPORT Q_DECL_EXPORT
+#else
+#  define LIBQUECG_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // LIBQUECG_GLOBAL_H

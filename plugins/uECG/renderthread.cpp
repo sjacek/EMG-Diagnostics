@@ -31,6 +31,7 @@
 
 RenderThread::RenderThread(QObject* parent)
     : QThread(parent)
+    , serialEnumerator(this)
 {
     setObjectName(typeid(this).name());
 
@@ -39,7 +40,20 @@ RenderThread::RenderThread(QObject* parent)
 
 void RenderThread::init()
 {
+    serialEnumerator.setUpNotifications();
+    connect(&serialEnumerator, &QextSerialEnumerator::deviceDiscovered, [=](const QextPortInfo& port)
+    {
+        qCDebug(cat) << "******************** deviceDiscovered:"
+                     << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                     << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+    });
 
+    connect(&serialEnumerator, &QextSerialEnumerator::deviceRemoved, [=](const QextPortInfo& port)
+    {
+        qCDebug(cat) << "******************** deviceRemoved:"
+                     << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                     << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+    });
 }
 
 RenderThread::~RenderThread()

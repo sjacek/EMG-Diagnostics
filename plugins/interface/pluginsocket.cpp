@@ -27,6 +27,7 @@
  **
  ****************************************************************************/
 
+#include "pch_interface.h"
 #include "pluginsocket.h"
 
 #include "plugin.h"

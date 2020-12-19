@@ -5,4 +5,6 @@ SUBDIRS = \
     sine \
     uECG
 
-CONFIG += ordered
+fake.depends = interface
+sine.depends = interface
+uECG.depends = interface

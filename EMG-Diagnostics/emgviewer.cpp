@@ -27,6 +27,7 @@
  **
  ****************************************************************************/
 
+#include "pch.h"
 #include "emgviewer.h"
 
 EmgViewer::EmgViewer()
