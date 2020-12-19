@@ -52,8 +52,15 @@ DEPENDPATH += $$TOP_SRCDIR/libQuECG
 
 LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME} -luECG
 
-CONFIG += qesp_linux_udev
-include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)
+INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
+DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
+LIBS += -L$$TOP_BUILDDIR/3rdparty/qextserialport -lQt5ExtSerialPort
+#INCLUDEPATH += /opt/Qt/5.15.2/gcc_64/include/QtExtSerialPort
+#DEFINES += QEXTSERIALPORT_USING_SHARED
+
+#CONFIG += qesp_linux_udev
+#include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)
+
 
 unix {
     target.path = /usr/lib
