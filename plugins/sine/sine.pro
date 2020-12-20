@@ -37,7 +37,7 @@ SOURCES = \
 DISTFILES += \
     sineplugin.json
 
-LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
+LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME}
 
 unix {
     target.path = /usr/lib

@@ -31,5 +31,10 @@
 #define PCH_LIBQUECG_H
 
 #include <QtCore/qglobal.h>
+#include <QtCore/QObject>
+#include <QtCore/QLoggingCategory>
+
+#include "qextserialenumerator.h"
+#include "qextserialport.h"
 
 #endif // PCH_LIBQUECG_H

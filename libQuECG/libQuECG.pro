@@ -6,7 +6,6 @@ QT -= gui
 
 TEMPLATE = lib
 DEFINES += LIBQUECG_LIBRARY
-#include(libQuECG.pri)
 
 CONFIG += c++17 rtti precompile_header
 
@@ -17,17 +16,32 @@ CONFIG += c++17 rtti precompile_header
 PRECOMPILED_HEADER = pch_libquecg.h
 
 SOURCES += \
-    uecg.cpp
+    ecgdata.cpp \
+    uecg.cpp \
+    uecgenumerator.cpp
 
 HEADERS += \
+    ecgdata.h \
     libquecg_global.h \
-    uecg.h
+    uecg.h \
+    uecgenumerator.h
 
 OTHER_FILES += \
     libQuECG.pri
+
+INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
+DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
+LIBS += -L$$TOP_BUILDDIR/3rdparty/qextserialport -lQt5ExtSerialPort
+
+#CONFIG += qesp_linux_udev
+#include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)
 
 # Default rules for deployment.
 unix {
     target.path = /usr/lib
 }
 !isEmpty(target.path): INSTALLS += target
+
+defined(LIB_DESTDIR, var) {
+    DESTDIR = $${LIB_DESTDIR}
+}

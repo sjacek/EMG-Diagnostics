@@ -43,5 +43,5 @@ unix {
     INSTALLS += target
 }
 
-DESTDIR = $${LIB_DIR}
+DESTDIR = $${LIB_DESTDIR}
 

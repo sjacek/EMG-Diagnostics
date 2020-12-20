@@ -47,8 +47,8 @@ qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
 else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
 !isEmpty(target.path): INSTALLS += target
 
-LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
+LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME}
 
 DISTFILES +=
 
-DESTDIR = $${BIN_DIR}
+DESTDIR = $${BIN_DESTDIR}

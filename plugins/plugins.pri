@@ -5,4 +5,4 @@ DEFINES += BUILD_NAME=\\\"$${TARGET}\\\"
 #else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}//lib/plugins
 #!isEmpty(target.path): INSTALLS += target
 
-DESTDIR = $${PLUGINS_DIR}
+DESTDIR = $${PLUGINS_DESTDIR}

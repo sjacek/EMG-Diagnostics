@@ -31,11 +31,46 @@
 #define UECG_H
 
 #include "libquecg_global.h"
+#include "ecgdata.h"
 
 class LIBQUECG_EXPORT Uecg
 {
 public:
     Uecg();
+
+private:
+//    var cur_ecg_data = [];
+//    var last_frame_id = 0;
+
+//    var cur_id = 0;
+//    var prev_id = 0;
+
+//    var ecg_data_queue = [];
+//    var ecg_data_queue_init = 0;
+//    var sample_length = 0;
+//    var queue_length = 800;
+//    var response_length = 1200;
+
+    EcgData ecgData;
+
+//    var history_pos = 0;
+//    var max_history_len = 12*3600*update_rate;
+//    var bpm_history = [];
+//    var hrv_history = [];
+//    var gsr_history = [];
+//    var step_rate_history = [];
+//    var temp_history = [];
+//    var batt_history = [];
+//    var acc_x_history = [];
+//    var acc_y_history = [];
+//    var acc_z_history = [];
+
+//    var rr_history_pos = 0;
+//    var rr_prev_id = -1;
+//    var rr_cur_history = [];
+//    var rr_prev_history = [];
+
+//    var prev_steps = 0;
 };
 
 #endif // UECG_H

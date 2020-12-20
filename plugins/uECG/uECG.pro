@@ -40,7 +40,7 @@ DISTFILES += \
 INCLUDEPATH += $$TOP_SRCDIR/libuECG
 DEPENDPATH += $$TOP_SRCDIR/libuECG
 
-LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME} -luECG
+LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME} -luECG
 
 INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
 DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src

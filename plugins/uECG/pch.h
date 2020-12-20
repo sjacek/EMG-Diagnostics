@@ -41,12 +41,12 @@
 
 QT_CHARTS_USE_NAMESPACE
 
-#include "qextserialenumerator.h"
 #include "qextserialport.h"
 
 #include <chrono>
 using namespace std::chrono;
 
 #include "pch_interface.h"
+#include "pch_libquecg.h"
 
 #endif // PCH_H

@@ -33,4 +33,4 @@ unix {
 }
 !isEmpty(target.path): INSTALLS += target
 
-DESTDIR = $${LIB_DIR}
+DESTDIR = $${LIB_DESTDIR}
