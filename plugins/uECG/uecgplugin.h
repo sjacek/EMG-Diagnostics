@@ -46,13 +46,21 @@ public:
 
     void init(int cols) override;
 
+    static inline int getSeriesCounter()
+    {
+        return seriesCounter++;
+    }
+
 private:
+    static inline int seriesCounter = 0;
+    int m_cols = -1;
+
     QList<DataSeries*> m_series;
     UecgEnumerator uecgEnumerator;
     QMap<QString, UecgThread*> threadMap;
 
     void initDevice();
-    void initSeries(int cols);
+    void initSeries();
 
 private slots:
     void deviceDiscovered(const QextPortInfo& port);

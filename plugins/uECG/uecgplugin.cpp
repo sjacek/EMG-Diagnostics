@@ -43,7 +43,8 @@ UecgPlugin::UecgPlugin(QObject* parent)
 void UecgPlugin::init(int cols)
 {
     initDevice();
-    initSeries(cols);
+    m_cols = cols;
+    initSeries();
 }
 
 void UecgPlugin::initDevice()
@@ -69,7 +70,16 @@ void UecgPlugin::deviceDiscovered(const QextPortInfo& port)
     qCDebug(cat) << "******************** deviceDiscovered:"
                  << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
                  << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-    threadMap.insert(port.portName, new UecgThread(this, port.portName));
+//    threadMap.insert(port.portName, new UecgThread(this, port.portName));
+
+    {
+        const QString seriesName = QString("uecg%0").arg(getSeriesCounter());
+
+        UecgSeries* series = new UecgSeries(this, seriesName);
+        series->setCols(m_cols);
+        m_series.append(series);
+        emit seriesCreated(seriesName, series);
+    }
 }
 
 void UecgPlugin::deviceRemoved(const QextPortInfo& port)
@@ -80,23 +90,12 @@ void UecgPlugin::deviceRemoved(const QextPortInfo& port)
 //    threadMap.insert(port.portName, new UecgThread(this, port.portName));
 }
 
-void UecgPlugin::initSeries(int cols)
+void UecgPlugin::initSeries()
 {
-    {
-        const QString seriesName = "uecg0";
+    const QString seriesName = QString("uecg%0").arg(getSeriesCounter());
 
-        SineSeries* series = new SineSeries(this, seriesName);
-        series->setCols(cols);
-        m_series.append(series);
-        emit seriesCreated(seriesName, series);
-    }
-
-    {
-        const QString seriesName = "uecg1";
-
-        UecgSeries* series = new UecgSeries(this, seriesName);
-        series->setCols(cols);
-        m_series.append(series);
-        emit seriesCreated(seriesName, series);
-    }
+    SineSeries* series = new SineSeries(this, seriesName);
+    series->setCols(m_cols);
+    m_series.append(series);
+    emit seriesCreated(seriesName, series);
 }
