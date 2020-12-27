@@ -10,6 +10,8 @@ extern "C"
 
 void LIBUECG_EXPORT serial_functions_init();
 void LIBUECG_EXPORT serial_main_init();
+void LIBUECG_EXPORT open_device(const char* deviceName);
+int LIBUECG_EXPORT serial_main_loop();
 
 #ifdef __cplusplus
 }

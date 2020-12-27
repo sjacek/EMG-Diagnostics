@@ -31,6 +31,8 @@
 #define UECGPLUGIN_H
 
 #include "plugin.h"
+#include "uecgenumerator.h"
+class UecgThread;
 
 class UecgPlugin : public Plugin
 {
@@ -46,6 +48,8 @@ public:
 
 private:
     QList<DataSeries*> m_series;
+    UecgEnumerator uecgEnumerator;
+    QMap<QString, UecgThread*> threadMap;
 
     void initDevice();
     void initSeries(int cols);

@@ -27,50 +27,35 @@
  **
  ****************************************************************************/
 
-#ifndef UECG_H
-#define UECG_H
+#ifndef UECGTHREAD_H
+#define UECGTHREAD_H
 
-#include "libquecg_global.h"
-#include "ecgdata.h"
-
-class LIBQUECG_EXPORT Uecg
+class UecgThread : public QThread
 {
+    Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    Uecg();
+    explicit UecgThread(QObject* parent, const QString& device);
+    ~UecgThread();
+
+protected:
+    void run() override;
 
 private:
-//    var cur_ecg_data = [];
-//    var last_frame_id = 0;
+    QString m_device;
 
-//    var cur_id = 0;
-//    var prev_id = 0;
+    QMutex m_Mutex;
+    QWaitCondition m_Condition;
 
-//    var ecg_data_queue = [];
-//    var ecg_data_queue_init = 0;
-//    var sample_length = 0;
-//    var queue_length = 800;
-//    var response_length = 1200;
+//    unsigned int m_X = 0;
 
-    EcgData ecgData;
+    bool m_Abort = false;
+    bool m_Restart = false;
 
-//    var history_pos = 0;
-//    var max_history_len = 12*3600*update_rate;
-//    var bpm_history = [];
-//    var hrv_history = [];
-//    var gsr_history = [];
-//    var step_rate_history = [];
-//    var temp_history = [];
-//    var batt_history = [];
-//    var acc_x_history = [];
-//    var acc_y_history = [];
-//    var acc_z_history = [];
+    void init();
 
-//    var rr_history_pos = 0;
-//    var rr_prev_id = -1;
-//    var rr_cur_history = [];
-//    var rr_prev_history = [];
+signals:
 
-//    var prev_steps = 0;
 };
 
-#endif // UECG_H
+#endif // UECGTHREAD_H

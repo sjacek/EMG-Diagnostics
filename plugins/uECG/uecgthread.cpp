@@ -27,8 +27,45 @@
  **
  ****************************************************************************/
 
-#include "uecg.h"
+#include "uecgthread.h"
 
-Uecg::Uecg()
+#include <uecg.h>
+
+UecgThread::UecgThread(QObject* parent, const QString& device)
+    : QThread(parent)
+    , m_device(device)
 {
+    setObjectName(typeid(this).name());
+    init();
+}
+
+UecgThread::~UecgThread()
+{
+    m_Abort = true;
+}
+
+void UecgThread::init()
+{
+    open_device(m_device.toStdString().c_str());
+
+    QMutexLocker locker(&m_Mutex);
+
+    if (!isRunning()) {
+        start(LowPriority);
+    } else {
+        m_Restart = true;
+        m_Condition.wakeOne();
+    }
+}
+
+void UecgThread::run()
+{
+    QMutexLocker locker(&m_Mutex);
+
+    while (!m_Abort && !isInterruptionRequested() )
+    {
+        qCDebug(cat) << "!";
+        serial_main_loop();
+        msleep(10);
+    }
 }

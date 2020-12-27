@@ -31,9 +31,11 @@
 
 #include "uecgseries.h"
 #include <uecg.h>
+#include "uecgthread.h"
 
 UecgPlugin::UecgPlugin(QObject* parent)
     : Plugin(parent)
+    , uecgEnumerator(this)
 {
 }
 
@@ -45,8 +47,34 @@ void UecgPlugin::init(int cols)
 
 void UecgPlugin::initDevice()
 {
-//    serial_functions_init();
-//    serial_main_init();
+    serial_functions_init();
+    serial_main_init();
+
+    const QList<QextPortInfo>& ports = QextSerialEnumerator::getPorts();
+    for(const QextPortInfo& port : ports)
+    {
+        if ((port.productID == UecgEnumerator::PRODUCT_ID) && (port.vendorID == UecgEnumerator::VENDOR_ID))
+        {
+            qCDebug(cat) << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                         << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+            UecgThread* thread = new UecgThread(this, port.portName);
+            threadMap.insert(port.portName, thread);
+        }
+    }
+
+    connect(&uecgEnumerator, &UecgEnumerator::deviceDiscovered, [=](const QextPortInfo& port)
+    {
+        qCDebug(cat) << "******************** deviceDiscovered:"
+                     << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                     << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+    });
+
+    connect(&uecgEnumerator, &UecgEnumerator::deviceRemoved, [=](const QextPortInfo& port)
+    {
+        qCDebug(cat) << "******************** deviceRemoved:"
+                     << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                     << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+    });
 }
 
 void UecgPlugin::initSeries(int cols)

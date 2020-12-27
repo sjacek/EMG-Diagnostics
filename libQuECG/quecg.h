@@ -27,44 +27,70 @@
  **
  ****************************************************************************/
 
-#include "renderthread.h"
+#ifndef QUECG_H
+#define QUECG_H
 
-RenderThread::RenderThread(QObject* parent)
-    : QThread(parent)
+#include "libquecg_global.h"
+#include "ecgdata.h"
+
+class LIBQUECG_EXPORT Uecg : public QObject
 {
-    setObjectName(typeid(this).name());
-}
+    Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
+public:
+    Uecg(QObject* parent, const QString& device);
 
-RenderThread::~RenderThread()
-{
-    m_Abort = true;
-}
+    void serial_main_loop();
 
-void RenderThread::render()
-{
-    QMutexLocker locker(&m_Mutex);
-
-    if (!isRunning()) {
-        start(LowPriority);
-    } else {
-        m_Restart = true;
-        m_Condition.wakeOne();
-    }
-}
-
-void RenderThread::run()
-{
-    QMutexLocker locker(&m_Mutex);
-
-    while (!m_Abort && !isInterruptionRequested() )
+private:
+    enum param_sends
     {
-        drawChart();
-        msleep(10);
-    }
-}
+        param_batt_bpm = 0,
+        param_sdnn,
+        param_skin_res,
+        param_lastRR,
+        param_imu_acc,
+        param_imu_steps,
+        param_pnn_bins,
+        param_end,
+        param_emg_spectrum
+    };
 
-void RenderThread::drawChart()
-{
-    qreal y = qSin(M_PI / 50 * m_X + 20);
-    emit pointAdded(QPointF(m_X++, y));
-}
+    // imported from original
+    int device = 0;
+
+    struct timeval curTime, prevTime, zeroTime;
+    int hex_mode_pos = 0;
+
+    double real_time = 0;
+
+    bool response_inited = false;
+    uint8_t *response_buf;
+    int response_pos = 0;
+    int response_buf_len = 4096;
+
+    uint8_t uart_prefix[2] = { 79, 213 };
+    uint8_t uart_suffix[2] = { 76, 203 };
+
+    uint32_t device_ids[8] = { 0, 0, 0, 0, 0, 0, 0, 0};
+
+    float device_batt[8];
+    float batt_voltage = 0;
+
+    float bmi_ax;
+    float bmi_ay;
+    float bmi_az;
+    int bmi_steps;
+
+    void device_parse_response(uint8_t *buf, int len);
+    float decode_acc(float acc);
+    void serial_main_init();
+
+private:
+    QString m_device;
+
+    EcgData ecgData;
+
+};
+
+#endif // QUECG_H

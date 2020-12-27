@@ -30,8 +30,6 @@
 #ifndef RENDERTHREAD_H
 #define RENDERTHREAD_H
 
-#include "uecgenumerator.h"
-
 class RenderThread : public QThread
 {
     Q_OBJECT
@@ -40,7 +38,6 @@ public:
     RenderThread(QObject* parent = nullptr);
     ~RenderThread();
 
-    void init();
     void render();
 
 protected:
@@ -49,8 +46,6 @@ protected:
 private:
     QMutex m_Mutex;
     QWaitCondition m_Condition;
-
-    UecgEnumerator uecgEnumerator;
 
     unsigned int m_X = 0;
 

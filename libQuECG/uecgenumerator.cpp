@@ -10,13 +10,16 @@ UecgEnumerator::UecgEnumerator(QObject *parent)
         qCDebug(cat) << "******************** deviceDiscovered:"
                      << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
                      << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-        emit deviceDiscovered(port);
+
+        if ((port.productID == PRODUCT_ID) && (port.vendorID == VENDOR_ID))
+            emit deviceDiscovered(port);
     });
     connect(&serialEnumerator, &QextSerialEnumerator::deviceRemoved,  [=](const QextPortInfo& port)
     {
         qCDebug(cat) << "******************** deviceRemoved:"
                      << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
                      << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-        emit deviceRemoved(port);
+        if ((port.productID == PRODUCT_ID) && (port.vendorID == VENDOR_ID))
+            emit deviceRemoved(port);
     });
 }

@@ -37,4 +37,9 @@
 #include "qextserialenumerator.h"
 #include "qextserialport.h"
 
+#include <poll.h>
+#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
+
 #endif // PCH_LIBQUECG_H

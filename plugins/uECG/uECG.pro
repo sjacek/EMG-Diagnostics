@@ -28,11 +28,13 @@ HEADERS = \
     pch.h \
     renderthread.h \
     uecgplugin.h \
-    uecgseries.h
+    uecgseries.h \
+    uecgthread.h
 SOURCES = \
     renderthread.cpp \
     uecgplugin.cpp \
-    uecgseries.cpp
+    uecgseries.cpp \
+    uecgthread.cpp
 
 DISTFILES += \
     uecgplugin.json
@@ -41,10 +43,6 @@ INCLUDEPATH += $$TOP_SRCDIR/libuECG
 DEPENDPATH += $$TOP_SRCDIR/libuECG
 
 LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME} -luECG
-
-INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-LIBS += -L$$TOP_BUILDDIR/3rdparty/qextserialport -lQt5ExtSerialPort
 
 #CONFIG += qesp_linux_udev
 #include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)

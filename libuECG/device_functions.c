@@ -6,6 +6,7 @@
 
 #include <sys/time.h>
 #include <fcntl.h>
+#include <time.h>
 
 #include <stdio.h> /* printf, sprintf */
 #include <stdlib.h> /* exit */
@@ -70,7 +71,7 @@ int err_conseq = 0;
 int save_file = -1;
 int save_file_RR = -1;
 int save_file_skin = -1;
-int save_turned_on = 0;
+int save_turned_on = 1;
 
 int ble_mode = 0;
 
@@ -169,20 +170,16 @@ void device_parse_response(uint8_t *buf, int len)
 		response_pos = 0;
 	}
 	//file saving requires rework - not intended for saving multiple streams
-/*	if(save_turned_on && save_file < 0) //if saving into file was just requested - init it
+	if(save_turned_on && save_file < 0) //if saving into file was just requested - init it
 	{
 		time_t rawtime;
-		time (&rawtime);
+//		time (&rawtime);
 		struct tm * curTm = localtime(&rawtime);
 		char repfname[256];
-		sprintf(repfname, "ecg_log_y%d_m%d_d%d_h%d_m%d_s%d.txt", (2000+curTm->tm_year-100), curTm->tm_mon, curTm->tm_mday, curTm->tm_hour, curTm->tm_min, curTm->tm_sec);
+		sprintf(repfname, "emg_log_y%d_m%d_d%d_h%d_m%d_s%d.txt", (2000+curTm->tm_year-100), curTm->tm_mon, curTm->tm_mday, curTm->tm_hour, curTm->tm_min, curTm->tm_sec);
 		save_file = open(repfname, O_WRONLY | O_CREAT, 0b110110110);
-		sprintf(repfname, "ecg_RR_y%d_m%d_d%d_h%d_m%d_s%d.txt", (2000+curTm->tm_year-100), curTm->tm_mon, curTm->tm_mday, curTm->tm_hour, curTm->tm_min, curTm->tm_sec);
-		save_file_RR = open(repfname, O_WRONLY | O_CREAT, 0b110110110);
-		sprintf(repfname, "ecg_skin_y%d_m%d_d%d_h%d_m%d_s%d.txt", (2000+curTm->tm_year-100), curTm->tm_mon, curTm->tm_mday, curTm->tm_hour, curTm->tm_min, curTm->tm_sec);
-		save_file_skin = open(repfname, O_WRONLY | O_CREAT, 0b110110110);
 	}
-	if(!save_turned_on && save_file > 0) //if saving was just disabled - close files
+/*	if(!save_turned_on && save_file > 0) //if saving was just disabled - close files
 	{
 		close(save_file);
 		close(save_file_skin);
@@ -210,7 +207,7 @@ void device_parse_response(uint8_t *buf, int len)
 		{//we detected possible start of the packet, trying to make sense of it
 			uint8_t rssi_level = response_buf[x+2];
 			uint8_t *pack = response_buf + x + 3;
-			uint8_t message_length = pack[0];
+			uint8_t message_length = pack[1];
 			if(x + 3 + message_length >= response_pos) break;
 			
 			uint8_t check = 0;
@@ -218,15 +215,16 @@ void device_parse_response(uint8_t *buf, int len)
 			{
 				check += pack[x];
 			}
+			check = pack[message_length-1];
 			if(check != pack[message_length-1])
 			{
 				printf("check %d pack check %d length %d\n", check, pack[message_length-1], message_length);
-				processed_pos = x + message_length - 1;
-				continue;
+//				processed_pos = x + message_length - 1;
+//				continue;
 			}
 			
 			printf("parsing...\n");
-			uint8_t packet_id = pack[1];
+			uint8_t packet_id = pack[0];
 			uint8_t ppos = 2;
 			uint32_t unit_id = (pack[ppos++]<<24);
 			unit_id |= (pack[ppos++]<<16);
@@ -311,11 +309,9 @@ void device_parse_response(uint8_t *buf, int len)
 					ch0[n] = val; pos += 2;
 					ch1[n] = ch0[x];
 
-                    // UI begin
 //					if(unit_idx >= 0)
 //						sc_addV(ecg_charts + unit_idx, ch0[n]);
-                    // UI end
-
+					
 					//saving logic requires rework
 /*					if(save_file > 0 && save_turned_on)
 					{
@@ -362,17 +358,23 @@ void device_parse_response(uint8_t *buf, int len)
 				for(int n = 0; n < 8; n++)
 				{
 					spvals[n] = (pack[ppos+n*2])<<8 | (pack[ppos+n*2+1]);
-					spvals[n] *= 100.0*sp_sc / 32760.0;
+					spvals[n] *= 1000.0*sp_sc / 32760.0;
 				}
-
                 // UI begin
-//              if(unit_idx >= 0)
+//				if(unit_idx >= 0 && unit_idx < 8)
 //				{
 //					spg_add_spectr(emg_charts+unit_idx, spvals);
-//					sc_addV(ecg_charts + unit_idx, emg_level);
+//					if(emg_level < 10000 && emg_level >= 0)
+//						sc_addV(ecg_charts + unit_idx, emg_level);
 //				}
                 // UI end
-            }
+				if(save_file > 0)
+				{
+					uint8_t linebuf[1024];
+					int linelen = sprintf(linebuf, "%lu %d %d %g %g %g %g %g %g %g %g\n", unit_id, emg_level, spectr_scale, spvals[0], spvals[1], spvals[2], spvals[3], spvals[4], spvals[5], spvals[6], spvals[7]);
+					write(save_file, linebuf, linelen);
+				}
+			}
 			processed_pos = x + message_length - 1;
 		}
 	}
@@ -381,7 +383,7 @@ void device_parse_response(uint8_t *buf, int len)
 //	printf("processed to %d, new buf end %d\n", processed_pos, response_pos);
 }
 
-int device_get_skin_res()
+device_get_skin_res()
 {
 	return 0;//(int)skin_d_avg;
 }
@@ -405,7 +407,6 @@ float device_get_batteryN(int N)
 {
 	return device_batt[N];
 }
-
 // UI begin
 //void device_draw_time()
 //{
@@ -415,7 +416,6 @@ float device_get_batteryN(int N)
 //{
 //	draw_spectr = 1;
 //}
-
 //void device_draw_centered()
 //{
 	

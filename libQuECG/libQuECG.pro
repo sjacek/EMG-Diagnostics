@@ -17,13 +17,13 @@ PRECOMPILED_HEADER = pch_libquecg.h
 
 SOURCES += \
     ecgdata.cpp \
-    uecg.cpp \
+    quecg.cpp \
     uecgenumerator.cpp
 
 HEADERS += \
     ecgdata.h \
     libquecg_global.h \
-    uecg.h \
+    quecg.h \
     uecgenumerator.h
 
 OTHER_FILES += \
@@ -31,7 +31,7 @@ OTHER_FILES += \
 
 INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
 DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-LIBS += -L$$TOP_BUILDDIR/3rdparty/qextserialport -lQt5ExtSerialPort
+LIBS += -L$$LIB_DESTDIR -lQt5ExtSerialPort
 
 #CONFIG += qesp_linux_udev
 #include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)

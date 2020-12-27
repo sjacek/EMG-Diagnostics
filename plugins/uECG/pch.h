@@ -41,7 +41,7 @@
 
 QT_CHARTS_USE_NAMESPACE
 
-#include "qextserialport.h"
+//#include "qextserialport.h"
 
 #include <chrono>
 using namespace std::chrono;
