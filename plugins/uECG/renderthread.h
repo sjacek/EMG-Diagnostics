@@ -40,6 +40,8 @@ public:
 
     void render();
 
+    void setShift(unsigned int shift);
+
 protected:
     void run() override;
 
@@ -48,6 +50,7 @@ private:
     QWaitCondition m_Condition;
 
     unsigned int m_X = 0;
+    unsigned int m_shift = 0;
 
     bool m_Abort = false;
     bool m_Restart = false;

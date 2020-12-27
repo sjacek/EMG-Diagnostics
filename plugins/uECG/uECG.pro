@@ -27,11 +27,13 @@ PRECOMPILED_HEADER = pch.h
 HEADERS = \
     pch.h \
     renderthread.h \
+    sineseries.h \
     uecgplugin.h \
     uecgseries.h \
     uecgthread.h
 SOURCES = \
     renderthread.cpp \
+    sineseries.cpp \
     uecgplugin.cpp \
     uecgseries.cpp \
     uecgthread.cpp

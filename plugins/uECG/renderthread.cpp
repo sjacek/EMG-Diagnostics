@@ -63,8 +63,13 @@ void RenderThread::run()
     }
 }
 
+void RenderThread::setShift(unsigned int shift)
+{
+    m_shift = shift;
+}
+
 void RenderThread::drawChart()
 {
-    qreal y = qSin(M_PI / 50 * m_X + 20);
+    qreal y = qSin(M_PI / 50 * m_X + m_shift);
     emit pointAdded(QPointF(m_X++, y));
 }

@@ -29,6 +29,7 @@
 
 #include "uecgplugin.h"
 
+#include "sineseries.h"
 #include "uecgseries.h"
 #include <uecg.h>
 #include "uecgthread.h"
@@ -55,34 +56,47 @@ void UecgPlugin::initDevice()
     {
         if ((port.productID == UecgEnumerator::PRODUCT_ID) && (port.vendorID == UecgEnumerator::VENDOR_ID))
         {
-            qCDebug(cat) << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
-                         << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-            UecgThread* thread = new UecgThread(this, port.portName);
-            threadMap.insert(port.portName, thread);
+            deviceDiscovered(port);
         }
     }
 
-    connect(&uecgEnumerator, &UecgEnumerator::deviceDiscovered, [=](const QextPortInfo& port)
-    {
-        qCDebug(cat) << "******************** deviceDiscovered:"
-                     << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
-                     << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-    });
+    connect(&uecgEnumerator, &UecgEnumerator::deviceDiscovered, this, &UecgPlugin::deviceDiscovered);
+    connect(&uecgEnumerator, &UecgEnumerator::deviceRemoved, this, &UecgPlugin::deviceRemoved);
+}
 
-    connect(&uecgEnumerator, &UecgEnumerator::deviceRemoved, [=](const QextPortInfo& port)
-    {
-        qCDebug(cat) << "******************** deviceRemoved:"
-                     << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
-                     << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-    });
+void UecgPlugin::deviceDiscovered(const QextPortInfo& port)
+{
+    qCDebug(cat) << "******************** deviceDiscovered:"
+                 << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                 << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+    threadMap.insert(port.portName, new UecgThread(this, port.portName));
+}
+
+void UecgPlugin::deviceRemoved(const QextPortInfo& port)
+{
+    qCDebug(cat) << "******************** deviceRemoved:"
+                 << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                 << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+//    threadMap.insert(port.portName, new UecgThread(this, port.portName));
 }
 
 void UecgPlugin::initSeries(int cols)
 {
-    const QString seriesName = "uecg0";
+    {
+        const QString seriesName = "uecg0";
 
-    UecgSeries* series = new UecgSeries(this, seriesName);
-    series->setCols(cols);
-    m_series.append(series);
-    emit seriesCreated(seriesName, series);
+        SineSeries* series = new SineSeries(this, seriesName);
+        series->setCols(cols);
+        m_series.append(series);
+        emit seriesCreated(seriesName, series);
+    }
+
+    {
+        const QString seriesName = "uecg1";
+
+        UecgSeries* series = new UecgSeries(this, seriesName);
+        series->setCols(cols);
+        m_series.append(series);
+        emit seriesCreated(seriesName, series);
+    }
 }

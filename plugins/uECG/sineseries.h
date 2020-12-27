@@ -27,36 +27,24 @@
  **
  ****************************************************************************/
 
-#ifndef UECGPLUGIN_H
-#define UECGPLUGIN_H
+#ifndef SINESERIES_H
+#define SINESERIES_H
 
-#include "plugin.h"
-#include "uecgenumerator.h"
-class UecgThread;
+#include "dataseries.h"
+#include "renderthread.h"
 
-class UecgPlugin : public Plugin
+class SineSeries : public DataSeries
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "com.github.sjacek.EMG-Diagnostics.Plugin" FILE "uecgplugin.json")
-    Q_INTERFACES(Plugin)
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
-
 public:
-    explicit UecgPlugin(QObject* parent = nullptr);
-
-    void init(int cols) override;
+    explicit SineSeries(QObject* parent, const QString& name);
+    ~SineSeries();
 
 private:
-    QList<DataSeries*> m_series;
-    UecgEnumerator uecgEnumerator;
-    QMap<QString, UecgThread*> threadMap;
+    RenderThread m_Thread;
 
-    void initDevice();
-    void initSeries(int cols);
-
-private slots:
-    void deviceDiscovered(const QextPortInfo& port);
-    void deviceRemoved(const QextPortInfo& port);
+    void init();
 };
 
-#endif // UECGPLUGIN_H
+#endif // SINESERIES_H
