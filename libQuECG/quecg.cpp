@@ -31,9 +31,9 @@
 
 Uecg::Uecg(QObject* parent, const QString& device)
     : QObject(parent)
-    , m_device(device)
 {
     serial_main_init();
+    openDevice(device);
 }
 
 void Uecg::serial_main_init()
@@ -41,6 +41,32 @@ void Uecg::serial_main_init()
     gettimeofday(&prevTime, NULL);
     gettimeofday(&zeroTime, NULL);
 }
+
+void Uecg::openDevice(const QString& deviceName)
+{
+//	uint8_t *dev = gtk_entry_get_text(GTK_ENTRY(serial_entry_device));
+    struct termios newtio;
+    device = open(deviceName.toStdString().c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+    bzero(&newtio, sizeof(newtio));
+
+    newtio.c_cflag = baudrate | CS8 | CLOCAL | CREAD;
+    newtio.c_iflag = 0;//IGNPAR;
+    newtio.c_oflag = 0;
+    newtio.c_lflag = 0;//ICANON;
+
+    newtio.c_cc[VTIME] = 1;
+    newtio.c_cc[VMIN] = 1;
+
+    tcflush(device, TCIOFLUSH);
+    tcsetattr(device, TCSANOW, &newtio);
+    // UI begin
+//    char txt[128];
+//    sprintf(txt, "device port open result: %d\n", device);
+//    qCDebug(cat, "%s", txt);
+//	add_text_to_main_serial_log(txt);
+    // UI end
+}
+
 
 //decode 8-bit acceleration value: we need more precision around 0 and less at high g
 float Uecg::decode_acc(float acc)
@@ -88,11 +114,13 @@ void Uecg::device_parse_response(uint8_t *buf, int len)
 //		save_file = open(repfname, O_WRONLY | O_CREAT, 0b110110110);
 //	}
 
+    // SPARE begin
     time_t rawtime;
     struct tm* curTm = localtime(&rawtime);
     qCDebug(cat, "emg_log_y%d_m%d_d%d_h%d_m%d_s%d.txt",
             2000 + curTm->tm_year - 100,
             curTm->tm_mon, curTm->tm_mday, curTm->tm_hour, curTm->tm_min, curTm->tm_sec);
+    // SPARE end
 /*	if(!save_turned_on && save_file > 0) //if saving was just disabled - close files
     {
         close(save_file);
@@ -123,7 +151,8 @@ void Uecg::device_parse_response(uint8_t *buf, int len)
             uint8_t rssi_level = response_buf[x+2];
             uint8_t *pack = response_buf + x + 3;
             uint8_t message_length = pack[1];
-            if(x + 3 + message_length >= response_pos) break;
+            if(x + 3 + message_length >= response_pos)
+                break;
 
             uint8_t check = 0;
             for(int x = 0; x < message_length-1; x++)
@@ -133,19 +162,19 @@ void Uecg::device_parse_response(uint8_t *buf, int len)
             check = pack[message_length-1];
             if(check != pack[message_length-1])
             {
-                printf("check %d pack check %d length %d\n", check, pack[message_length-1], message_length);
+                qCDebug(cat, "check %d pack check %d length %d\n", check, pack[message_length-1], message_length);
 //				processed_pos = x + message_length - 1;
 //				continue;
             }
 
-            qCDebug(cat, "parsing...\n");
+            qCDebug(cat) << "parsing...\n";
             uint8_t packet_id = pack[0];
             uint8_t ppos = 2;
             uint32_t unit_id = (pack[ppos++]<<24);
             unit_id |= (pack[ppos++]<<16);
             unit_id |= (pack[ppos++]<<8);
             unit_id |= pack[ppos++];
-            qCDebug(cat, "unit id %lu\n", unit_id);
+            qCDebug(cat) << "unit id" << unit_id;
 
             int unit_idx = -1;
             for(int n = 0; n < 8; n++)
@@ -360,8 +389,15 @@ void Uecg::serial_main_loop()
 //		char tmbuf[64];
 //		int len = sprintf(tmbuf, "%g", real_time);
 //		gtk_entry_set_text(GTK_ENTRY(entry_line), tmbuf);
-        if(poll( &pfdS, 1, 1 ))
+
+        int poll_ret = poll( &pfdS, 1, 1 );
+        QString error;
+        if (poll_ret == -1)
+            error = QString(strerror(errno));
+
+        if(poll_ret)
         {
+            qCDebug(cat) << "poll_ret:" << poll_ret;
             int lng = 0;
             uint8_t bbf[4096];
             uint8_t hex_bbf[16384];

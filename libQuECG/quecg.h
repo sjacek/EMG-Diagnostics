@@ -40,6 +40,8 @@ class LIBQUECG_EXPORT Uecg : public QObject
 public:
     Uecg(QObject* parent, const QString& device);
 
+    void openDevice(const QString& device);
+
     void serial_main_loop();
 
 private:
@@ -58,6 +60,7 @@ private:
 
     // imported from original
     int device = 0;
+    speed_t baudrate = B921600;
 
     struct timeval curTime, prevTime, zeroTime;
     int hex_mode_pos = 0;
@@ -87,8 +90,6 @@ private:
     void serial_main_init();
 
 private:
-    QString m_device;
-
     EcgData ecgData;
 
 };

@@ -29,6 +29,7 @@
 
 import QtQuick 2.1
 import QtCharts 2.15
+import com.github.sjacek.emgdiagnostics 1.0
 
 ChartView {
     id: chartView
@@ -40,14 +41,15 @@ ChartView {
     onOpenGLChanged: {
 //        if (openGLSupported)
 //            for (var i = 0; i <= chartView.count; i++)
-//                dataSource.update(chartView.series(i));
+//                DataSource.update(chartView.series(i));
     }
     Component.onCompleted: {
 //        setupAllSeries("line")
+        DataSource.init(1024)
     }
 
     Connections {
-        target: dataSource
+        target: DataSource
 
         function onPointAdded(seriesName, point) {
 //            console.log(seriesName, point.x, point.y)

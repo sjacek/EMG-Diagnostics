@@ -37,6 +37,7 @@
 #include "qextserialenumerator.h"
 #include "qextserialport.h"
 
+#include <fcntl.h>
 #include <poll.h>
 #include <time.h>
 #include <sys/time.h>

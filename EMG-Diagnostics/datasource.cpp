@@ -73,7 +73,8 @@ void DataSource::init(int cols)
 
 void DataSource::setCols(int cols)
 {
-    for (DataSeries* series : m_dataSeries.values())
+    auto values = m_dataSeries.values();
+    for (DataSeries* series : values)
     {
         series->setCols(cols);
     }
@@ -81,7 +82,8 @@ void DataSource::setCols(int cols)
 
 QString DataSource::getSeriesName(int n) const
 {
-    return m_dataSeries.keys().at(n);
+    auto keys = m_dataSeries.keys();
+    return keys.at(n);
 }
 
 DataSeries& DataSource::getSeries(QString name) const

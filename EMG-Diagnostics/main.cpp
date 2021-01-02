@@ -29,6 +29,7 @@
 
 #include "pch.h"
 #include "emgviewer.h"
+#include "datasource.h"
 
 //Q_DECLARE_METATYPE(QAbstractSeries *)
 //Q_DECLARE_METATYPE(QAbstractAxis *)
@@ -42,6 +43,10 @@ int main(int argc, char *argv[])
 //    qRegisterMetaType<QAbstractAxis*>();
 
     QApplication app(argc, argv);
+
+    // alternative to non-working declaration in the .pro file
+    qmlRegisterSingletonInstance("com.github.sjacek.emgdiagnostics", 1, 0, "DataSource", &DataSource::instance());
+
 
     EmgViewer viewer;
     viewer.show();

@@ -70,16 +70,16 @@ void UecgPlugin::deviceDiscovered(const QextPortInfo& port)
     qCDebug(cat) << "******************** deviceDiscovered:"
                  << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
                  << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-//    threadMap.insert(port.portName, new UecgThread(this, port.portName));
+    threadMap.insert(port.portName, new UecgThread(this, port.portName));
 
-    {
-        const QString seriesName = QString("uecg%0").arg(getSeriesCounter());
+//    {
+//        const QString seriesName = QString("uecg%0").arg(getSeriesCounter());
 
-        UecgSeries* series = new UecgSeries(this, seriesName);
-        series->setCols(m_cols);
-        m_series.append(series);
-        emit seriesCreated(seriesName, series);
-    }
+//        UecgSeries* series = new UecgSeries(this, seriesName);
+//        series->setCols(m_cols);
+//        m_series.append(series);
+//        emit seriesCreated(seriesName, series);
+//    }
 }
 
 void UecgPlugin::deviceRemoved(const QextPortInfo& port)

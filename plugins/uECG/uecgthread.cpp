@@ -29,11 +29,11 @@
 
 #include "uecgthread.h"
 
-#include <uecg.h>
+#include "dataseries.h"
 
 UecgThread::UecgThread(QObject* parent, const QString& device)
     : QThread(parent)
-    , m_device(device)
+    , uecg(this, device)
 {
     setObjectName(typeid(this).name());
     init();
@@ -46,9 +46,9 @@ UecgThread::~UecgThread()
 
 void UecgThread::init()
 {
-    open_device(m_device.toStdString().c_str());
-
     QMutexLocker locker(&m_Mutex);
+
+    m_X = DataSeries::calculateAxisXMin();
 
     if (!isRunning()) {
         start(LowPriority);
@@ -64,8 +64,8 @@ void UecgThread::run()
 
     while (!m_Abort && !isInterruptionRequested() )
     {
-        qCDebug(cat) << "!";
-        serial_main_loop();
-        msleep(10);
+//        qCDebug(cat) << "!";
+        uecg.serial_main_loop();
+        msleep(DataSeries::STROKE_X);
     }
 }

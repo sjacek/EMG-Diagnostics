@@ -30,6 +30,8 @@
 #ifndef UECGTHREAD_H
 #define UECGTHREAD_H
 
+#include <quecg.h>
+
 class UecgThread : public QThread
 {
     Q_OBJECT
@@ -42,12 +44,12 @@ protected:
     void run() override;
 
 private:
-    QString m_device;
+    Uecg uecg;
 
     QMutex m_Mutex;
     QWaitCondition m_Condition;
 
-//    unsigned int m_X = 0;
+    unsigned int m_X = 0;
 
     bool m_Abort = false;
     bool m_Restart = false;

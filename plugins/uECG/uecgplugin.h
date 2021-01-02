@@ -48,11 +48,14 @@ public:
 
     static inline int getSeriesCounter()
     {
+        QMutexLocker ml(&m_seriesCounterMutex);
         return seriesCounter++;
     }
 
 private:
     static inline int seriesCounter = 0;
+    static inline QMutex m_seriesCounterMutex;
+
     int m_cols = -1;
 
     QList<DataSeries*> m_series;

@@ -47,10 +47,10 @@ void open_device(const char* deviceName)
 
 	tcflush(device, TCIOFLUSH);
 	tcsetattr(device, TCSANOW, &newtio);
-	char txt[128];
-    sprintf(txt, "device port open result: %d\n", device);
-	printf("%s", txt);
     // UI begin
+//	char txt[128];
+//    sprintf(txt, "device port open result: %d\n", device);
+//	printf("%s", txt);
 //	add_text_to_main_serial_log(txt);
     // UI end
 }
