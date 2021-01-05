@@ -45,6 +45,13 @@ public:
     void serial_main_loop();
 
 private:
+    QextSerialPort serialPort;
+    const static inline PortSettings settings = { BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10 };
+
+private slots:
+    void onReadyRead();
+
+private:
     enum param_sends
     {
         param_batt_bpm = 0,

@@ -31,10 +31,26 @@
 
 Uecg::Uecg(QObject* parent, const QString& device)
     : QObject(parent)
+    , serialPort(device, settings)
 {
     serial_main_init();
     openDevice(device);
+
+    connect(&serialPort, &QextSerialPort::readyRead, [=]() {
+        QByteArray data = serialPort.readAll();
+        qCDebug(cat) << data.length();
+        for (int i(0); i < data.length(); i++)
+            qCDebug(cat) << i << ":" << (int)data[i];
+    });
+    serialPort.open(QIODevice::ReadWrite);
 }
+
+void Uecg::onReadyRead()
+{
+    QByteArray data = serialPort.readAll();
+    qCDebug(cat) << data;
+}
+
 
 void Uecg::serial_main_init()
 {
@@ -347,8 +363,8 @@ void Uecg::serial_main_loop()
 
     prevTime = curTime;
 
-    char rss[32];
     // SPARE begin
+//    char rss[32];
 //    sprintf(rss, "RSSI %.1f", device_get_rssi());
 //    fprintf(stderr, "%s\n", rss);
     // SPARE end
@@ -397,7 +413,7 @@ void Uecg::serial_main_loop()
 
         if(poll_ret)
         {
-            qCDebug(cat) << "poll_ret:" << poll_ret;
+//            qCDebug(cat) << "poll_ret:" << poll_ret;
             int lng = 0;
             uint8_t bbf[4096];
             uint8_t hex_bbf[16384];
