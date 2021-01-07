@@ -2,7 +2,6 @@ TEMPLATE = subdirs
 SUBDIRS = \
     libuECG \
     libQuECG \
-    libuECGpp \
     plugins \
     EMG-Diagnostics \
 
