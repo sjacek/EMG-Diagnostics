@@ -1,11 +1,10 @@
 QMAKE_PROJECT_NAME = EMG-Diagnostics
 
-! include( $$TOP_SRCDIR/common.pri ) {
-    error( "Couldn't find the common.pri file!" )
-}
-
+include( $$TOP_SRCDIR/plugins/interface/interface.pri )
 
 QT += charts qml quick
+
+CONFIG += rtti c++17 precompile_header
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -17,6 +16,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+# currently it's not working thus commented out
+CONFIG += qmltypes
+QML_IMPORT_NAME = com.github.sjacek.emgdiagnostics
+QML_IMPORT_MAJOR_VERSION = 1
+QML_IMPORT_MINOR_VERSION = 0
+
+INCLUDEPATH += EMG-Diagnostics
+
+PRECOMPILED_HEADER = pch.h
 
 HEADERS += \
     pch.h \
@@ -46,10 +55,8 @@ qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
 else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
 !isEmpty(target.path): INSTALLS += target
 
-LIBS += -L$${LIB_DIR} -l$${INTERFACE_LIB_NAME}
+LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME}
 
 DISTFILES +=
 
-DESTDIR = $${BIN_DIR}
-
-CONFIG += install_ok  # Do not cargo-cult this!
+DESTDIR = $${BIN_DESTDIR}

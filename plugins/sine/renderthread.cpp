@@ -28,6 +28,7 @@
  ****************************************************************************/
 
 #include "renderthread.h"
+#include "dataseries.h"
 
 RenderThread::RenderThread(QObject* parent)
     : QThread(parent)
@@ -44,6 +45,8 @@ void RenderThread::render()
 {
     QMutexLocker locker(&m_Mutex);
 
+    m_X = DataSeries::calculateAxisXMin();
+
     if (!isRunning()) {
         start(LowPriority);
     } else {
@@ -59,7 +62,7 @@ void RenderThread::run()
     while (!m_Abort && !isInterruptionRequested() )
     {
         drawSine();
-        msleep(10);
+        msleep(DataSeries::STROKE_X);
     }
 }
 

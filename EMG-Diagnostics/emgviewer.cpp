@@ -27,14 +27,12 @@
  **
  ****************************************************************************/
 
+#include "pch.h"
 #include "emgviewer.h"
 
 EmgViewer::EmgViewer()
-    : m_DataSource(this)
 {
     initGUI();
-
-    m_DataSource.init(1024);
 }
 
 void EmgViewer::initGUI()
@@ -55,9 +53,6 @@ void EmgViewer::initGUI()
     connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
 
     setTitle(QStringLiteral("EMG Diagnostics"));
-
-    rootContext()->setContextProperty("dataSource", &m_DataSource);
-
     setSource(QUrl("qrc:/qml/EmgViewer.qml"));
     setResizeMode(QQuickView::SizeRootObjectToView);
     setColor(QColor("#404040"));

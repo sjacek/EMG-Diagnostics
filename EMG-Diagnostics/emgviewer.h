@@ -30,8 +30,6 @@
 #ifndef EMGVIEWER_H
 #define EMGVIEWER_H
 
-#include "datasource.h"
-
 class EmgViewer : public QQuickView
 {
     Q_OBJECT
@@ -40,8 +38,6 @@ public:
     EmgViewer();
 
 private:
-    DataSource m_DataSource;
-
     void initGUI();
 };
 

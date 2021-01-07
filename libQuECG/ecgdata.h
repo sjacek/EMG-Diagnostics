@@ -27,38 +27,15 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef ECGDATA_H
+#define ECGDATA_H
 
-class RenderThread : public QThread
+#include <QtCore/qglobal.h>
+
+class EcgData
 {
-    Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
-
-    void render();
-
-    void setShift(unsigned int shift);
-
-protected:
-    void run() override;
-
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
-
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
+    EcgData();
 };
 
-#endif // RENDERTHREAD_H
+#endif // ECGDATA_H

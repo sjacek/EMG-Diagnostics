@@ -27,38 +27,74 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef UARTPORT_H
+#define UARTPORT_H
 
-class RenderThread : public QThread
+#include "libquecg_global.h"
+#include "ecgdata.h"
+
+class LIBQUECG_EXPORT UartPort : public QextSerialPort
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+    UartPort(QObject* parent, const QString& device);
 
-    void render();
+    void openDevice(const QString& device);
 
-    void setShift(unsigned int shift);
+    void serial_main_loop();
 
-protected:
-    void run() override;
+private slots:
+    void onReadyRead();
 
 private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
+    enum param_sends
+    {
+        param_batt_bpm = 0,
+        param_sdnn,
+        param_skin_res,
+        param_lastRR,
+        param_imu_acc,
+        param_imu_steps,
+        param_pnn_bins,
+        param_end,
+        param_emg_spectrum
+    };
 
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
+    // imported from original
+    int device = 0;
+    speed_t baudrate = B921600;
 
-    bool m_Abort = false;
-    bool m_Restart = false;
+    struct timeval curTime, prevTime, zeroTime;
+    int hex_mode_pos = 0;
 
-    void drawChart();
+    double real_time = 0;
 
-signals:
-    void pointAdded(QPointF point);
+    bool response_inited = false;
+    uint8_t *response_buf;
+    int response_pos = 0;
+    int response_buf_len = 4096;
+
+    uint8_t uart_prefix[2] = { 79, 213 };
+    uint8_t uart_suffix[2] = { 76, 203 };
+
+    uint32_t device_ids[8] = { 0, 0, 0, 0, 0, 0, 0, 0};
+
+    float device_batt[8];
+    float batt_voltage = 0;
+
+    float bmi_ax;
+    float bmi_ay;
+    float bmi_az;
+    int bmi_steps;
+
+    void device_parse_response(uint8_t *buf, int len);
+    float decode_acc(float acc);
+    void serial_main_init();
+
+private:
+    EcgData ecgData;
+
 };
 
-#endif // RENDERTHREAD_H
+#endif // UARTPORT_H

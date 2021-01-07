@@ -1,11 +1,12 @@
 TEMPLATE = subdirs
 SUBDIRS = \
-    3rdparty/qextserialport \
     libuECG \
+    libQuECG \
     plugins \
     EMG-Diagnostics \
 
+plugins.depends = libQuECG
+EMG-Diagnostics.depends = plugins
+
 OTHER_FILES += \
     .qmake.conf
-
-CONFIG += ordered

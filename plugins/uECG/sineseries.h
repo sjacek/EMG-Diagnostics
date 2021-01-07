@@ -27,38 +27,24 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef SINESERIES_H
+#define SINESERIES_H
 
-class RenderThread : public QThread
+#include "dataseries.h"
+#include "renderthread.h"
+
+class SineSeries : public DataSeries
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
-
-    void render();
-
-    void setShift(unsigned int shift);
-
-protected:
-    void run() override;
+    explicit SineSeries(QObject* parent, const QString& name);
+    ~SineSeries();
 
 private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
+    RenderThread m_Thread;
 
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
+    void init();
 };
 
-#endif // RENDERTHREAD_H
+#endif // SINESERIES_H

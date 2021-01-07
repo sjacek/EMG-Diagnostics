@@ -27,38 +27,24 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#include "sineseries.h"
 
-class RenderThread : public QThread
+SineSeries::SineSeries(QObject* parent, const QString& name)
+    : DataSeries(parent, name)
+    , m_Thread(this)
 {
-    Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
-public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+    connect(&m_Thread, &RenderThread::pointAdded, this, &SineSeries::pointAdded);
+    init();
+}
 
-    void render();
+SineSeries::~SineSeries()
+{
+    m_Thread.quit();
+    m_Thread.wait();
+}
 
-    void setShift(unsigned int shift);
-
-protected:
-    void run() override;
-
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
-
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
-};
-
-#endif // RENDERTHREAD_H
+void SineSeries::init()
+{
+    m_Thread.setShift(60);
+    m_Thread.render();
+}

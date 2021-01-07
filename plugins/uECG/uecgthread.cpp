@@ -27,38 +27,45 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#include "uecgthread.h"
 
-class RenderThread : public QThread
+#include "dataseries.h"
+
+UecgThread::UecgThread(QObject* parent, const QString& device)
+    : QThread(parent)
+    , uecg(this, device)
 {
-    Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
-public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+    setObjectName(typeid(this).name());
+    init();
+}
 
-    void render();
+UecgThread::~UecgThread()
+{
+    m_Abort = true;
+}
 
-    void setShift(unsigned int shift);
+void UecgThread::init()
+{
+    QMutexLocker locker(&m_Mutex);
 
-protected:
-    void run() override;
+    m_X = DataSeries::calculateAxisXMin();
 
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
+//    if (!isRunning()) {
+//        start(LowPriority);
+//    } else {
+//        m_Restart = true;
+//        m_Condition.wakeOne();
+//    }
+}
 
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
+void UecgThread::run()
+{
+    QMutexLocker locker(&m_Mutex);
 
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
-};
-
-#endif // RENDERTHREAD_H
+    while (!m_Abort && !isInterruptionRequested() )
+    {
+//        qCDebug(cat) << "!";
+        uecg.serial_main_loop();
+        msleep(DataSeries::STROKE_X);
+    }
+}

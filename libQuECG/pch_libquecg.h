@@ -27,38 +27,20 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef PCH_LIBQUECG_H
+#define PCH_LIBQUECG_H
 
-class RenderThread : public QThread
-{
-    Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
-public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+#include <QtCore/qglobal.h>
+#include <QtCore/QObject>
+#include <QtCore/QLoggingCategory>
 
-    void render();
+#include "qextserialenumerator.h"
+#include "qextserialport.h"
 
-    void setShift(unsigned int shift);
+#include <fcntl.h>
+#include <poll.h>
+#include <time.h>
+#include <sys/time.h>
+#include <unistd.h>
 
-protected:
-    void run() override;
-
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
-
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
-};
-
-#endif // RENDERTHREAD_H
+#endif // PCH_LIBQUECG_H

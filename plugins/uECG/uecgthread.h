@@ -27,38 +27,37 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef UECGTHREAD_H
+#define UECGTHREAD_H
 
-class RenderThread : public QThread
+#include <uartport.h>
+
+class UecgThread : public QThread
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
-
-    void render();
-
-    void setShift(unsigned int shift);
+    explicit UecgThread(QObject* parent, const QString& device);
+    ~UecgThread();
 
 protected:
     void run() override;
 
 private:
+    UartPort uecg;
+
     QMutex m_Mutex;
     QWaitCondition m_Condition;
 
     unsigned int m_X = 0;
-    unsigned int m_shift = 0;
 
     bool m_Abort = false;
     bool m_Restart = false;
 
-    void drawChart();
+    void init();
 
 signals:
-    void pointAdded(QPointF point);
+
 };
 
-#endif // RENDERTHREAD_H
+#endif // UECGTHREAD_H

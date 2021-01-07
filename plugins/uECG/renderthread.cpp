@@ -28,18 +28,12 @@
  ****************************************************************************/
 
 #include "renderthread.h"
+#include "dataseries.h"
 
 RenderThread::RenderThread(QObject* parent)
     : QThread(parent)
 {
     setObjectName(typeid(this).name());
-
-    init();
-}
-
-void RenderThread::init()
-{
-
 }
 
 RenderThread::~RenderThread()
@@ -50,6 +44,8 @@ RenderThread::~RenderThread()
 void RenderThread::render()
 {
     QMutexLocker locker(&m_Mutex);
+
+    m_X = DataSeries::calculateAxisXMin();
 
     if (!isRunning()) {
         start(LowPriority);
@@ -66,12 +62,17 @@ void RenderThread::run()
     while (!m_Abort && !isInterruptionRequested() )
     {
         drawChart();
-        msleep(10);
+        msleep(DataSeries::STROKE_X);
     }
+}
+
+void RenderThread::setShift(unsigned int shift)
+{
+    m_shift = shift;
 }
 
 void RenderThread::drawChart()
 {
-    qreal y = qSin(M_PI / 50 * m_X + 20);
+    qreal y = qSin(M_PI / 50 * m_X + m_shift);
     emit pointAdded(QPointF(m_X++, y));
 }

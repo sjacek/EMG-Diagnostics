@@ -29,32 +29,74 @@
 
 #include "uecgplugin.h"
 
+#include "sineseries.h"
 #include "uecgseries.h"
 #include <uecg.h>
+#include "uecgthread.h"
 
 UecgPlugin::UecgPlugin(QObject* parent)
     : Plugin(parent)
+    , uecgEnumerator(this)
 {
 }
 
 void UecgPlugin::init(int cols)
 {
     initDevice();
-    initSeries(cols);
+    m_cols = cols;
+    initSeries();
 }
 
 void UecgPlugin::initDevice()
 {
     serial_functions_init();
     serial_main_init();
+
+    const QList<QextPortInfo>& ports = QextSerialEnumerator::getPorts();
+    for(const QextPortInfo& port : ports)
+    {
+        if ((port.vendorID == UecgEnumerator::VENDOR_SILICON_LABS) &&
+            (port.productID == UecgEnumerator::PRODUCT_CP210X_UART_BRIDGE))
+        {
+            deviceDiscovered(port);
+        }
+    }
+
+    connect(&uecgEnumerator, &UecgEnumerator::deviceDiscovered, this, &UecgPlugin::deviceDiscovered);
+    connect(&uecgEnumerator, &UecgEnumerator::deviceRemoved, this, &UecgPlugin::deviceRemoved);
 }
 
-void UecgPlugin::initSeries(int cols)
+void UecgPlugin::deviceDiscovered(const QextPortInfo& port)
 {
-    const QString seriesName = "uecg0";
+    qCDebug(cat) << "******************** deviceDiscovered:"
+                 << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                 << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+    threadMap.insert(port.portName, new UecgThread(this, port.portName));
 
-    UecgSeries* series = new UecgSeries(this, seriesName);
-    series->setCols(cols);
+//    {
+//        const QString seriesName = QString("uecg%0").arg(getSeriesCounter());
+
+//        UecgSeries* series = new UecgSeries(this, seriesName);
+//        series->setCols(m_cols);
+//        m_series.append(series);
+//        emit seriesCreated(seriesName, series);
+//    }
+}
+
+void UecgPlugin::deviceRemoved(const QextPortInfo& port)
+{
+    qCDebug(cat) << "******************** deviceRemoved:"
+                 << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
+                 << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
+//    threadMap.insert(port.portName, new UecgThread(this, port.portName));
+}
+
+void UecgPlugin::initSeries()
+{
+    const QString seriesName = QString("uecg%0").arg(getSeriesCounter());
+
+    SineSeries* series = new SineSeries(this, seriesName);
+    series->setCols(m_cols);
     m_series.append(series);
     emit seriesCreated(seriesName, series);
 }

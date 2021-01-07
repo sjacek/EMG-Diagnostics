@@ -50,9 +50,20 @@ public:
     virtual void setSeriesName(QString name) { this->name = name; }
     virtual QString getName() const { return name; }
 
+    static int calculateAxisXMin()
+    {
+        QMutexLocker lock(&m_mutexStartTime);
+        return m_startTime.msecsTo(QTime::currentTime()) / STROKE_X;
+    }
+
+    static const int STROKE_X = 10;
+
 private:
     QString name;
     int cols;
+
+    static inline QMutex m_mutexStartTime;
+    static inline QTime m_startTime = QTime::currentTime();
 
 signals:
     void colsChanged();

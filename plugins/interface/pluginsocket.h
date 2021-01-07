@@ -34,9 +34,9 @@
 #include "plugin_global.h"
 
 QT_BEGIN_NAMESPACE
-class Plugin;
 class QDir;
 QT_END_NAMESPACE
+class Plugin;
 
 class INTERFACEPLUGINSHARED_EXPORT PluginSocket : public QObject, public Singleton<PluginSocket>
 {
