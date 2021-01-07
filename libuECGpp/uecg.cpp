@@ -1,5 +1,5 @@
 #include "uecg.h"
 
-Uecg::Uecg()
+UartPort::UartPort()
 {
 }

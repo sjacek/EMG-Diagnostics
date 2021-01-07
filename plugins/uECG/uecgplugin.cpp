@@ -55,7 +55,8 @@ void UecgPlugin::initDevice()
     const QList<QextPortInfo>& ports = QextSerialEnumerator::getPorts();
     for(const QextPortInfo& port : ports)
     {
-        if ((port.productID == UecgEnumerator::PRODUCT_ID) && (port.vendorID == UecgEnumerator::VENDOR_ID))
+        if ((port.vendorID == UecgEnumerator::VENDOR_SILICON_LABS) &&
+            (port.productID == UecgEnumerator::PRODUCT_CP210X_UART_BRIDGE))
         {
             deviceDiscovered(port);
         }

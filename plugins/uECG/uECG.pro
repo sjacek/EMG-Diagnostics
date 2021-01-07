@@ -46,9 +46,6 @@ DEPENDPATH += $$TOP_SRCDIR/libuECG
 
 LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME} -luECG
 
-#CONFIG += qesp_linux_udev
-#include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)
-
 unix {
     target.path = /usr/lib
     INSTALLS += target

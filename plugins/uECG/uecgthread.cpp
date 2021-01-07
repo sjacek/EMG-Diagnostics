@@ -50,12 +50,12 @@ void UecgThread::init()
 
     m_X = DataSeries::calculateAxisXMin();
 
-    if (!isRunning()) {
-        start(LowPriority);
-    } else {
-        m_Restart = true;
-        m_Condition.wakeOne();
-    }
+//    if (!isRunning()) {
+//        start(LowPriority);
+//    } else {
+//        m_Restart = true;
+//        m_Condition.wakeOne();
+//    }
 }
 
 void UecgThread::run()

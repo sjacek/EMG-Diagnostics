@@ -30,7 +30,7 @@
 #ifndef UECGTHREAD_H
 #define UECGTHREAD_H
 
-#include <quecg.h>
+#include <uartport.h>
 
 class UecgThread : public QThread
 {
@@ -44,7 +44,7 @@ protected:
     void run() override;
 
 private:
-    Uecg uecg;
+    UartPort uecg;
 
     QMutex m_Mutex;
     QWaitCondition m_Condition;

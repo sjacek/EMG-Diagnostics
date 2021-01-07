@@ -8,8 +8,9 @@ class UecgEnumerator : public QObject
 public:
     explicit UecgEnumerator(QObject* parent = nullptr);
 
-    static const int PRODUCT_ID = 0xea60;
-    static const int VENDOR_ID = 0x10c4;
+    static const int VENDOR_SILICON_LABS = 0x10c4;
+
+    static const int PRODUCT_CP210X_UART_BRIDGE = 0xea60;
 
 private:
     QextSerialEnumerator serialEnumerator;

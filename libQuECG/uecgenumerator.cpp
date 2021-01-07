@@ -11,7 +11,7 @@ UecgEnumerator::UecgEnumerator(QObject *parent)
                      << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
                      << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
 
-        if ((port.productID == PRODUCT_ID) && (port.vendorID == VENDOR_ID))
+        if ((port.productID == PRODUCT_CP210X_UART_BRIDGE) && (port.vendorID == VENDOR_SILICON_LABS))
             emit deviceDiscovered(port);
     });
     connect(&serialEnumerator, &QextSerialEnumerator::deviceRemoved,  [=](const QextPortInfo& port)
@@ -19,7 +19,7 @@ UecgEnumerator::UecgEnumerator(QObject *parent)
         qCDebug(cat) << "******************** deviceRemoved:"
                      << "enumName" << port.enumName << "friendName" << port.friendName << "physName" << port.physName
                      << "portName" << port.portName << "productID" << port.productID << "vendorID" << port.vendorID;
-        if ((port.productID == PRODUCT_ID) && (port.vendorID == VENDOR_ID))
+        if ((port.productID == PRODUCT_CP210X_UART_BRIDGE) && (port.vendorID == VENDOR_SILICON_LABS))
             emit deviceRemoved(port);
     });
 }

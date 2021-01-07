@@ -7,7 +7,7 @@ QT -= gui
 TEMPLATE = lib
 DEFINES += LIBQUECG_LIBRARY
 
-CONFIG += c++17 rtti precompile_header
+CONFIG += c++17 rtti precompile_header extserialport
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -17,21 +17,21 @@ PRECOMPILED_HEADER = pch_libquecg.h
 
 SOURCES += \
     ecgdata.cpp \
-    quecg.cpp \
+    uartport.cpp \
     uecgenumerator.cpp
 
 HEADERS += \
     ecgdata.h \
     libquecg_global.h \
-    quecg.h \
+    uartport.h \
     uecgenumerator.h
 
 OTHER_FILES += \
     libQuECG.pri
 
-INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-LIBS += -L$$LIB_DESTDIR -lQt5ExtSerialPort
+#INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
+#DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
+#LIBS += -L$$LIB_DESTDIR -lQt5ExtSerialPort
 
 #CONFIG += qesp_linux_udev
 #include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)

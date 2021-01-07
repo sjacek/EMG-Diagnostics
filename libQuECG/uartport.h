@@ -27,26 +27,22 @@
  **
  ****************************************************************************/
 
-#ifndef QUECG_H
-#define QUECG_H
+#ifndef UARTPORT_H
+#define UARTPORT_H
 
 #include "libquecg_global.h"
 #include "ecgdata.h"
 
-class LIBQUECG_EXPORT Uecg : public QObject
+class LIBQUECG_EXPORT UartPort : public QextSerialPort
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    Uecg(QObject* parent, const QString& device);
+    UartPort(QObject* parent, const QString& device);
 
     void openDevice(const QString& device);
 
     void serial_main_loop();
-
-private:
-    QextSerialPort serialPort;
-    const static inline PortSettings settings = { BAUD9600, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10 };
 
 private slots:
     void onReadyRead();
@@ -101,4 +97,4 @@ private:
 
 };
 
-#endif // QUECG_H
+#endif // UARTPORT_H

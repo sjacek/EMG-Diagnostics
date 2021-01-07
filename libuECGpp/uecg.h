@@ -3,10 +3,10 @@
 
 #include "libuECGpp_global.h"
 
-class LIBUECGPP_EXPORT Uecg
+class LIBUECGPP_EXPORT UartPort
 {
 public:
-    Uecg();
+    UartPort();
 };
 
 #endif // UECG_H

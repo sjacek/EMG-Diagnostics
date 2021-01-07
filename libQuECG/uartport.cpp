@@ -27,42 +27,48 @@
  **
  ****************************************************************************/
 
-#include "quecg.h"
+#include "uartport.h"
 
-Uecg::Uecg(QObject* parent, const QString& device)
-    : QObject(parent)
-    , serialPort(device, settings)
+UartPort::UartPort(QObject* parent, const QString& device)
+    : QextSerialPort(device,
+                     { BAUD921600 /*BAUD1152000*/, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10 },
+                     EventDriven, parent)
 {
-    serial_main_init();
-    openDevice(device);
+//    serial_main_init();
+//    openDevice(device);
 
-    connect(&serialPort, &QextSerialPort::readyRead, [=]() {
-        QByteArray data = serialPort.readAll();
-        qCDebug(cat) << data.length();
-        for (int i(0); i < data.length(); i++)
-            qCDebug(cat) << i << ":" << (int)data[i];
-    });
-    serialPort.open(QIODevice::ReadWrite);
+    connect(this, &QextSerialPort::readyRead, this, &UartPort::onReadyRead);
+
+    open(ReadWrite);
 }
 
-void Uecg::onReadyRead()
+void UartPort::onReadyRead()
 {
-    QByteArray data = serialPort.readAll();
-    qCDebug(cat) << data;
+    const QByteArray& data = readAll();
+
+    qCDebug(cat) << data.length() << ":" << data.toHex();
+
+    if ((data[0] == (char)0x4f) && (data[1] == (char)0xd5)) {
+        qCDebug(cat()) << "OK";
+
+    }
+    else
+    {
+        qCWarning(cat) << "Bad data";
+    }
 }
 
-
-void Uecg::serial_main_init()
+void UartPort::serial_main_init()
 {
     gettimeofday(&prevTime, NULL);
     gettimeofday(&zeroTime, NULL);
 }
 
-void Uecg::openDevice(const QString& deviceName)
+void UartPort::openDevice(const QString& deviceName)
 {
 //	uint8_t *dev = gtk_entry_get_text(GTK_ENTRY(serial_entry_device));
     struct termios newtio;
-    device = open(deviceName.toStdString().c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+    device = ::open(deviceName.toStdString().c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
     bzero(&newtio, sizeof(newtio));
 
     newtio.c_cflag = baudrate | CS8 | CLOCAL | CREAD;
@@ -85,7 +91,7 @@ void Uecg::openDevice(const QString& deviceName)
 
 
 //decode 8-bit acceleration value: we need more precision around 0 and less at high g
-float Uecg::decode_acc(float acc)
+float UartPort::decode_acc(float acc)
 {
     float vv = acc - 128.0;
     int vm = vv;
@@ -105,7 +111,7 @@ float Uecg::decode_acc(float acc)
     return res;
 }
 
-void Uecg::device_parse_response(uint8_t *buf, int len)
+void UartPort::device_parse_response(uint8_t *buf, int len)
 //we should be prepared that bytestream has missed bytes - it happens too often to ignore,
 //so each data transfer from base starts with 2 fixed prefix bytes. But it could happen that
 //actual data contents occasionally matches these prefix bytes, so we can't just treat them
@@ -131,11 +137,11 @@ void Uecg::device_parse_response(uint8_t *buf, int len)
 //	}
 
     // SPARE begin
-    time_t rawtime;
-    struct tm* curTm = localtime(&rawtime);
-    qCDebug(cat, "emg_log_y%d_m%d_d%d_h%d_m%d_s%d.txt",
-            2000 + curTm->tm_year - 100,
-            curTm->tm_mon, curTm->tm_mday, curTm->tm_hour, curTm->tm_min, curTm->tm_sec);
+//    time_t rawtime;
+//    struct tm* curTm = localtime(&rawtime);
+//    qCDebug(cat, "emg_log_y%d_m%d_d%d_h%d_m%d_s%d.txt",
+//            2000 + curTm->tm_year - 100,
+//            curTm->tm_mon, curTm->tm_mday, curTm->tm_hour, curTm->tm_min, curTm->tm_sec);
     // SPARE end
 /*	if(!save_turned_on && save_file > 0) //if saving was just disabled - close files
     {
@@ -347,55 +353,13 @@ void Uecg::device_parse_response(uint8_t *buf, int len)
 //	printf("processed to %d, new buf end %d\n", processed_pos, response_pos);
 }
 
-void Uecg::serial_main_loop()
+void UartPort::serial_main_loop()
 {
-    // UI begin
-//	draw_loop();
-    // UI end
-//	if(!main_inited)
-//	{
-//		serial_main_init();
-//		main_inited = 1;
-//	}
     gettimeofday(&curTime, NULL);
     int dT = (curTime.tv_sec - prevTime.tv_sec) * 1000000 + (curTime.tv_usec - prevTime.tv_usec);
     real_time += (double)dT * 0.000001;
 
     prevTime = curTime;
-
-    // SPARE begin
-//    char rss[32];
-//    sprintf(rss, "RSSI %.1f", device_get_rssi());
-//    fprintf(stderr, "%s\n", rss);
-    // SPARE end
-//	sprintf(rss, "RSSI %.1f", 78.0);
-    // UI begin
-//	gtk_label_set_text(lb_rssi, rss);
-    // UI end
-
-    // SPARE begin
-//	sprintf(rss, "%.2fv %g %g %g %d", device_get_battery(), device_get_ax(), device_get_ay(), device_get_az(), device_get_steps());
-//    fprintf(stderr, "%s\n", rss);
-//    sprintf(rss, "batt %.2fv", 3.84);
-//    fprintf(stderr, "%s\n", rss);
-    // SPARE end
-    // UI begin
-//	gtk_label_set_text(lb_batt, rss);
-    // UI end
-//	PangoAttrList *attrs = pango_attr_list_new();
-//	PangoAttribute atrb;
-//	atrb.klass = ;
-//	pango_attr_list_insert(attrs, atrb);
-//	pango_attr_list_unref(attrs);
-
-    // SPARE begin
-//	sprintf(rss, "BPM %d SGR %d", device_get_bpm(), device_get_skin_res());
-//  sprintf(rss, "BPM %d", 68);
-    // SPARE end
-
-    // UI begin
-//	gtk_label_set_text(lb_heart_rate, rss);
-    // UI end
 
     if(device > 0)
     {
@@ -416,35 +380,15 @@ void Uecg::serial_main_loop()
 //            qCDebug(cat) << "poll_ret:" << poll_ret;
             int lng = 0;
             uint8_t bbf[4096];
-            uint8_t hex_bbf[16384];
-            lng = read(device, bbf, 4096);
+            lng = ::read(device, bbf, 4096);
             if(lng > 0)
             {
-                device_parse_response(bbf, lng);
-                char *htext = (char*)hex_bbf;
-                int htext_pos = 0;
-                for(int p = 0; p < lng; p++)
+                qCDebug(cat) << lng;
+                for (int i(0); i < lng; i++)
                 {
-                    htext_pos += sprintf(htext+htext_pos, "%02X ", bbf[p]);
-                    hex_mode_pos++;
-                    if(hex_mode_pos == 8 || hex_mode_pos == 24)
-                        htext_pos += sprintf(htext+htext_pos, " ");
-                    if(hex_mode_pos == 16)
-                        htext_pos += sprintf(htext+htext_pos, "   ");
-                    if(hex_mode_pos == 32)
-                    {
-                        htext_pos += sprintf(htext+htext_pos, "\n");
-                        hex_mode_pos = 0;
-                    }
+                    qCDebug(cat) << i << ":" << Qt::hex << (int)bbf[i];
                 }
-/*				add_buf_to_main_serial_log(htext, htext_pos);
-                added_lines_count++;
-                if(added_lines_count > 10000)
-                {
-                    clear_serial_log();
-                    added_lines_count = 0;
-                }*/
-//				add_buf_to_main_serial_log(bbf, lng);
+                device_parse_response(bbf, lng);
             }
         }
     }
