@@ -41,6 +41,7 @@ UecgThread::UecgThread(QObject* parent, const QString& device)
 
 UecgThread::~UecgThread()
 {
+    qCDebug(cat) << "delete";
     m_Abort = true;
 }
 

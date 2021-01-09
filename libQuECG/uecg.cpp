@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,21 +27,37 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_LIBQUECG_H
-#define PCH_LIBQUECG_H
+#include "uecg.h"
 
-#include <QtCore/qglobal.h>
-#include <QtCore/QObject>
-#include <QtCore/QLoggingCategory>
-#include <QtCore/QDateTime>
+//Uecg::Uecg(Uecg& uecg)
+//    : QObject(uecg.parent())
+//    , m_deviceId(uecg.m_deviceId)
+//    , m_lastSeen(uecg.m_lastSeen)
+//    , m_ecgLog(uecg.m_ecgLog)
+//{}
 
-#include "qextserialenumerator.h"
-#include "qextserialport.h"
+Uecg::Uecg(quint32 deviceId, QObject *parent)
+    : QObject(parent)
+    , m_deviceId(deviceId)
+{}
 
-#include <fcntl.h>
-#include <poll.h>
-#include <time.h>
-#include <sys/time.h>
-#include <unistd.h>
+Uecg::~Uecg()
+{
+    qCDebug(cat) << "delete: device id:" << m_deviceId;
+}
 
-#endif // PCH_LIBQUECG_H
+//Uecg& Uecg::operator = (const Uecg& uecg)
+//{
+//    m_deviceId = uecg.deviceId();
+//    m_lastSeen = uecg.m_lastSeen;
+//    m_ecgLog = uecg.m_ecgLog;
+//    return *this;
+//}
+
+void Uecg::process(const QByteArray& data)
+{
+    const EcgData& ecg = EcgData::fromByteArray(data);
+    qCDebug(cat) << ecg;
+
+    m_lastSeen = QDateTime::currentDateTime();
+}

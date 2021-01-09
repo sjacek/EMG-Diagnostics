@@ -51,6 +51,12 @@ void UartPort::onReadyRead()
     if ((data[0] == (char)0x4f) && (data[1] == (char)0xd5)) {
         qCDebug(cat()) << "OK";
 
+        quint32 device_id = (data[5] << 24) | (data[6] << 16) | (data[7] << 8) | data[8];
+
+        if (!m_mapUecg.contains(device_id))
+            m_mapUecg.insert(device_id, new Uecg(device_id));
+
+        m_mapUecg[device_id]->process(data);
     }
     else
     {

@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -30,12 +30,41 @@
 #ifndef ECGDATA_H
 #define ECGDATA_H
 
-#include <QtCore/qglobal.h>
-
-class EcgData
+class EcgData : public QObject
 {
+    Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    EcgData();
+    static EcgData fromByteArray(const QByteArray& data, QObject *parent = nullptr);
+
+    const QByteArray& getData() const     { return data; }
+    qint8 getRssi() const                 { return rssi; }
+    qint8 getPacketId() const             { return packetId; }
+    qint8 getMessageLength() const        { return messageLength; }
+    qint32 getDeviceId() const            { return deviceId; }
+
+signals:
+
+private:
+    explicit EcgData(QObject *parent = nullptr);
+
+    EcgData(const EcgData& ecg);
+
+    QByteArray data;
+    qint8 rssi;
+    qint8 packetId;
+    qint8 messageLength;
+    qint32 deviceId;
+
 };
+
+inline QDebug operator<< (QDebug debug, const EcgData& ecg)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "data:" << ecg.getData();
+    debug.nospace() << "rssi:" << ecg.getRssi() << "packet_id" << ecg.getDeviceId() << "message length:" << ecg.getMessageLength() << "device id:" << ecg.getDeviceId();
+
+    return debug;
+}
 
 #endif // ECGDATA_H
