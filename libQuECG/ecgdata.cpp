@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,38 +27,33 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#include "ecgdata.h"
 
-class RenderThread : public QThread
+//EcgData::EcgData(QObject *parent)
+//    : QObject(parent)
+//{
+//}
+
+EcgData::EcgData(const EcgData& ecg)
+    : QObject(ecg.parent())
+    , data(ecg.data)
+    , rssi(ecg.rssi)
+    , packetId(ecg.packetId)
+    , messageLength(ecg.messageLength)
+    , deviceId(ecg.deviceId)
 {
-    Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
-public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+}
 
-    void render();
+EcgData EcgData::fromByteArray(const QByteArray& data, QObject *parent)
+{
+    EcgData ret(parent);
+    ret.data = data;
 
-    void setShift(unsigned int shift);
+    ret.rssi = data[2];
+    ret.packetId = data[3];
+    ret.messageLength = data[4];
+    ret.deviceId = (data[5] << 24) | (data[6] << 16) | (data[7] << 8) | data[8];
 
-protected:
-    void run() override;
+    return ret;
+}
 
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
-
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
-};
-
-#endif // RENDERTHREAD_H

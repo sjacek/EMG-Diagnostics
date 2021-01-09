@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,38 +27,44 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef ECGDATA_H
+#define ECGDATA_H
 
-class RenderThread : public QThread
+class EcgData : public QObject
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+    static EcgData fromByteArray(const QByteArray& data, QObject *parent = nullptr);
 
-    void render();
-
-    void setShift(unsigned int shift);
-
-protected:
-    void run() override;
-
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
-
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
+    const QByteArray& getData() const     { return data; }
+    qint8 getRssi() const                 { return rssi; }
+    qint8 getPacketId() const             { return packetId; }
+    qint8 getMessageLength() const        { return messageLength; }
+    qint32 getDeviceId() const            { return deviceId; }
 
 signals:
-    void pointAdded(QPointF point);
+
+private:
+    explicit EcgData(QObject *parent = nullptr);
+
+    EcgData(const EcgData& ecg);
+
+    QByteArray data;
+    qint8 rssi;
+    qint8 packetId;
+    qint8 messageLength;
+    qint32 deviceId;
+
 };
 
-#endif // RENDERTHREAD_H
+inline QDebug operator<< (QDebug debug, const EcgData& ecg)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "data:" << ecg.getData();
+    debug.nospace() << "rssi:" << ecg.getRssi() << "packet_id" << ecg.getDeviceId() << "message length:" << ecg.getMessageLength() << "device id:" << ecg.getDeviceId();
+
+    return debug;
+}
+
+#endif // ECGDATA_H

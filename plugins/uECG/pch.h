@@ -45,5 +45,6 @@ QT_CHARTS_USE_NAMESPACE
 using namespace std::chrono;
 
 #include "pch_interface.h"
+#include "pch_libquecg.h"
 
 #endif // PCH_H

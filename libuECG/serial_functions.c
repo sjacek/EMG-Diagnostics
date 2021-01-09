@@ -10,12 +10,9 @@
 #include <sys/ioctl.h>
 #include <linux/serial.h>
 //#include <asm/ioctls.h>
-#include <strings.h>
 #include <stdio.h>
-#include <unistd.h>
 
 //#include "drawing.h"
-
 #include "definitions.h"
 
 struct timeval curTime, prevTime, zeroTime;
@@ -23,7 +20,7 @@ int device = 0;
 double real_time = 0;
 speed_t baudrate;
 
-const char* DEVICE_NAME = "/dev/ttyUSB0";
+//const char* DEVICE_NAME = "/dev/ttyUSB0";
 
 void serial_functions_init()
 {
@@ -31,16 +28,14 @@ void serial_functions_init()
 //	baudrate = B230400;
 }
 
-void open_device()
+void open_device(const char* deviceName)
 {
     // UI begin
 //	uint8_t *dev = gtk_entry_get_text(GTK_ENTRY(serial_entry_device));
     // UI end
 	struct termios newtio;
-//	device = open(dev, O_RDWR | O_NOCTTY | O_NDELAY);
-    // TODO: parametrize device name
-    device = open(DEVICE_NAME, O_RDWR | O_NOCTTY | O_NDELAY);
-    bzero(&newtio, sizeof(newtio));
+    device = open(deviceName, O_RDWR | O_NOCTTY | O_NDELAY);
+	bzero(&newtio, sizeof(newtio));
 
 	newtio.c_cflag = baudrate | CS8 | CLOCAL | CREAD;
 	newtio.c_iflag = 0;//IGNPAR;
@@ -52,10 +47,10 @@ void open_device()
 
 	tcflush(device, TCIOFLUSH);
 	tcsetattr(device, TCSANOW, &newtio);
-	char txt[128];
-	sprintf(txt, "device port open result: %d\n", device);
-	printf("%s", txt);
     // UI begin
+//	char txt[128];
+//    sprintf(txt, "device port open result: %d\n", device);
+//	printf("%s", txt);
 //	add_text_to_main_serial_log(txt);
     // UI end
 }
@@ -302,12 +297,13 @@ void serial_main_init()
 }
 int hex_mode_pos = 0;
 int added_lines_count = 0;
+
 int serial_main_loop()
 {
     // UI begin
 //	draw_loop();
     // UI end
-    if(!main_inited)
+	if(!main_inited)
 	{
 		serial_main_init();
 		main_inited = 1;
@@ -318,15 +314,18 @@ int serial_main_loop()
 
 	prevTime = curTime;
 	
-	char rss[32];
+    char rss[32];
 	sprintf(rss, "RSSI %.1f", device_get_rssi());
+    fprintf(stderr, "%s\n", rss);
 //	sprintf(rss, "RSSI %.1f", 78.0);
     // UI begin
 //	gtk_label_set_text(lb_rssi, rss);
     // UI end
  
 	sprintf(rss, "%.2fv %g %g %g %d", device_get_battery(), device_get_ax(), device_get_ay(), device_get_az(), device_get_steps());
-//	sprintf(rss, "batt %.2fv", 3.84);
+    fprintf(stderr, "%s\n", rss);
+    sprintf(rss, "batt %.2fv", 3.84);
+    fprintf(stderr, "%s\n", rss);
     // UI begin
 //	gtk_label_set_text(lb_batt, rss);
     // UI end
@@ -337,7 +336,9 @@ int serial_main_loop()
 //	pango_attr_list_unref(attrs);
 	
 	sprintf(rss, "BPM %d SGR %d", device_get_bpm(), device_get_skin_res());
-//	sprintf(rss, "BPM %d", 68);
+    fprintf(stderr, "%s\n", rss);
+    sprintf(rss, "BPM %d", 68);
+    fprintf(stderr, "%s\n", rss);
     // UI begin
 //	gtk_label_set_text(lb_heart_rate, rss);
     // UI end

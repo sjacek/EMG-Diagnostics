@@ -31,6 +31,8 @@
 #define UECGPLUGIN_H
 
 #include "plugin.h"
+#include "uecgenumerator.h"
+class UecgThread;
 
 class UecgPlugin : public Plugin
 {
@@ -44,11 +46,28 @@ public:
 
     void init(int cols) override;
 
+    static inline int getSeriesCounter()
+    {
+        QMutexLocker ml(&m_seriesCounterMutex);
+        return seriesCounter++;
+    }
+
 private:
+    static inline int seriesCounter = 0;
+    static inline QMutex m_seriesCounterMutex;
+
+    int m_cols = -1;
+
     QList<DataSeries*> m_series;
+    UecgEnumerator uecgEnumerator;
+    QMap<QString, UecgThread*> threadMap;
 
     void initDevice();
-    void initSeries(int cols);
+    void initSeries();
+
+private slots:
+    void deviceDiscovered(const QextPortInfo& port);
+    void deviceRemoved(const QextPortInfo& port);
 };
 
 #endif // UECGPLUGIN_H

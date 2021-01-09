@@ -44,6 +44,8 @@
 #include <QtQuick/QQuickView>
 #include <QtCharts/QXYSeries>
 
+#include <qqml.h>
+
 #include "pch_interface.h"
 
 #endif // PCH_H

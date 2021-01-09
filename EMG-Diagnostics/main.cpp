@@ -27,20 +27,20 @@
  **
  ****************************************************************************/
 
+#include "pch.h"
 #include "emgviewer.h"
-
-//Q_DECLARE_METATYPE(QAbstractSeries *)
-//Q_DECLARE_METATYPE(QAbstractAxis *)
+#include "datasource.h"
 
 int main(int argc, char *argv[])
 {
 //    qSetMessagePattern("[%{time yyyyMMdd h:mm:ss.zzz t} %{if-debug}Debug%{endif}%{if-info}Info%{endif}%{if-warning}Warning%{endif}%{if-critical}Critical%{endif}%{if-fatal}Fatal%{endif}] %{file}:%{line} - %{message}");
     qSetMessagePattern("[%{time yyyyMMdd h:mm:ss.zzz t} %{type}] %{category}::%{function}:%{line} - %{message}");
 
-//    qRegisterMetaType<QAbstractSeries*>();
-//    qRegisterMetaType<QAbstractAxis*>();
-
     QApplication app(argc, argv);
+
+    // alternative to non-working declaration in the .pro file
+    qmlRegisterSingletonInstance("com.github.sjacek.emgdiagnostics", 1, 0, "DataSource", &DataSource::instance());
+
 
     EmgViewer viewer;
     viewer.show();

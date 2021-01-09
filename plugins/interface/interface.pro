@@ -1,16 +1,12 @@
 QMAKE_PROJECT_NAME = interface
 
-# Check if the config file exists
-! include( ../plugins.pri ) {
-    error( "Couldn't find the plugins.pri file!" )
-}
-
 QT -= gui
 
 TARGET  = $${INTERFACE_LIB_NAME}
 #TARGET  = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
 
 TEMPLATE = lib
+CONFIG += rtti c++17 precompile_header
 
 DEFINES += INTERFACEPLUGIN_LIBRARY
 
@@ -25,7 +21,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-# overwritten common.pri
 PRECOMPILED_HEADER = \
     pch_interface.h
 
@@ -40,11 +35,13 @@ HEADERS += \
         pluginsocket.h \
         dataseries.h
 
+OTHER_FILES += \
+    interface.pri
+
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
 
-DESTDIR = $${LIB_DIR}
+DESTDIR = $${LIB_DESTDIR}
 
-CONFIG += install_ok  # Do not cargo-cult this!

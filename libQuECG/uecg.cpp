@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,38 +27,37 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#include "uecg.h"
 
-class RenderThread : public QThread
+//Uecg::Uecg(Uecg& uecg)
+//    : QObject(uecg.parent())
+//    , m_deviceId(uecg.m_deviceId)
+//    , m_lastSeen(uecg.m_lastSeen)
+//    , m_ecgLog(uecg.m_ecgLog)
+//{}
+
+Uecg::Uecg(quint32 deviceId, QObject *parent)
+    : QObject(parent)
+    , m_deviceId(deviceId)
+{}
+
+Uecg::~Uecg()
 {
-    Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
-public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+    qCDebug(cat) << "delete: device id:" << m_deviceId;
+}
 
-    void render();
+//Uecg& Uecg::operator = (const Uecg& uecg)
+//{
+//    m_deviceId = uecg.deviceId();
+//    m_lastSeen = uecg.m_lastSeen;
+//    m_ecgLog = uecg.m_ecgLog;
+//    return *this;
+//}
 
-    void setShift(unsigned int shift);
+void Uecg::process(const QByteArray& data)
+{
+    const EcgData& ecg = EcgData::fromByteArray(data);
+    qCDebug(cat) << ecg;
 
-protected:
-    void run() override;
-
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
-
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
-};
-
-#endif // RENDERTHREAD_H
+    m_lastSeen = QDateTime::currentDateTime();
+}

@@ -45,5 +45,6 @@ UecgSeries::~UecgSeries()
 
 void UecgSeries::init()
 {
+    m_Thread.setShift(40);
     m_Thread.render();
 }

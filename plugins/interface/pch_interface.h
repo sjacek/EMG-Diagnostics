@@ -37,6 +37,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QtGlobal>
 #include <QtCore/QLoggingCategory>
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
 #include <QtCore/QObject>
 #include <QtCore/QPluginLoader>
 

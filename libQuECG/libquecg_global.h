@@ -27,38 +27,13 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef LIBQUECG_GLOBAL_H
+#define LIBQUECG_GLOBAL_H
 
-class RenderThread : public QThread
-{
-    Q_OBJECT
-    Q_LOGGING_CATEGORY(cat, typeid(this).name())
-public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+#if defined(LIBQUECG_LIBRARY)
+#  define LIBQUECG_EXPORT Q_DECL_EXPORT
+#else
+#  define LIBQUECG_EXPORT Q_DECL_IMPORT
+#endif
 
-    void render();
-
-    void setShift(unsigned int shift);
-
-protected:
-    void run() override;
-
-private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
-
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
-
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
-
-signals:
-    void pointAdded(QPointF point);
-};
-
-#endif // RENDERTHREAD_H
+#endif // LIBQUECG_GLOBAL_H

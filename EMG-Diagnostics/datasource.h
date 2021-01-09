@@ -30,16 +30,18 @@
 #ifndef DATASOURCE_H
 #define DATASOURCE_H
 
-QT_CHARTS_USE_NAMESPACE
+#include <singleton.h>
 
 class DataSeries;
 
-class DataSource : public QObject
+class DataSource : public QObject, public Singleton<DataSource>
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
+    QML_ELEMENT
+//    QML_SINGLETON
 public:
-    explicit DataSource(QObject* parent);
+    explicit DataSource(QObject* parent = nullptr);
 
     Q_INVOKABLE int count() { return m_dataSeries.count(); }
 

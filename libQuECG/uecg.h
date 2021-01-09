@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,38 +27,39 @@
  **
  ****************************************************************************/
 
-#ifndef RENDERTHREAD_H
-#define RENDERTHREAD_H
+#ifndef UECG_H
+#define UECG_H
 
-class RenderThread : public QThread
+#include "ecgdata.h"
+
+class Uecg : public QObject
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    RenderThread(QObject* parent = nullptr);
-    ~RenderThread();
+//    explicit Uecg(QObject *parent = nullptr) : QObject(parent) {};
 
-    void render();
+//    Uecg(Uecg& uecg);
 
-    void setShift(unsigned int shift);
+    explicit Uecg(quint32 deviceId, QObject *parent = nullptr);
 
-protected:
-    void run() override;
+    ~Uecg();
+
+//    Uecg& operator = (const Uecg& uecg);
+
+    quint32 deviceId() const { return m_deviceId; }
+
+    void process(const QByteArray& data);
 
 private:
-    QMutex m_Mutex;
-    QWaitCondition m_Condition;
+    quint32 m_deviceId;
 
-    unsigned int m_X = 0;
-    unsigned int m_shift = 0;
+    QDateTime m_lastSeen;
 
-    bool m_Abort = false;
-    bool m_Restart = false;
-
-    void drawChart();
+    QMap<QDateTime,EcgData> m_ecgLog;
 
 signals:
-    void pointAdded(QPointF point);
+
 };
 
-#endif // RENDERTHREAD_H
+#endif // UECG_H
