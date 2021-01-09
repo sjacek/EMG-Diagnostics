@@ -32,7 +32,19 @@ import QtCharts 2.15
 
 ChartView {
     id: chartView
-//    animationOptions: ChartView.NoAnimation
+
+    ValueAxis {
+        id: axisY
+        min: -1
+        max: 4
+    }
+
+    ValueAxis {
+        id: axisX
+        min: 0
+        max: 1024
+    }
+
     animationOptions: ChartView.SeriesAnimations
     theme: ChartView.ChartThemeDark
     property bool openGL: true
@@ -40,41 +52,38 @@ ChartView {
     onOpenGLChanged: {
 //        if (openGLSupported)
 //            for (var i = 0; i <= chartView.count; i++)
-//                dataSource.update(chartView.series(i));
+//                DataSource.update(chartView.series(i))
     }
     Component.onCompleted: {
-//        setupAllSeries("line")
+        DataSource.init(axisX.max)
     }
 
     Connections {
         target: dataSource
 
         function onPointAdded(seriesName, point) {
-//            console.log(seriesName, point.x, point.y)
+            if (chartView.count === 0) {
+                axisX.min += point.x
+                axisX.max += point.x
+            }
+
             var series = chartView.series(seriesName)
             if (series === null)
                 series = setupSeries(seriesName, "line")
 
             series.append(point.x, point.y)
+
+            var axis = chartView.axisX(series)
+//            console.debug("1: " + series.name + "; point.x:" + point.x + ": chartView.axisX:" + axis.min + "; " + axis.max)
+            if (point.x > axis.max) {
+                chartView.scrollRight(point.x - axis.max)
+//                console.debug("   2: " + series.name + ": chartView.axisX:" + axis.min + "; " + axis.max)
+//                var axisRange = axis.max - axis.min
+//                axis.applyNiceNumbers()
+//                axis.min = axis.max - axisRange
+            }
+
         }
-    }
-
-    ValueAxis {
-        id: axisY1
-        min: -1
-        max: 4
-    }
-
-    ValueAxis {
-        id: axisY2
-        min: -10
-        max: 5
-    }
-
-    ValueAxis {
-        id: axisX
-        min: 0
-        max: 1024
     }
 
     function setupAllSeries(type) {
@@ -91,38 +100,35 @@ ChartView {
         if (series !== null)
             chartView.removeSeries(series)
 
-        var seriesType;
+        var seriesType
         switch (type) {
         case "line":
-            seriesType = ChartView.SeriesTypeLine;
-            break;
+            seriesType = ChartView.SeriesTypeLine
+            break
         case "scatter":
-            seriesType = ChartView.SeriesTypeScatter;
-            break;
+            seriesType = ChartView.SeriesTypeScatter
+            break
         case "spline":
-            seriesType = ChartView.SeriesTypeSpline;
-            break;
+            seriesType = ChartView.SeriesTypeSpline
+            break
         }
 
-        series = chartView.createSeries(seriesType, name, axisX, axisY1);
+        series = chartView.createSeries(seriesType, name, axisX, axisY)
 
         series.useOpenGL = chartView.openGL
         if (type === "scatter") {
-            series.markerSize = 2;
-            series.borderColor = "transparent";
+            series.markerSize = 2
+            series.borderColor = "transparent"
         }
 
         return series
     }
 
     function changeRefreshRate(rate) {
-        refreshTimer.interval = 1 / Number(rate) * 1000;
+        refreshTimer.interval = 1 / Number(rate) * 1000
     }
 
-    Rectangle {
-        id: horizontalScrollMask
-        visible: false
-    }
+    property real oldMouseX
 
     MouseArea {
         id: chartMouseAreaA
@@ -131,13 +137,13 @@ ChartView {
 
         onMouseXChanged: {
             if ((mouse.buttons & Qt.LeftButton) == Qt.LeftButton) {
-                chartView.scrollLeft(mouseX - horizontalScrollMask.x);
-                horizontalScrollMask.x = mouseX;
+                chartView.scrollLeft(mouseX - oldMouseX)
+                oldMouseX = mouseX
             }
         }
         onPressed: {
             if (mouse.button == Qt.LeftButton) {
-                horizontalScrollMask.x = mouseX;
+                oldMouseX = mouseX
             }
         }
     }
