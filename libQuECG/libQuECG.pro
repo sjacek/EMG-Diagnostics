@@ -18,12 +18,14 @@ PRECOMPILED_HEADER = pch_libquecg.h
 SOURCES += \
     ecgdata.cpp \
     uartport.cpp \
+    uecg.cpp \
     uecgenumerator.cpp
 
 HEADERS += \
     ecgdata.h \
     libquecg_global.h \
     uartport.h \
+    uecg.h \
     uecgenumerator.h
 
 OTHER_FILES += \

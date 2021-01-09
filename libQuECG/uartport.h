@@ -31,7 +31,7 @@
 #define UARTPORT_H
 
 #include "libquecg_global.h"
-#include "ecgdata.h"
+#include "uecg.h"
 
 class LIBQUECG_EXPORT UartPort : public QextSerialPort
 {
@@ -93,8 +93,7 @@ private:
     void serial_main_init();
 
 private:
-    EcgData ecgData;
-
+    QMap<quint32, Uecg*> m_mapUecg;
 };
 
 #endif // UARTPORT_H

@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,21 +27,39 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_LIBQUECG_H
-#define PCH_LIBQUECG_H
+#ifndef UECG_H
+#define UECG_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/QObject>
-#include <QtCore/QLoggingCategory>
-#include <QtCore/QDateTime>
+#include "ecgdata.h"
 
-#include "qextserialenumerator.h"
-#include "qextserialport.h"
+class Uecg : public QObject
+{
+    Q_OBJECT
+    Q_LOGGING_CATEGORY(cat, typeid(this).name())
+public:
+//    explicit Uecg(QObject *parent = nullptr) : QObject(parent) {};
 
-#include <fcntl.h>
-#include <poll.h>
-#include <time.h>
-#include <sys/time.h>
-#include <unistd.h>
+//    Uecg(Uecg& uecg);
 
-#endif // PCH_LIBQUECG_H
+    explicit Uecg(quint32 deviceId, QObject *parent = nullptr);
+
+    ~Uecg();
+
+//    Uecg& operator = (const Uecg& uecg);
+
+    quint32 deviceId() const { return m_deviceId; }
+
+    void process(const QByteArray& data);
+
+private:
+    quint32 m_deviceId;
+
+    QDateTime m_lastSeen;
+
+    QMap<QDateTime,EcgData> m_ecgLog;
+
+signals:
+
+};
+
+#endif // UECG_H

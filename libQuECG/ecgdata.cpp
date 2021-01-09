@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -29,7 +29,31 @@
 
 #include "ecgdata.h"
 
-EcgData::EcgData()
-{
+//EcgData::EcgData(QObject *parent)
+//    : QObject(parent)
+//{
+//}
 
+EcgData::EcgData(const EcgData& ecg)
+    : QObject(ecg.parent())
+    , data(ecg.data)
+    , rssi(ecg.rssi)
+    , packetId(ecg.packetId)
+    , messageLength(ecg.messageLength)
+    , deviceId(ecg.deviceId)
+{
 }
+
+EcgData EcgData::fromByteArray(const QByteArray& data, QObject *parent)
+{
+    EcgData ret(parent);
+    ret.data = data;
+
+    ret.rssi = data[2];
+    ret.packetId = data[3];
+    ret.messageLength = data[4];
+    ret.deviceId = (data[5] << 24) | (data[6] << 16) | (data[7] << 8) | data[8];
+
+    return ret;
+}
+
