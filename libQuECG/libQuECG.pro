@@ -31,13 +31,6 @@ HEADERS += \
 OTHER_FILES += \
     libQuECG.pri
 
-#INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-#DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-#LIBS += -L$$LIB_DESTDIR -lQt5ExtSerialPort
-
-#CONFIG += qesp_linux_udev
-#include($$TOP_SRCDIR/3rdparty/qextserialport/src/qextserialport.pri)
-
 # Default rules for deployment.
 unix {
     target.path = /usr/lib

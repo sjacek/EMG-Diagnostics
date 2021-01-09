@@ -35,8 +35,8 @@
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QDateTime>
 
-#include "qextserialenumerator.h"
-#include "qextserialport.h"
+#include <QtExtSerialPort/qextserialenumerator.h>
+#include <QtExtSerialPort/qextserialport.h>
 
 #include <fcntl.h>
 #include <poll.h>
