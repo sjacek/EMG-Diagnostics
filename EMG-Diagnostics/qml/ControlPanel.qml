@@ -39,20 +39,6 @@ ColumnLayout {
     signal antialiasingEnabled(bool enabled)
     signal openGlChanged(bool enabled)
 
-    MultiButton {
-        text: qsTr("Graph: ")
-        items: [qsTr("line"), qsTr("scatter"), qsTr("spline")]
-        currentSelection: 0
-        onSelectionChanged: seriesTypeChanged(items[currentSelection]);
-    }
-
-    MultiButton {
-        text: qsTr("Refresh rate: ")
-        items: ["1", "24", "60"]
-        currentSelection: 2
-        onSelectionChanged: refreshRateChanged(items[currentSelection]);
-    }
-
     GridLayout {
         width: 100
         height: 100
@@ -60,6 +46,16 @@ ColumnLayout {
         Layout.fillWidth: true
         rows: 2
         columns: 2
+
+        Text {
+            text: qsTr("Graph")
+        }
+
+        ComboBox {
+            id: graph
+            model: [qsTr("line"), qsTr("scatter"), qsTr("spline")]
+            onActivated: seriesTypeChanged(currentValue)
+        }
 
         Text {
             text: qsTr("OpenGL")
