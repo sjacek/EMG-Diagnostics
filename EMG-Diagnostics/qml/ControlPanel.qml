@@ -29,6 +29,7 @@
 
 import QtQuick 2.1
 import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.15
 
 ColumnLayout {
     property alias openGLButton: openGLButton
@@ -41,48 +42,97 @@ ColumnLayout {
     signal antialiasingEnabled(bool enabled)
     signal openGlChanged(bool enabled)
 
-    Text {
-        text: "Scope"
-        font.pointSize: 18
-        color: "white"
-    }
-
     MultiButton {
         id: openGLButton
-        text: "OpenGL: "
-        items: ["false", "true"]
+        text: qsTr("OpenGL: ")
+        items: [qsTr("false"), qsTr("true")]
         currentSelection: 1
         onSelectionChanged: openGlChanged(currentSelection == 1);
     }
 
     MultiButton {
-        text: "Graph: "
-        items: ["line", "scatter", "spline"]
+        text: qsTr("Graph: ")
+        items: [qsTr("line"), qsTr("scatter"), qsTr("spline")]
         currentSelection: 0
         onSelectionChanged: seriesTypeChanged(items[currentSelection]);
     }
 
     MultiButton {
         id: sampleCountButton
-        text: "Samples: "
+        text: qsTr("Samples: ")
         items: ["6", "128", "1024", "10000"]
         currentSelection: 1
         onSelectionChanged: signalSourceChanged(selection);
     }
 
     MultiButton {
-        text: "Refresh rate: "
+        text: qsTr("Refresh rate: ")
         items: ["1", "24", "60"]
         currentSelection: 2
         onSelectionChanged: refreshRateChanged(items[currentSelection]);
     }
 
+    GridLayout {
+        id: gridLayout
+        width: 100
+        height: 100
+        Layout.fillHeight: false
+        Layout.fillWidth: true
+        rows: 2
+        columns: 2
+
+        Text {
+            id: text1
+            text: qsTr("Samples:")
+            font.pixelSize: 12
+            Layout.columnSpan: 2
+        }
+
+        Text {
+            id: textSamples
+            text: sliderSamples.value
+            font.pixelSize: 12
+            fontSizeMode: Text.FixedSize
+        }
+
+        Slider {
+            id: sliderSamples
+            height: 40
+            stepSize: 5
+            to: 10000
+            value: 6
+        }
+
+        Text {
+            id: text2
+            text: qsTr("Refresh rate:")
+            font.pixelSize: 12
+            Layout.columnSpan: 2
+        }
+
+        Text {
+            id: textRefreshRate
+            text: sliderRefreshRate.value
+            font.pixelSize: 12
+            fontSizeMode: Text.FixedSize
+        }
+
+        Slider {
+            id: sliderRefreshRate
+            height: 40
+            stepSize: 5
+            to: 60
+            value: 24
+        }
+    }
+
     MultiButton {
         id: antialiasButton
-        text: "Antialias: "
-        items: ["OFF", "ON"]
+        text: qsTr("Antialias: ")
+        items: [qsTr("OFF"), qsTr("ON")]
         enabled: true
         currentSelection: 0
         onSelectionChanged: antialiasingEnabled(currentSelection == 1);
     }
+
 }

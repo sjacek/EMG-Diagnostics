@@ -37,7 +37,7 @@ SOURCES += \
     emgviewer.cpp \
     main.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml/qml.qrc
 
 DISTFILES +=
 
