@@ -28,41 +28,22 @@
  ****************************************************************************/
 
 import QtQuick 2.1
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.15
 import QtQuick.Controls 2.15
 
 ColumnLayout {
-    property alias openGLButton: openGLButton
-    property alias antialiasButton: antialiasButton
     spacing: 8
     Layout.fillHeight: true
     signal seriesTypeChanged(string type)
     signal refreshRateChanged(variant rate);
-    signal signalSourceChanged(int sampleCount);
     signal antialiasingEnabled(bool enabled)
     signal openGlChanged(bool enabled)
-
-    MultiButton {
-        id: openGLButton
-        text: qsTr("OpenGL: ")
-        items: [qsTr("false"), qsTr("true")]
-        currentSelection: 1
-        onSelectionChanged: openGlChanged(currentSelection == 1);
-    }
 
     MultiButton {
         text: qsTr("Graph: ")
         items: [qsTr("line"), qsTr("scatter"), qsTr("spline")]
         currentSelection: 0
         onSelectionChanged: seriesTypeChanged(items[currentSelection]);
-    }
-
-    MultiButton {
-        id: sampleCountButton
-        text: qsTr("Samples: ")
-        items: ["6", "128", "1024", "10000"]
-        currentSelection: 1
-        onSelectionChanged: signalSourceChanged(selection);
     }
 
     MultiButton {
@@ -73,7 +54,6 @@ ColumnLayout {
     }
 
     GridLayout {
-        id: gridLayout
         width: 100
         height: 100
         Layout.fillHeight: false
@@ -82,57 +62,43 @@ ColumnLayout {
         columns: 2
 
         Text {
-            id: text1
-            text: qsTr("Samples:")
-            font.pixelSize: 12
+            text: qsTr("OpenGL")
+        }
+
+        Switch {
+            id: openGLSwitch
+            checked: true
+            onToggled: openGlChanged(checked)
+        }
+
+        Text {
+            text: qsTr("Refresh rate")
             Layout.columnSpan: 2
         }
 
         Text {
-            id: textSamples
-            text: sliderSamples.value
-            font.pixelSize: 12
+            text: refreshRateSlider.value
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             fontSizeMode: Text.FixedSize
         }
 
         Slider {
-            id: sliderSamples
-            height: 40
-            stepSize: 5
-            to: 10000
-            value: 6
-        }
-
-        Text {
-            id: text2
-            text: qsTr("Refresh rate:")
-            font.pixelSize: 12
-            Layout.columnSpan: 2
-        }
-
-        Text {
-            id: textRefreshRate
-            text: sliderRefreshRate.value
-            font.pixelSize: 12
-            fontSizeMode: Text.FixedSize
-        }
-
-        Slider {
-            id: sliderRefreshRate
+            id: refreshRateSlider
             height: 40
             stepSize: 5
             to: 60
             value: 24
         }
-    }
 
-    MultiButton {
-        id: antialiasButton
-        text: qsTr("Antialias: ")
-        items: [qsTr("OFF"), qsTr("ON")]
-        enabled: true
-        currentSelection: 0
-        onSelectionChanged: antialiasingEnabled(currentSelection == 1);
-    }
+        Text {
+            text: qsTr("Antialias")
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+        }
 
+        Switch {
+            id: antialiasSwitch
+            checked: false
+            onToggled: antialiasingEnabled(checked)
+        }
+    }
 }

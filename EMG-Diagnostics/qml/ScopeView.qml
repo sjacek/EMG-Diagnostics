@@ -129,6 +129,11 @@ ChartView {
         refreshTimer.interval = 1 / Number(rate) * 1000
     }
 
+    function changeSamplesCount(count) {
+        chartView.axisX().max = count
+        DataSource.setCols(count)
+    }
+
     property real oldMouseX
 
     MouseArea {

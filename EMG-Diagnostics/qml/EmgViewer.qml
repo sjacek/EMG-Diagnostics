@@ -28,6 +28,8 @@
  ****************************************************************************/
 
 import QtQuick 2.1
+import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 Item {
     id: emgViewer
@@ -37,8 +39,8 @@ Item {
     ScopeView {
         id: scopeView
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
         anchors.left: parent.left
+        anchors.bottom: rowLayout.top
         anchors.right: controlPanel.left
         height: emgViewer.height
 
@@ -50,6 +52,29 @@ Item {
         }
     }
 
+    RowLayout {
+        id: rowLayout
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: controlPanel.left
+
+        Slider {
+            id: samplesSlider
+            height: 40
+            Layout.fillWidth: true
+            stepSize: 5
+            to: 1000
+            value: 6
+            onMoved: scopeView.changeSamplesCount(value)
+        }
+
+        Text {
+            id: textSamples
+            text: samplesSlider.value
+            fontSizeMode: Text.FixedSize
+        }
+    }
+
     ControlPanel {
         id: controlPanel
         anchors.top: parent.top
@@ -57,15 +82,9 @@ Item {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
 
-        onSignalSourceChanged: {
-            scopeView.axisX().max = sampleCount;
-            dataSource.setCols(sampleCount);
-        }
-        onSeriesTypeChanged: scopeView.setupAllSeries(type);
-        onRefreshRateChanged: scopeView.changeRefreshRate(rate);
-        onAntialiasingEnabled: scopeView.antialiasing = enabled;
-        onOpenGlChanged: {
-            scopeView.openGL = enabled;
-        }
+        onSeriesTypeChanged:   scopeView.setupAllSeries(type)
+        onRefreshRateChanged:  scopeView.changeRefreshRate(rate)
+        onAntialiasingEnabled: scopeView.antialiasing = enabled
+        onOpenGlChanged:       scopeView.openGL = enabled
     }
 }
