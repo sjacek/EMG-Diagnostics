@@ -28,61 +28,73 @@
  ****************************************************************************/
 
 import QtQuick 2.1
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 ColumnLayout {
-    property alias openGLButton: openGLButton
-    property alias antialiasButton: antialiasButton
     spacing: 8
     Layout.fillHeight: true
     signal seriesTypeChanged(string type)
     signal refreshRateChanged(variant rate);
-    signal signalSourceChanged(int sampleCount);
     signal antialiasingEnabled(bool enabled)
     signal openGlChanged(bool enabled)
 
-    Text {
-        text: "Scope"
-        font.pointSize: 18
-        color: "white"
-    }
+    GridLayout {
+        width: 100
+        height: 100
+        Layout.fillHeight: false
+        Layout.fillWidth: true
+        rows: 2
+        columns: 2
 
-    MultiButton {
-        id: openGLButton
-        text: "OpenGL: "
-        items: ["false", "true"]
-        currentSelection: 1
-        onSelectionChanged: openGlChanged(currentSelection == 1);
-    }
+        Text {
+            text: qsTr("Graph")
+        }
 
-    MultiButton {
-        text: "Graph: "
-        items: ["line", "scatter", "spline"]
-        currentSelection: 0
-        onSelectionChanged: seriesTypeChanged(items[currentSelection]);
-    }
+        ComboBox {
+            id: graph
+            model: [qsTr("line"), qsTr("scatter"), qsTr("spline")]
+            onActivated: seriesTypeChanged(currentValue)
+        }
 
-    MultiButton {
-        id: sampleCountButton
-        text: "Samples: "
-        items: ["6", "128", "1024", "10000"]
-        currentSelection: 1
-        onSelectionChanged: signalSourceChanged(selection);
-    }
+        Text {
+            text: qsTr("OpenGL")
+        }
 
-    MultiButton {
-        text: "Refresh rate: "
-        items: ["1", "24", "60"]
-        currentSelection: 2
-        onSelectionChanged: refreshRateChanged(items[currentSelection]);
-    }
+        Switch {
+            id: openGLSwitch
+            checked: true
+            onToggled: openGlChanged(checked)
+        }
 
-    MultiButton {
-        id: antialiasButton
-        text: "Antialias: "
-        items: ["OFF", "ON"]
-        enabled: true
-        currentSelection: 0
-        onSelectionChanged: antialiasingEnabled(currentSelection == 1);
+        Text {
+            text: qsTr("Refresh rate")
+            Layout.columnSpan: 2
+        }
+
+        Text {
+            text: refreshRateSlider.value
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            fontSizeMode: Text.FixedSize
+        }
+
+        Slider {
+            id: refreshRateSlider
+            height: 40
+            stepSize: 5
+            to: 60
+            value: 24
+        }
+
+        Text {
+            text: qsTr("Antialias")
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+        }
+
+        Switch {
+            id: antialiasSwitch
+            checked: false
+            onToggled: antialiasingEnabled(checked)
+        }
     }
 }

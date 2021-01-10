@@ -53,7 +53,7 @@ void EmgViewer::initGUI()
     connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
 
     setTitle(QStringLiteral("EMG Diagnostics"));
-    setSource(QUrl("qrc:/qml/EmgViewer.qml"));
+    setSource(QUrl("qrc:/EmgViewer.qml"));
     setResizeMode(QQuickView::SizeRootObjectToView);
     setColor(QColor("#404040"));
 }

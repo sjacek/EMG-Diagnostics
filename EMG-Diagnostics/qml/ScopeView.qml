@@ -125,8 +125,24 @@ ChartView {
         return series
     }
 
+    Timer {
+        id: refreshTimer
+        interval: 1 / 60 * 1000 // 60 Hz
+        running: true
+        repeat: true
+        onTriggered: {
+//            dataSource.update(chartView.series(0));
+//            dataSource.update(chartView.series(1));
+        }
+    }
+
     function changeRefreshRate(rate) {
         refreshTimer.interval = 1 / Number(rate) * 1000
+    }
+
+    function changeSamplesCount(count) {
+        chartView.axisX().max = chartView.axisX().min + count
+        DataSource.setCols(count)
     }
 
     property real oldMouseX

@@ -17,14 +17,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-# currently it's not working thus commented out
-CONFIG += qmltypes
-QML_IMPORT_NAME = com.github.sjacek.emgdiagnostics
-QML_IMPORT_MAJOR_VERSION = 1
-QML_IMPORT_MINOR_VERSION = 0
-
-INCLUDEPATH += EMG-Diagnostics
-
 PRECOMPILED_HEADER = pch.h
 
 HEADERS += \
@@ -37,12 +29,18 @@ SOURCES += \
     emgviewer.cpp \
     main.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml/qml.qrc
 
 DISTFILES +=
 
 TRANSLATIONS += \
     EMG-Diagnostics_en_GB.ts
+
+# currently it's not working thus commented out
+CONFIG += qmltypes
+QML_IMPORT_NAME = com.github.sjacek.emgdiagnostics
+QML_IMPORT_MAJOR_VERSION = 1
+QML_IMPORT_MINOR_VERSION = 0
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/ControlPanel.qml</file>
-        <file>qml/MultiButton.qml</file>
-        <file>qml/ScopeView.qml</file>
-        <file>qml/EmgViewer.qml</file>
-    </qresource>
-</RCC>
