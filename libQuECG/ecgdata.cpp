@@ -61,29 +61,29 @@ EcgData EcgData::fromByteArray(const QByteArray& data, QObject *parent)
     EcgData ret(parent);
     ret.data = data;
 
-    ret.rssi = data[2];
-    ret.packetId = data[3];
-    ret.messageLength = data[4];
-    ret.deviceId = (data[5] << 24) | (data[6] << 16) | (data[7] << 8) | data[8];
-    ret.numberOfDataPoints = data[9] + 200;
-    ret.batteryLevel = data[10] * 10 + 2000;
-    ret.dataId = data[11];
-    ret.muscleActivity = (data[12] << 8) | data[13];
-    ret.scale = (data[14] << 8) | data[15];
+//    ret.rssi = data[2];
+//    ret.packetId = data[3];
+//    ret.messageLength = data[4];
+//    ret.deviceId = (data[5] << 24) | (data[6] << 16) | (data[7] << 8) | data[8];
+//    ret.numberOfDataPoints = data[9] + 200;
+//    ret.batteryLevel = data[10] * 10 + 2000;
+//    ret.dataId = data[11];
+//    ret.muscleActivity = (data[12] << 8) | data[13];
+//    ret.scale = (data[14] << 8) | data[15];
 
-    uint pos = 16;
-    for (uint i(0); i < ret.numberOfDataPoints; i++, pos += 2) {
-        quint32 fft = (data[pos] << 8) | data[pos + 1];
-        fft = ret.scale/32768 * fft;
-        ret.ffts.append(fft);
-    }
+//    uint pos = 16;
+//    for (uint i(0); i < ret.numberOfDataPoints; i++, pos += 2) {
+//        quint32 fft = (data[pos] << 8) | data[pos + 1];
+//        fft = ret.scale/32768 * fft;
+//        ret.ffts.append(fft);
+//    }
 
-    ret.accX = data[pos++];
-    ret.accY = data[pos++];
-    ret.accZ = data[pos++];
-    ret.gyroX = data[pos++];
-    ret.gyroY = data[pos++];
-    ret.gyroZ = data[pos++];
+//    ret.accX = data[pos++];
+//    ret.accY = data[pos++];
+//    ret.accZ = data[pos++];
+//    ret.gyroX = data[pos++];
+//    ret.gyroY = data[pos++];
+//    ret.gyroZ = data[pos++];
 
     return ret;
 }

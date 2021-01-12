@@ -21,6 +21,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+include( $$TOP_SRCDIR/QtVaria/QtVaria.pri )
+
 PRECOMPILED_HEADER = \
     pch_interface.h
 
@@ -31,12 +33,13 @@ HEADERS += \
         pch_interface.h \
         plugin.h \
         plugin_global.h \
-        singleton.h \
         pluginsocket.h \
         dataseries.h
 
 OTHER_FILES += \
     interface.pri
+
+LIBS += -L$${LIB_DESTDIR}
 
 unix {
     target.path = /usr/lib

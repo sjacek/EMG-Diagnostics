@@ -1,7 +1,5 @@
 QMAKE_PROJECT_NAME = EMG-Diagnostics
 
-include( $$TOP_SRCDIR/plugins/interface/interface.pri )
-
 QT += charts qml quick
 
 CONFIG += rtti c++17 precompile_header
@@ -48,13 +46,15 @@ QML_IMPORT_PATH =
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
-else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
-!isEmpty(target.path): INSTALLS += target
-
 LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME}
 
 DISTFILES +=
 
 DESTDIR = $${BIN_DESTDIR}
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
+else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
+!isEmpty(target.path): INSTALLS += target
+
+include( $$TOP_SRCDIR/plugins/interface/interface.pri )
