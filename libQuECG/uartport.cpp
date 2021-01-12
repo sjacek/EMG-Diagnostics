@@ -48,6 +48,12 @@ void UartPort::onReadyRead()
 
     qCDebug(cat) << data.length() << ":" << data.toHex();
 
+    try {
+
+    } catch (const std::exception& ex) {
+        qCWarning(cat) << ex.what();
+    }
+
     if ((data[0] == (char)0x4f) && (data[1] == (char)0xd5)) {
         qCDebug(cat()) << "OK";
 

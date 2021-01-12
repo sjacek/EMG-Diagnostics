@@ -1,8 +1,6 @@
 INCLUDEPATH += $$PWD
 DEPENDPATH += $$PWD
 
-LIBS += -L$$TOP_BUILDDIR/libQuECG -lQuECG
+LIBS += -lQuECG
 
-INCLUDEPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-DEPENDPATH += $$TOP_SRCDIR/3rdparty/qextserialport/src
-LIBS += -L$$LIB_DESTDIR -lQt5ExtSerialPort
+include( $$TOP_SRCDIR/QtVaria/QtVaria.pri )

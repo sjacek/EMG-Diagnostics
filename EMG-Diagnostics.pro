@@ -1,11 +1,13 @@
 TEMPLATE = subdirs
 SUBDIRS = \
+    QtVaria \
     libuECG \
     libQuECG \
     plugins \
     EMG-Diagnostics \
 
-plugins.depends = libQuECG
+libQuECG.depends = QtVaria
+plugins.depends = QtVaria libQuECG
 EMG-Diagnostics.depends = plugins
 
 OTHER_FILES += \
