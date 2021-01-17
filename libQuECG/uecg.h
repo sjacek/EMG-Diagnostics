@@ -49,7 +49,8 @@ public:
 
     quint32 deviceId() const { return m_deviceId; }
 
-    void process(const QByteArray& data);
+//    void process(const QByteArray& data);
+    void add(const EcgData& ecg);
 
 private:
     quint32 m_deviceId;

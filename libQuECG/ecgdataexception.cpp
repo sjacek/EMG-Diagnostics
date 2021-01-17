@@ -29,6 +29,6 @@
 
 #include "ecgdataexception.h"
 
-EcgDataException::EcgDataException(uint code, const char* what)
+EcgDataException::EcgDataException(uint code, const QString& what)
     : QVException(code, what)
 {}

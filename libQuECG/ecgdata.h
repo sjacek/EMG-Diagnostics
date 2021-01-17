@@ -35,14 +35,19 @@ class EcgData : public QObject
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    static EcgData fromByteArray(const QByteArray& data, QObject* parent = nullptr);
+    EcgData(const EcgData& ecg);
+
+    EcgData& operator =(const EcgData& ecg);
+
+    static EcgData fromByteArray1(const QByteArray& data, QObject* parent = nullptr);
+    static EcgData fromByteArray2(const QByteArray& data, QObject* parent = nullptr);
 
     const QByteArray& getData() const     { return data; }
     qint8 getRssi() const                 { return rssi; }
     qint8 getPacketId() const             { return packetId; }
     qint8 getMessageLength() const        { return messageLength; }
     qint32 getDeviceId() const            { return deviceId; }
-    uint getNumberOfDataPoints() const    { return numberOfDataPoints; }
+//    uint getNumberOfDataPoints() const    { return dataPoints; }
     uint getBatteryLevel() const          { return batteryLevel; }
     uint getDataId() const                { return dataId; }
     uint getMuscleactivity() const        { return muscleActivity; }
@@ -57,8 +62,6 @@ public:
 
 private:
     explicit EcgData(QObject *parent = nullptr);
-
-    EcgData(const EcgData& ecg);
 
     QByteArray data;
 
@@ -75,7 +78,7 @@ private:
     quint32 deviceId;
 
     // number of data points + 200 (200 indicates that this is EMG data). So if byte 9 is equal to 220, there are 20 data points
-    uint numberOfDataPoints;
+//    uint dataPoints;
 
     // battery level, encoded. Battery voltage in mV = [byte 10] * 10 + 2000
     uint batteryLevel;
@@ -109,7 +112,7 @@ inline QDebug operator<< (QDebug debug, const EcgData& ecg)
           << "packet_id" << ecg.getDeviceId()
           << "message length:" << ecg.getMessageLength()
           << "device id:" << ecg.getDeviceId()
-          << "number of data points:" << ecg.getNumberOfDataPoints()
+//          << "number of data points:" << ecg.getNumberOfDataPoints()
           << "battery level:" << ecg.getBatteryLevel()
           << "data Id:" << ecg.getDataId()
           << "muscle activity:" << ecg.getMuscleactivity()

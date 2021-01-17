@@ -34,6 +34,7 @@ class QVException : public QException
 {
 public:
     explicit QVException(uint code, const char* what) noexcept;
+    explicit QVException(uint code, const QString& what) noexcept;
 
     virtual const char* what() const noexcept override;
     virtual uint code() const noexcept;
