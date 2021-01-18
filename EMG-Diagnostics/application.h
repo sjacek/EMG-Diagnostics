@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,11 +27,32 @@
  **
  ****************************************************************************/
 
-#include "pch.h"
-#include "application.h"
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-int main(int argc, char *argv[])
+class Application : public QApplication
 {
-    Application app(argc, argv);
-    return app.exec();
-}
+    Q_OBJECT
+public:
+    explicit Application(int& argc, char** argv, int flags = ApplicationFlags);
+
+    virtual int exec();
+
+    ~Application();
+
+protected:
+    void init();
+
+private:
+//    static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+//    static QtMessageHandler oldMessageHandler;
+
+    void initializeRootLogger();
+    void shutdownRootLogger();
+    void logStartup();
+    void logShutdown();
+    void setupRootLogger(const QString& introMessage = QString());
+    void shutDownRootLogger(const QString &extroMessage = QString());
+};
+
+#endif // APPLICATION_H
