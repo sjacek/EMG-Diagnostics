@@ -44,6 +44,10 @@
 #include <QtQuick/QQuickView>
 #include <QtCharts/QXYSeries>
 
+#include <log4qt/logger.h>
+#include <log4qt/loggerrepository.h>
+#include <log4qt/propertyconfigurator.h>
+
 #include <qqml.h>
 
 #include "pch_interface.h"
