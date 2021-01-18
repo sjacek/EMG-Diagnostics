@@ -23,16 +23,20 @@ QML_IMPORT_NAME = com.github.sjacek.emgdiagnostics
 QML_IMPORT_MAJOR_VERSION = 1
 QML_IMPORT_MINOR_VERSION = 0
 
+DEFINES += QT_MESSAGELOGCONTEXT
+
 INCLUDEPATH += EMG-Diagnostics
 
 PRECOMPILED_HEADER = pch.h
 
 HEADERS += \
+    application.h \
     pch.h \
     datasource.h \
     emgviewer.h
 
 SOURCES += \
+    application.cpp \
     datasource.cpp \
     emgviewer.cpp \
     main.cpp
