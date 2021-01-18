@@ -35,7 +35,7 @@
 class EcgDataException : public QVException
 {
 public:
-    explicit EcgDataException(uint code, const char* what);
+    explicit EcgDataException(uint code, const QString& what);
 
     void raise() const override        { throw *this; }
     QException *clone() const override { return new EcgDataException(*this); }

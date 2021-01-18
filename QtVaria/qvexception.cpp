@@ -35,6 +35,10 @@ QVException::QVException(uint code, const char* what) noexcept
     , m_what(what)
 {}
 
+QVException::QVException(uint code, const QString& what) noexcept
+    : QVException(code, what.toStdString().c_str())
+{}
+
 const char* QVException::what() const noexcept
 {
     char* ret = new char[m_what.length() + 1];

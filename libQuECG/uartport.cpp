@@ -29,6 +29,8 @@
 
 #include "uartport.h"
 
+#include "ecgdataexception.h"
+
 UartPort::UartPort(QObject* parent, const QString& device)
     : QextSerialPort(device,
                      { BAUD921600 /*BAUD1152000*/, DATA_8, PAR_NONE, STOP_1, FLOW_OFF, 10 },
@@ -46,28 +48,32 @@ void UartPort::onReadyRead()
 {
     const QByteArray& data = readAll();
 
-    qCDebug(cat) << data.length() << ":" << data.toHex();
+//    qCDebug(ecglog()) << data.length() << ":" << data.toHex();
 
     try {
+        if (!m_mapUecg.contains(ecg.getDeviceId()))
+            m_mapUecg.insert(ecg.getDeviceId(), new Uecg(ecg.getDeviceId()));
 
-    } catch (const std::exception& ex) {
-        qCWarning(cat) << ex.what();
+        m_mapUecg[ecg.getDeviceId()]->add(ecg);
+
+    } catch (const EcgDataException& ex) {
+        qCWarning(cat) << "Error code:" << ex.code() << "; " << ex.what();
     }
 
-    if ((data[0] == (char)0x4f) && (data[1] == (char)0xd5)) {
-        qCDebug(cat()) << "OK";
+//    if ((data[0] == (char)0x4f) && (data[1] == (char)0xd5)) {
+//        qCDebug(cat()) << "OK";
 
-        quint32 device_id = (data[5] << 24) | (data[6] << 16) | (data[7] << 8) | data[8];
+//        quint32 device_id = (data[5] << 24) | (data[6] << 16) | (data[7] << 8) | data[8];
 
-        if (!m_mapUecg.contains(device_id))
-            m_mapUecg.insert(device_id, new Uecg(device_id));
+//        if (!m_mapUecg.contains(device_id))
+//            m_mapUecg.insert(device_id, new Uecg(device_id));
 
-        m_mapUecg[device_id]->process(data);
-    }
-    else
-    {
-        qCWarning(cat) << "Bad data";
-    }
+//        m_mapUecg[device_id]->process(data);
+//    }
+//    else
+//    {
+//        qCWarning(cat) << "Bad data";
+//    }
 }
 
 void UartPort::serial_main_init()

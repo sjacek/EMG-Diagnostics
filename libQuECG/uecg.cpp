@@ -54,10 +54,16 @@ Uecg::~Uecg()
 //    return *this;
 //}
 
-void Uecg::process(const QByteArray& data)
-{
-    const EcgData& ecg = EcgData::fromByteArray(data);
-    qCDebug(cat) << ecg;
+//void Uecg::process(const QByteArray& data)
+//{
+//    const EcgData& ecg = EcgData::fromByteArray(data);
+//    qCDebug(cat) << ecg;
 
+//    m_lastSeen = QDateTime::currentDateTime();
+//}
+
+void Uecg::add(const EcgData &ecg)
+{
     m_lastSeen = QDateTime::currentDateTime();
+    m_ecgLog.insert(m_lastSeen, ecg);
 }

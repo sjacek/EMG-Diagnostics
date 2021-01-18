@@ -2,7 +2,7 @@ QMAKE_PROJECT_NAME = EMG-Diagnostics
 
 QT += charts qml quick
 
-CONFIG += rtti c++17 precompile_header
+CONFIG += rtti c++17 precompile_header log4qt
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -41,7 +41,8 @@ SOURCES += \
 
 RESOURCES += qml/qml.qrc
 
-DISTFILES +=
+DISTFILES += \
+    .log4qt.properties
 
 TRANSLATIONS += \
     EMG-Diagnostics_en_GB.ts

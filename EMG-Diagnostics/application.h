@@ -38,12 +38,21 @@ public:
 
     virtual int exec();
 
+    ~Application();
+
 protected:
     void init();
 
 private:
-    static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
-    static QtMessageHandler oldMessageHandler;
+//    static void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+//    static QtMessageHandler oldMessageHandler;
+
+    void initializeRootLogger();
+    void shutdownRootLogger();
+    void logStartup();
+    void logShutdown();
+    void setupRootLogger(const QString& introMessage = QString());
+    void shutDownRootLogger(const QString &extroMessage = QString());
 };
 
 #endif // APPLICATION_H

@@ -37,6 +37,7 @@ class LIBQUECG_EXPORT UartPort : public QextSerialPort
 {
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
+    Q_LOGGING_CATEGORY(ecglog, "ECG Log")
 public:
     UartPort(QObject* parent, const QString& device);
 
