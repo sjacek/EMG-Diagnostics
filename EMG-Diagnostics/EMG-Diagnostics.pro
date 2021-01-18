@@ -1,7 +1,5 @@
 QMAKE_PROJECT_NAME = EMG-Diagnostics
 
-include( $$TOP_SRCDIR/plugins/interface/interface.pri )
-
 QT += charts qml quick
 
 CONFIG += rtti c++17 precompile_header
@@ -41,12 +39,18 @@ SOURCES += \
     emgviewer.cpp \
     main.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml/qml.qrc
 
 DISTFILES +=
 
 TRANSLATIONS += \
     EMG-Diagnostics_en_GB.ts
+
+# currently it's not working thus commented out
+CONFIG += qmltypes
+QML_IMPORT_NAME = com.github.sjacek.emgdiagnostics
+QML_IMPORT_MAJOR_VERSION = 1
+QML_IMPORT_MINOR_VERSION = 0
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -54,13 +58,15 @@ QML_IMPORT_PATH =
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
-else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
-!isEmpty(target.path): INSTALLS += target
-
 LIBS += -L$${LIB_DESTDIR} -l$${INTERFACE_LIB_NAME}
 
 DISTFILES +=
 
 DESTDIR = $${BIN_DESTDIR}
+
+# Default rules for deployment.
+qnx: target.path = /tmp/$${QMAKE_PROJECT_NAME}/bin
+else: unix:!android: target.path = /opt/$${QMAKE_PROJECT_NAME}/bin
+!isEmpty(target.path): INSTALLS += target
+
+include( $$TOP_SRCDIR/plugins/interface/interface.pri )

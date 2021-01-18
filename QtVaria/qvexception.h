@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,23 +27,20 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_LIBQUECG_H
-#define PCH_LIBQUECG_H
+#ifndef QVEXCEPTION_H
+#define QVEXCEPTION_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/QObject>
-#include <QtCore/QLoggingCategory>
-#include <QtCore/QDateTime>
+class QVException : public QException
+{
+public:
+    explicit QVException(uint code, const char* what) noexcept;
 
-#include <QtExtSerialPort/qextserialenumerator.h>
-#include <QtExtSerialPort/qextserialport.h>
+    virtual const char* what() const noexcept override;
+    virtual uint code() const noexcept;
 
-#include <fcntl.h>
-#include <poll.h>
-#include <time.h>
-#include <sys/time.h>
-#include <unistd.h>
+private:
+    uint m_code;
+    QString m_what;
+};
 
-#include <pch_qtvaria.h>
-
-#endif // PCH_LIBQUECG_H
+#endif // QVEXCEPTION_H

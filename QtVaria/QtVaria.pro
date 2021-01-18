@@ -1,41 +1,32 @@
-QMAKE_PROJECT_NAME = libQuECG
+QMAKE_PROJECT_NAME = QtVaria
 #TARGET = $$qtLibraryTarget($${QMAKE_PROJECT_NAME})
-TARGET = QuECG
 
 QT -= gui
 
 TEMPLATE = lib
-DEFINES += LIBQUECG_LIBRARY
+DEFINES += QTVARIA_LIBRARY
 
-CONFIG += c++17 rtti precompile_header extserialport
-
-include( $$TOP_SRCDIR/QtVaria/QtVaria.pri )
+CONFIG += c++17 rtti precompile_header
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-PRECOMPILED_HEADER = pch_libquecg.h
+PRECOMPILED_HEADER = pch_qtvaria.h
 
 SOURCES += \
-    ecgdata.cpp \
-    ecgdataexception.cpp \
-    uartport.cpp \
-    uecg.cpp \
-    uecgenumerator.cpp
+    qtvaria.cpp \
+    qvexception.cpp
 
 HEADERS += \
-    ecgdata.h \
-    ecgdataexception.h \
-    libquecg_global.h \
-    uartport.h \
-    uecg.h \
-    uecgenumerator.h
+    QtVaria_global.h \
+    pch_qtvaria.h \
+    qtvaria.h \
+    qvexception.h \
+    singleton.h
 
 OTHER_FILES += \
-    libQuECG.pri
-
-LIBS += -L$${LIB_DESTDIR}
+    QtVaria.pri
 
 # Default rules for deployment.
 unix {

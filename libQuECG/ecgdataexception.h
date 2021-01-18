@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,23 +27,18 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_LIBQUECG_H
-#define PCH_LIBQUECG_H
+#ifndef ECGDATAEXCEPTION_H
+#define ECGDATAEXCEPTION_H
 
-#include <QtCore/qglobal.h>
-#include <QtCore/QObject>
-#include <QtCore/QLoggingCategory>
-#include <QtCore/QDateTime>
+#include <qvexception.h>
 
-#include <QtExtSerialPort/qextserialenumerator.h>
-#include <QtExtSerialPort/qextserialport.h>
+class EcgDataException : public QVException
+{
+public:
+    explicit EcgDataException(uint code, const char* what);
 
-#include <fcntl.h>
-#include <poll.h>
-#include <time.h>
-#include <sys/time.h>
-#include <unistd.h>
+    void raise() const override        { throw *this; }
+    QException *clone() const override { return new EcgDataException(*this); }
+};
 
-#include <pch_qtvaria.h>
-
-#endif // PCH_LIBQUECG_H
+#endif // ECGDATAEXCEPTION_H

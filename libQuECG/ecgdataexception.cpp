@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,43 +27,8 @@
  **
  ****************************************************************************/
 
-import QtQuick 2.1
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Styles 1.0
+#include "ecgdataexception.h"
 
-Item {
-    id: button
-
-    property string text: "Option: "
-    property variant items: ["first"]
-    property int currentSelection: 0
-    signal selectionChanged(variant selection)
-
-    signal clicked
-
-    implicitWidth: buttonText.implicitWidth + 5
-    implicitHeight: buttonText.implicitHeight + 10
-
-    Button {
-        id: buttonText
-        width: parent.width
-        height: parent.height
-
-        style: ButtonStyle {
-            label: Component {
-                Text {
-                    text: button.text + button.items[currentSelection]
-                    clip: true
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    anchors.fill: parent
-                }
-            }
-        }
-        onClicked: {
-            currentSelection = (currentSelection + 1) % items.length;
-            selectionChanged(button.items[currentSelection]);
-        }
-    }
-}
+EcgDataException::EcgDataException(uint code, const char* what)
+    : QVException(code, what)
+{}

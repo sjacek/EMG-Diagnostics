@@ -1,6 +1,6 @@
 /****************************************************************************
  **
- ** Copyright (C) 2020 Jacek Sztajnke.
+ ** Copyright (C) 2021 Jacek Sztajnke.
  ** Contact: jacek.sztajnke@gmail.com
  **
  ** This file is part of the EMG-Diagnostics project.
@@ -27,23 +27,8 @@
  **
  ****************************************************************************/
 
-#ifndef PCH_LIBQUECG_H
-#define PCH_LIBQUECG_H
+#include "qtvaria.h"
 
-#include <QtCore/qglobal.h>
-#include <QtCore/QObject>
-#include <QtCore/QLoggingCategory>
-#include <QtCore/QDateTime>
-
-#include <QtExtSerialPort/qextserialenumerator.h>
-#include <QtExtSerialPort/qextserialport.h>
-
-#include <fcntl.h>
-#include <poll.h>
-#include <time.h>
-#include <sys/time.h>
-#include <unistd.h>
-
-#include <pch_qtvaria.h>
-
-#endif // PCH_LIBQUECG_H
+QtVaria::QtVaria()
+{
+}
