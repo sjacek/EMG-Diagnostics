@@ -35,6 +35,10 @@
 Application::Application(int& argc, char** argv, int flags)
     : QApplication(argc, argv, flags)
 {
+    setOrganizationName("Grinnotech");
+    setOrganizationDomain("sjacek.github.com");
+    setApplicationName("EMG-Diagnostics");
+
 //    oldMessageHandler = qInstallMessageHandler(messageOutput);
 
     // qSetMessagePattern("[%{time yyyyMMdd h:mm:ss.zzz t} %{if-debug}Debug%{endif}%{if-info}Info%{endif}%{if-warning}Warning%{endif}%{if-critical}Critical%{endif}%{if-fatal}Fatal%{endif}] %{file}:%{line} - %{message}");

@@ -35,18 +35,18 @@
 #include <QtWidgets/QApplication>
 #include <QtCore/QDebug>
 #include <QtCore/QObject>
+#include <log4qt/Logger>
+#include <log4qt/LoggerRepository>
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QtMath>
 #include <QtWidgets/QMessageBox>
+#include <log4qt/PropertyConfigurator>
 #include <QtCore/QRandomGenerator>
+#include <QtCore/QSettings>
 #include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QQuickView>
 #include <QtCharts/QXYSeries>
-
-#include <log4qt/logger.h>
-#include <log4qt/loggerrepository.h>
-#include <log4qt/propertyconfigurator.h>
 
 #include <qqml.h>
 
