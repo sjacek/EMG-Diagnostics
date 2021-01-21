@@ -35,10 +35,14 @@ class EmgViewer : public QQuickView
     Q_OBJECT
     Q_LOGGING_CATEGORY(cat, typeid(this).name())
 public:
-    EmgViewer();
+    EmgViewer(QWindow* parent = nullptr);
 
 private:
     void initGUI();
+    void loadSettings();
+    void saveSettings();
+
+//    QString m_sSettingsFile;
 };
 
 #endif // EMGVIEWER_H

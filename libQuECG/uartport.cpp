@@ -51,6 +51,7 @@ void UartPort::onReadyRead()
 //    qCDebug(ecglog()) << data.length() << ":" << data.toHex();
 
     try {
+        const EcgData& ecg = EcgData::fromByteArray2(data);
         if (!m_mapUecg.contains(ecg.getDeviceId()))
             m_mapUecg.insert(ecg.getDeviceId(), new Uecg(ecg.getDeviceId()));
 

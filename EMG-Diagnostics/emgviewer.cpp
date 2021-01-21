@@ -30,9 +30,16 @@
 #include "pch.h"
 #include "emgviewer.h"
 
-EmgViewer::EmgViewer()
+EmgViewer::EmgViewer(QWindow* parent)
+    : QQuickView(parent)
 {
     initGUI();
+
+//    connect(this, &QQuickWindow::closing, [=](QQuickCloseEvent*) {
+//        saveSettings();
+//    });
+
+    loadSettings();
 }
 
 void EmgViewer::initGUI()
@@ -53,7 +60,20 @@ void EmgViewer::initGUI()
     connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
 
     setTitle(QStringLiteral("EMG Diagnostics"));
-    setSource(QUrl("qrc:/EmgViewer.qml"));
+    setSource(QUrl("qrc:/EmgViewerItem.qml"));
     setResizeMode(QQuickView::SizeRootObjectToView);
     setColor(QColor("#404040"));
+}
+
+void EmgViewer::loadSettings()
+{
+    QSettings settings;
+    QVariant size = settings.value("emgviewer/size");
+    if (!size.isNull()) resize(size.toSize());
+}
+
+void EmgViewer::saveSettings()
+{
+    QSettings settings;
+    settings.setValue("emgviewer/size", size());
 }
